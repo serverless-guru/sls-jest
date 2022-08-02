@@ -16,6 +16,7 @@
   "author": "Serverless Guru LLC",
   "license": "ISC",
   "devDependencies": {
+    "@tsconfig/node16": "^1.0.3",
     "@types/aws-lambda": "^8.10.101",
     "@types/jest": "^28.1.6",
     "@types/lodash": "^4.14.182",
