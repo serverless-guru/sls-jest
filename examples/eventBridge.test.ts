@@ -14,7 +14,10 @@ const client = new EventBridgeClient({});
 describe('EventBridge Spy', () => {
   it('should have event object', async () => {
     const spy = eventBridgeSpy({
-      logGroupName: '/aws/events/event-bridge-spy',
+      type: 'cloudWatchLogs',
+      config: {
+        logGroupName: '/aws/events/event-bridge-spy',
+      },
     });
 
     await client.send(
@@ -46,7 +49,10 @@ describe('EventBridge Spy', () => {
 
   it('should have event matching object times', async () => {
     const spy = eventBridgeSpy({
-      logGroupName: '/aws/events/event-bridge-spy',
+      type: 'cloudWatchLogs',
+      config: {
+        logGroupName: '/aws/events/event-bridge-spy',
+      },
     });
 
     await client.send(
@@ -82,7 +88,10 @@ describe('EventBridge Spy', () => {
 
   it('should not have event matching object', async () => {
     const spy = eventBridgeSpy({
-      logGroupName: '/aws/events/event-bridge-spy',
+      type: 'cloudWatchLogs',
+      config: {
+        logGroupName: '/aws/events/event-bridge-spy',
+      },
     });
 
     await expect(spy).not.toHaveEventMatchingObject({

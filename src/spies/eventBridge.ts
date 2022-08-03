@@ -165,7 +165,8 @@ export class CloudWatchLogsEventBridgeSpy extends EventBridgeSpy {
     };
   }
 
-  async getLogStreams(logGroupName: string) {
+  async deleteAllLogs(logGroupName: string): Promise<void> {
+    // fixme. Need to paginate?
     const { logStreams = [] } = await this.cloudWatchLogs.send(
       new DescribeLogStreamsCommand({
         descending: true,
@@ -174,12 +175,6 @@ export class CloudWatchLogsEventBridgeSpy extends EventBridgeSpy {
       }),
     );
 
-    return { logStreams };
-  }
-
-  async deleteAllLogs(logGroupName: string): Promise<void> {
-    // fixme. Need to paginate?
-    const { logStreams } = await this.getLogStreams(logGroupName);
     if (logStreams.length <= 0) {
       return;
     }
@@ -199,10 +194,24 @@ export class CloudWatchLogsEventBridgeSpy extends EventBridgeSpy {
   }
 }
 
+type EventBridgeSpyParams = {
+  type: 'cloudWatchLogs';
+  config: CloudWatchEventSpyParams;
+};
+
 export const eventBridgeSpy = (
-  params: CloudWatchEventSpyParams,
+  params: EventBridgeSpyParams,
 ): EventBridgeSpy => {
-  const spy = new CloudWatchLogsEventBridgeSpy(params);
+  const { type, config } = params;
+
+  let spy: EventBridgeSpy;
+
+  if (type === 'cloudWatchLogs') {
+    spy = new CloudWatchLogsEventBridgeSpy(config);
+  } else {
+    throw new Error(`Unknown eventBridgeSpy type: ${type}`);
+  }
+
   spy.pollEvents();
   return spy;
 };
