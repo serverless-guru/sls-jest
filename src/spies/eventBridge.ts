@@ -1,13 +1,48 @@
 import { EventBridgeEvent } from 'aws-lambda';
 import { uniqBy, last } from 'lodash';
 import { DateTime } from 'luxon';
-import { Observable, Subscriber } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import {
   CloudWatchLogsClient,
   FilterLogEventsCommand,
   DescribeLogStreamsCommand,
   DeleteLogStreamCommand,
 } from '@aws-sdk/client-cloudwatch-logs';
+import {
+  DeleteMessageBatchCommand,
+  ReceiveMessageCommand,
+  ReceiveMessageCommandOutput,
+  SQSClient,
+} from '@aws-sdk/client-sqs';
+
+export type EventBridgeSpyParams =
+  | {
+      type: 'cloudWatchLogs';
+      config: CloudWatchEventSpyParams;
+    }
+  | {
+      type: 'sqs';
+      config: SqsEventSpyParams;
+    };
+
+export const eventBridgeSpy = (
+  params: EventBridgeSpyParams,
+): EventBridgeSpy => {
+  const { type, config } = params;
+
+  let spy: EventBridgeSpy;
+
+  if (type === 'cloudWatchLogs') {
+    spy = new CloudWatchLogsEventBridgeSpy(config);
+  } else if (type === 'sqs') {
+    spy = new SQSEventBridgeSpy(config);
+  } else {
+    throw new Error(`Unknown eventBridgeSpy type: ${type}`);
+  }
+
+  spy.pollEvents();
+  return spy;
+};
 
 type EventMatcher = (
   event: EventBridgeEvent<string, unknown>[],
@@ -18,21 +53,12 @@ type EventMatcher = (
  */
 export class EventBridgeSpy {
   events: EventBridgeEvent<string, unknown>[] = [];
-  subscribers: Subscriber<EventBridgeEvent<string, unknown>[]>[] = [];
-  observable: Observable<EventBridgeEvent<string, unknown>[]>;
+  subject: BehaviorSubject<EventBridgeEvent<string, unknown>[]>;
   done = false;
 
   constructor() {
     // create observable
-    this.observable = new Observable((subscriber) => {
-      this.subscribers.push(subscriber);
-      // when we are done, new susbcribers immediately resolve
-      if (!this.done) {
-        subscriber.next(this.events);
-      } else {
-        subscriber.complete();
-      }
-    });
+    this.subject = new BehaviorSubject(this.events);
   }
 
   clear(): void {
@@ -50,13 +76,20 @@ export class EventBridgeSpy {
     throw new Error('Not implemented. Implement this in a child class.');
   }
 
+  appendEvents(events: EventBridgeEvent<string, unknown>[]): void {
+    const uniqueEvents = uniqBy(events, 'id');
+    this.events = uniqBy([...this.events, ...uniqueEvents], 'id');
+    this.subject.next(this.events);
+  }
+
   awaitEvents(
     matcher: EventMatcher,
   ): Promise<EventBridgeEvent<string, unknown>[]> {
     return new Promise<EventBridgeEvent<string, unknown>[]>((resolve) => {
-      this.observable.subscribe({
+      const sub = this.subject.subscribe({
         next: (events) => {
           if (matcher(events)) {
+            sub.unsubscribe();
             resolve(events);
           }
         },
@@ -65,6 +98,12 @@ export class EventBridgeSpy {
         },
       });
     });
+  }
+
+  notifySubscribers() {
+    this.done = true;
+    this.subject.next(this.events);
+    this.subject.complete();
   }
 }
 
@@ -114,27 +153,25 @@ export class CloudWatchLogsEventBridgeSpy extends EventBridgeSpy {
         nextToken: this.nextToken,
       });
       this.nextToken = newNextToken;
-      this.events = uniqBy([...this.events, ...events], 'id');
+      this.appendEvents(events);
       const lastTime = last(this.events)?.time;
       // use the last event's time, but only if there is no nextToken
       this.startTime =
         lastTime && !newNextToken
           ? DateTime.fromISO(lastTime).toMillis()
           : startTime;
-      this.subscribers.forEach((subscriber) => subscriber.next(events));
     }, this.interval);
     // stop after timeout
     this.timeoutTimer = setTimeout(() => {
       this.intervalTimer && clearInterval(this.intervalTimer);
-      this.subscribers.forEach((subscriber) => subscriber.complete());
-      this.done = true;
+      this.notifySubscribers();
     }, this.timeout);
   }
 
   async stopPoller() {
     this.timeoutTimer && clearTimeout(this.timeoutTimer);
     this.intervalTimer && clearInterval(this.intervalTimer);
-    this.subscribers.forEach((subscriber) => subscriber.complete());
+    this.notifySubscribers();
     await this.deleteAllLogs(this.logGroupName);
   }
 
@@ -194,24 +231,76 @@ export class CloudWatchLogsEventBridgeSpy extends EventBridgeSpy {
   }
 }
 
-type EventBridgeSpyParams = {
-  type: 'cloudWatchLogs';
-  config: CloudWatchEventSpyParams;
+type SqsEventSpyParams = {
+  timeout?: number;
+  queueUrl: string;
 };
 
-export const eventBridgeSpy = (
-  params: EventBridgeSpyParams,
-): EventBridgeSpy => {
-  const { type, config } = params;
+/**
+ * An implementation of the EventBdridgeSpy, using SQS as
+ * an event subscriber.
+ * */
+export class SQSEventBridgeSpy extends EventBridgeSpy {
+  timeout: number;
+  sqsClient: SQSClient;
+  queueUrl: string;
+  promise?: Promise<ReceiveMessageCommandOutput>;
 
-  let spy: EventBridgeSpy;
+  constructor(params: SqsEventSpyParams) {
+    super();
+    const { queueUrl, timeout = 10000 } = params;
 
-  if (type === 'cloudWatchLogs') {
-    spy = new CloudWatchLogsEventBridgeSpy(config);
-  } else {
-    throw new Error(`Unknown eventBridgeSpy type: ${type}`);
+    this.sqsClient = new SQSClient({});
+    this.queueUrl = queueUrl;
+    this.timeout = timeout;
   }
 
-  spy.pollEvents();
-  return spy;
-};
+  async pollEvents(): Promise<void> {
+    let timer = this.timeout;
+    do {
+      const timeout = Math.round(Math.min(timer / 1000, 1));
+      const start = Date.now();
+      this.promise = this.sqsClient.send(
+        new ReceiveMessageCommand({
+          QueueUrl: this.queueUrl,
+          MaxNumberOfMessages: 10,
+          WaitTimeSeconds: timeout,
+          VisibilityTimeout: Math.ceil(timer / 1000),
+        }),
+      );
+      const result = await this.promise;
+      const events = result.Messages?.map(
+        (message) =>
+          JSON.parse(message.Body || '{}') as EventBridgeEvent<string, unknown>,
+      );
+
+      if (events) {
+        this.subject;
+        this.appendEvents(events);
+        this.sqsClient.send(
+          new DeleteMessageBatchCommand({
+            QueueUrl: this.queueUrl,
+            Entries: result.Messages?.map((message) => ({
+              Id: message.MessageId,
+              ReceiptHandle: message.ReceiptHandle,
+            })),
+          }),
+        );
+      }
+      const end = Date.now() - start;
+      timer -= end;
+    } while (timer > 0 && !this.done);
+
+    this.notifySubscribers();
+  }
+
+  async stopPoller() {
+    this.done = true;
+    if (this.promise) {
+      // FIXME: we have to wait until the last poll is finihsed
+      // otherwise it could pick up an event from a following test.
+      // is there a way to avoid this?
+      await this.promise;
+    }
+  }
+}
