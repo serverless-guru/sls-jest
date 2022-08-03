@@ -1,8 +1,9 @@
-export * from './spies/eventBridge';
-
 import { EventBridgeEvent } from 'aws-lambda';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import * as matchers from './assertions/index';
+
+export { matchers };
+export * from './spies/eventBridge';
 
 declare global {
   namespace jest {
