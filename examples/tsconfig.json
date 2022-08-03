@@ -6,6 +6,6 @@
     "target": "es2020",
     "strict": true
   },
-  "include": ["**/*.ts", "../types/index.d.ts"],
+  "include": ["**/*.ts", "../types/inex.d.ts"],
   "exclude": ["./node_modules"]
 }

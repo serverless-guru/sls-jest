@@ -1,12 +1,9 @@
-import * as asserts from '../src/assertions';
 import { eventBridgeSpy, EventBridgeSpyParams } from '../src/spies/eventBridge';
 import {
   EventBridgeClient,
   PutEventsCommand,
 } from '@aws-sdk/client-eventbridge';
 import { v4 as uuid } from 'uuid';
-
-expect.extend(asserts);
 
 jest.setTimeout(15000);
 
