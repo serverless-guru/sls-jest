@@ -10,13 +10,18 @@
     "all.js"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "author": "Serverless Guru LLC",
   "license": "ISC",
   "devDependencies": {
+    "@tsconfig/node16": "^1.0.3",
     "@types/aws-lambda": "^8.10.101",
+    "@types/jest": "^28.1.6",
     "@types/lodash": "^4.14.182",
+    "@types/luxon": "^3.0.0",
+    "@types/node": "^18.6.3",
     "aws-lambda": "^1.0.7",
     "prettier": "^2.7.1"
   },
@@ -25,6 +30,7 @@
     "@aws-sdk/client-dynamodb": "^3.137.0",
     "jest-matcher-utils": "^28.1.3",
     "lodash": "^4.17.21",
+    "luxon": "^3.0.1",
     "rxjs": "^7.5.6",
     "typescript": "^4.7.4"
   }
