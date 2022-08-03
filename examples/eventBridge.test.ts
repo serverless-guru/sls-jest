@@ -60,7 +60,7 @@ describe.each([
       },
     });
 
-    await spy.reset();
+    await spy.mockReset();
   });
 
   it('should have event matching object times', async () => {
@@ -95,7 +95,7 @@ describe.each([
       1,
     );
 
-    await spy.reset();
+    await spy.mockReset();
   });
 
   it('should not have event matching object', async () => {
@@ -112,6 +112,6 @@ describe.each([
       },
     });
 
-    await spy.reset();
+    await spy.mockReset();
   });
 });

@@ -1,8 +1,8 @@
 import { EventBridgeEvent } from 'aws-lambda';
 import { matcherHint, printExpected, printReceived } from 'jest-matcher-utils';
-import { EventBridgeSpy } from '../spies/eventBridge';
 import { MatcherState } from 'expect';
 import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
+import { EventBridgeSpy } from '../spies/eventBridge/EventBridgeSpy';
 
 type AssertionResponse = {
   message: () => string;
