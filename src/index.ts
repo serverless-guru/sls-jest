@@ -1,3 +1,5 @@
+export * from './spies/eventBridge';
+
 import { EventBridgeEvent } from 'aws-lambda';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
