@@ -1,4 +1,3 @@
-export * from './assertions/index';
 export * from './spies/eventBridge';
 
 import { EventBridgeEvent } from 'aws-lambda';
