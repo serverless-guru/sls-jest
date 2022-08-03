@@ -1,65 +1,53 @@
-import {
-  BatchGetItemCommand,
-  DynamoDBClient,
-  GetItemCommand,
-} from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { find } from 'lodash';
 
-const client = new DynamoDBClient({});
+const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 type AssertionResponse = {
   message: () => string;
   pass: boolean;
 };
 
+type toHaveItemExpectParams = {
+  tableName: string;
+  region?: string;
+};
+
+export type toHaveItemParams = {
+  key: DocumentClient.Key;
+  values?: DocumentClient.AttributeMap;
+};
+
 export const toHaveItem = async (
-  tableName: string,
-  key: DocumentClient.Key,
+  expectParams: toHaveItemExpectParams,
+  params: toHaveItemParams,
 ): Promise<AssertionResponse> => {
-  const result = await client.send(
-    new GetItemCommand({
+  const { tableName } = expectParams;
+  const { key } = params;
+
+  const { Item } = await client.send(
+    new GetCommand({
       TableName: tableName,
       Key: key,
     }),
   );
 
-  const pass = result.Item !== undefined;
+  const pass = Item !== undefined;
 
   return {
     message: () =>
-      `expected ${tableName} to have Item ${JSON.stringify(key, null, 2)}`,
-    pass,
-  };
-};
-
-export const toHaveItems = async (
-  tableName: string,
-  keys: DocumentClient.Key[],
-): Promise<AssertionResponse> => {
-  const result = await client.send(
-    new BatchGetItemCommand({
-      RequestItems: {
-        [tableName]: {
-          Keys: keys,
-        },
-      },
-    }),
-  );
-
-  const pass = result.Responses?.[tableName]?.length === keys.length;
-
-  let missing: DocumentClient.Key[] = [];
-  if (!pass) {
-    // FIXME: Find out how to use color diff.
-    missing = keys.filter((key) => find(result.Responses?.[tableName], key));
-  }
-
-  return {
-    message: () =>
-      `expected ${tableName} to have Items ${JSON.stringify(
-        keys,
-      )}. Missing: ${JSON.stringify(missing)}`,
+      pass
+        ? `expected "${tableName}" table to not have item ${JSON.stringify(
+            key,
+            null,
+            2,
+          )}`
+        : `expected "${tableName}" table to have item ${JSON.stringify(
+            key,
+            null,
+            2,
+          )}`,
     pass,
   };
 };
