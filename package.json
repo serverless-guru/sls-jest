@@ -3,10 +3,9 @@
   "version": "0.0.0",
   "description": "A collection of matchers and spies for testing AWS serverless applications",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
-    "dist",
-    "types/index.d.ts",
-    "all.js"
+    "lib"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
