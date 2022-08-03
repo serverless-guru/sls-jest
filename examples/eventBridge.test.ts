@@ -1,5 +1,5 @@
-import * as asserts from '../lib/assertions';
-import { eventBridgeSpy } from '../lib/spies/cloudwatch';
+import * as asserts from '../src/assertions';
+import { eventBridgeSpy } from '../src/spies/eventBridge';
 import {
   EventBridgeClient,
   PutEventsCommand,
@@ -12,7 +12,7 @@ jest.setTimeout(30000);
 const client = new EventBridgeClient({});
 
 describe('EventBridge Spy', () => {
-  it('should have matching event', async () => {
+  it('should have event object', async () => {
     const spy = eventBridgeSpy({
       logGroupName: '/aws/events/event-bridge-spy',
     });
@@ -33,18 +33,18 @@ describe('EventBridge Spy', () => {
       }),
     );
 
-    await expect(spy).toHaveEventMatching({
+    await expect(spy).toHaveEventMatchingObject({
       'detail-type': 'orderCreated',
       detail: {
         id: '123',
-        createdAt: '2020-01-01T00:00:00.000Z',
+        createdAt: expect.any(String),
       },
     });
 
     await spy.reset();
   });
 
-  it('should have matching event times', async () => {
+  it('should have event matching object times', async () => {
     const spy = eventBridgeSpy({
       logGroupName: '/aws/events/event-bridge-spy',
     });
@@ -66,7 +66,7 @@ describe('EventBridge Spy', () => {
     );
 
     // natches an event exactly once
-    await expect(spy).toHaveEventMatchingTimes(
+    await expect(spy).toHaveEventMatchingObjectTimes(
       {
         'detail-type': 'orderCreated',
         detail: {
@@ -80,15 +80,15 @@ describe('EventBridge Spy', () => {
     await spy.reset();
   });
 
-  it('should hnot ave matching event', async () => {
+  it('should not have event matching object', async () => {
     const spy = eventBridgeSpy({
       logGroupName: '/aws/events/event-bridge-spy',
     });
 
-    await expect(spy).not.toHaveEventMatching({
+    await expect(spy).not.toHaveEventMatchingObject({
       'detail-type': 'orderCreated',
       detail: {
-        id: '123',
+        id: '789',
         createdAt: '2020-01-01T00:00:00.000Z',
       },
     });
