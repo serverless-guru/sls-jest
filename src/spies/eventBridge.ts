@@ -1,6 +1,5 @@
 import { EventBridgeEvent } from 'aws-lambda';
 import { uniqBy, last } from 'lodash';
-import { DateTime } from 'luxon';
 import { BehaviorSubject } from 'rxjs';
 import {
   CloudWatchLogsClient,
@@ -157,9 +156,7 @@ export class CloudWatchLogsEventBridgeSpy extends EventBridgeSpy {
       const lastTime = last(this.events)?.time;
       // use the last event's time, but only if there is no nextToken
       this.startTime =
-        lastTime && !newNextToken
-          ? DateTime.fromISO(lastTime).toMillis()
-          : startTime;
+        lastTime && !newNextToken ? Date.parse(lastTime) : startTime;
     }, this.interval);
     // stop after timeout
     this.timeoutTimer = setTimeout(() => {

@@ -1,4 +1,4 @@
-import { eventBridgeSpy, EventBridgeSpyParams } from '../src/spies/eventBridge';
+import { eventBridgeSpy, EventBridgeSpyParams } from 'sls-jest';
 import {
   EventBridgeClient,
   PutEventsCommand,
