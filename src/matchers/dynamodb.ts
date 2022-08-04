@@ -11,6 +11,7 @@ import {
   printReceived,
   stringify,
 } from 'jest-matcher-utils';
+import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -106,4 +107,66 @@ export const toHaveItemMatchingObject = async function (
         );
 
   return { actual: received, expected, message, name: matcherName, pass };
+};
+
+export const toHaveItemMatchingSnapshot = async function (
+  this: MatcherState,
+  input: DynamodbItemInput,
+  ...rest: any
+) {
+  const { tableName, key, region } = input;
+
+  // Note: we create a new client instance each time this matcher is called
+  // TODO improve this by reusing the same client instance??
+  const client = DynamoDBDocumentClient.from(
+    new DynamoDBClient({
+      region,
+    }),
+  );
+
+  const { Item: received } = await client.send(
+    new GetCommand({
+      TableName: tableName,
+      Key: key,
+    }),
+  );
+
+  return toMatchSnapshot.call(
+    this,
+    received,
+    // @ts-ignore
+    ...rest,
+  );
+};
+
+export const toHaveItemMatchingInlineSnapshot = async function (
+  this: MatcherState,
+  input: DynamodbItemInput,
+  ...rest: any
+) {
+  const { tableName, key, region } = input;
+
+  this.error = new Error();
+
+  // Note: we create a new client instance each time this matcher is called
+  // TODO improve this by reusing the same client instance??
+  const client = DynamoDBDocumentClient.from(
+    new DynamoDBClient({
+      region,
+    }),
+  );
+
+  const { Item: received } = await client.send(
+    new GetCommand({
+      TableName: tableName,
+      Key: key,
+    }),
+  );
+
+  return toMatchInlineSnapshot.call(
+    this,
+    received,
+    // @ts-ignore
+    ...rest,
+  );
 };

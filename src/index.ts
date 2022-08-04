@@ -9,6 +9,11 @@ declare global {
     interface Matchers<R> {
       toExist(): R;
       toHaveItemMatchingObject(params: DocumentClient.AttributeMap): R;
+      toHaveItemMatchingSnapshot(propertiesOrHint?: string, hint?: string): R;
+      toHaveItemMatchingInlineSnapshot(
+        propertiesOrHint?: string,
+        hint?: string,
+      ): R;
       toHaveEventMatchingObject(
         expected: Partial<EventBridgeEvent<string, unknown>>,
       ): R;
