@@ -8,7 +8,7 @@ const template = `
 `;
 
 describe('Mapping Template', () => {
-  it('should evaluate a template', async () => {
+  it('should evaluate a template string', async () => {
     const expected = `
 {
   "id": "123"
@@ -24,6 +24,19 @@ describe('Mapping Template', () => {
         },
       }),
     ).toEvaluateTo(expected);
+  });
+
+  it('should evaluate a template object', async () => {
+    await expect(
+      vtlMappingTemplate({
+        template,
+        context: {
+          arguments: {
+            id: '123',
+          },
+        },
+      }),
+    ).toEvaluateTo({ id: '123' });
   });
 
   it('should evaluate a template snapshot', async () => {

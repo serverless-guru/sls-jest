@@ -11,7 +11,7 @@ import {
   EvaluateMappingTemplateCommand,
 } from '@aws-sdk/client-appsync';
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
-import { equals } from '@jest/expect-utils';
+import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { AppSyncResolverEvent } from 'aws-lambda';
 import { O } from 'ts-toolbelt';
 
@@ -26,7 +26,7 @@ export type VtlTemplateInput = {
 export const toEvaluateTo = async function (
   this: MatcherState,
   params: VtlTemplateInput,
-  expected: string,
+  expected: string | object,
 ) {
   const matcherName = 'toEvaluateTo';
   const options: MatcherHintOptions = {
@@ -35,14 +35,20 @@ export const toEvaluateTo = async function (
 
   const client = new AppSyncClient({});
 
-  const { evaluationResult: received } = await client.send(
+  let { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
       template: params.template,
       context: JSON.stringify(params.context),
     }),
   );
 
-  const pass = equals(received, expected);
+  if (received && typeof expected === 'object') {
+    try {
+      received = JSON.parse(received);
+    } catch (error) {}
+  }
+
+  const pass = equals(received, expected, [iterableEquality, subsetEquality]);
 
   const message = pass
     ? () =>

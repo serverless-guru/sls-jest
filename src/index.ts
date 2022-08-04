@@ -16,7 +16,7 @@ declare global {
         expected: Partial<EventBridgeEvent<string, unknown>>,
         times: number,
       ): R;
-      toEvaluateTo(template: string): R;
+      toEvaluateTo(template: string | object): R;
       toEvaluateToSnapshot(propertiesOrHint?: string, hint?: string): R;
       toEvaluateToInlineSnapshot(propertiesOrHint?: string, hint?: string): R;
     }
