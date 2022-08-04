@@ -26,7 +26,7 @@ export const toEvaluateTo = async function (
   params: VtlTemplateInput,
   expected: string,
 ) {
-  const matcherName = 'toEqual';
+  const matcherName = 'toEvaluateTo';
   const options: MatcherHintOptions = {
     isNot: this.isNot,
   };
