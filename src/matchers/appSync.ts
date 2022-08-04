@@ -10,8 +10,8 @@ import {
   AppSyncClient,
   EvaluateMappingTemplateCommand,
 } from '@aws-sdk/client-appsync';
-import { isEqual } from 'lodash';
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
+import { equals } from '@jest/expect-utils';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -40,7 +40,7 @@ export const toEvaluateTo = async function (
     }),
   );
 
-  const pass = isEqual(received, expected);
+  const pass = equals(received, expected);
 
   const message = pass
     ? () =>
@@ -61,9 +61,6 @@ export const toEvaluateTo = async function (
           this.expand !== false,
         );
 
-  // Passing the actual and expected objects so that a custom reporter
-  // could access them, for example in order to display a custom visual diff,
-  // or create a different error message
   return { actual: received, expected, message, name: matcherName, pass };
 };
 
