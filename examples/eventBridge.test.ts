@@ -4,8 +4,9 @@ import {
   PutEventsCommand,
 } from '@aws-sdk/client-eventbridge';
 import { v4 as uuid } from 'uuid';
+import { EventBridgeSpy } from '../lib/spies/eventBridge/EventBridgeSpy';
 
-jest.setTimeout(15000);
+jest.setTimeout(30000);
 
 const client = new EventBridgeClient({});
 
@@ -15,7 +16,9 @@ describe.each([
     {
       type: 'sqs',
       config: {
-        timeout: 10000,
+        clientConfig: { region: 'us-east-1' },
+        waitTimeSeconds: 2000,
+        matcherDefaultTimeout: 10_000,
         queueUrl:
           'https://sqs.us-east-1.amazonaws.com/379730309663/spy-queue.fifo',
       },
@@ -26,20 +29,34 @@ describe.each([
     {
       type: 'cloudWatchLogs',
       config: {
-        timeout: 10000,
+        clientConfig: { region: 'us-east-1' },
+        matcherDefaultTimeout: 15_000,
         logGroupName: '/aws/events/event-bridge-spy',
       },
     } as EventBridgeSpyParams,
   ],
 ])('EventBridge Spy with %s', (type, config) => {
-  it('should have event matching object', async () => {
-    const spy = eventBridgeSpy(config);
+  let spy: EventBridgeSpy;
 
+  beforeAll(async () => {
+    spy = eventBridgeSpy(config);
+  });
+
+  afterEach(() => {
+    spy.reset();
+  });
+
+  afterAll(async () => {
+    await spy.stop();
+  });
+
+  it('should have event matching object', async () => {
     const order = {
       id: uuid(),
       createdAt: new Date().toISOString(),
     };
 
+    // AWS SDK error wrapper for TimeoutError: socket hang up
     await client.send(
       new PutEventsCommand({
         Entries: [
@@ -59,13 +76,9 @@ describe.each([
         id: order.id,
       },
     });
-
-    await spy.mockReset();
   });
 
   it('should have event matching object times', async () => {
-    const spy = eventBridgeSpy(config);
-
     const order = {
       id: uuid(),
       createdAt: new Date().toISOString(),
@@ -94,13 +107,9 @@ describe.each([
       },
       1,
     );
-
-    await spy.mockReset();
   });
 
   it('should not have event matching object', async () => {
-    const spy = eventBridgeSpy(config);
-
     const order = {
       id: uuid(),
       createdAt: new Date().toISOString(),
@@ -111,7 +120,5 @@ describe.each([
         id: order.id,
       },
     });
-
-    await spy.mockReset();
   });
 });

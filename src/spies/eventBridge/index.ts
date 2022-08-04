@@ -1,18 +1,18 @@
 import {
-  CloudWatchEventSpyParams,
+  CloudWatchEventSpyConfig,
   CloudWatchLogsEventBridgeSpy,
 } from './CloudWatchLogsEventSpy';
 import { EventBridgeSpy } from './EventBridgeSpy';
-import { SQSEventBridgeSpy, SqsEventSpyParams } from './SqsEventBridgeSpy';
+import { SQSEventBridgeSpy, SqsEventSpyConfig } from './SqsEventBridgeSpy';
 
 export type EventBridgeSpyParams =
   | {
       type: 'cloudWatchLogs';
-      config: CloudWatchEventSpyParams;
+      config: CloudWatchEventSpyConfig;
     }
   | {
       type: 'sqs';
-      config: SqsEventSpyParams;
+      config: SqsEventSpyConfig;
     };
 
 export const eventBridgeSpy = (

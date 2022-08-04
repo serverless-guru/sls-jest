@@ -2,14 +2,15 @@ import {
   SQSClient,
   ReceiveMessageCommand,
   DeleteMessageBatchCommand,
+  SQSClientConfig,
 } from '@aws-sdk/client-sqs';
 import { EventBridgeEvent } from 'aws-lambda';
-import { EventBridgeSpy } from './EventBridgeSpy';
+import { EventBridgeSpy, EventBridgeSpyConfig } from './EventBridgeSpy';
 
-export type SqsEventSpyParams = {
-  timeout?: number;
+export type SqsEventSpyConfig = EventBridgeSpyConfig & {
   queueUrl: string;
   waitTimeSeconds: number;
+  clientConfig?: SQSClientConfig;
 };
 
 /**
@@ -17,35 +18,33 @@ export type SqsEventSpyParams = {
  * an event subscriber.
  * */
 export class SQSEventBridgeSpy extends EventBridgeSpy {
-  timeout: number;
   sqsClient: SQSClient;
   queueUrl: string;
   waitTimeSeconds: number;
-  promise?: Promise<void>;
-  done = false;
+  currentPromise?: Promise<void>;
+  isStopped = false;
 
-  constructor(params: SqsEventSpyParams) {
-    super();
+  constructor(config: SqsEventSpyConfig) {
+    const {
+      queueUrl,
+      waitTimeSeconds = 2000,
+      clientConfig = {},
+      ...defaultConfig
+    } = config;
 
-    const { queueUrl, timeout = 10000, waitTimeSeconds = 2000 } = params;
-    this.sqsClient = new SQSClient({});
+    super(defaultConfig);
+
+    this.sqsClient = new SQSClient(clientConfig);
     this.queueUrl = queueUrl;
     this.waitTimeSeconds = waitTimeSeconds;
-    this.timeout = timeout;
   }
 
   async pollEvents(): Promise<void> {
-    let timer = this.timeout;
     do {
-      const timeout = Math.min(Math.round(timer / 1000), this.waitTimeSeconds);
-      const start = Date.now();
-      this.promise = this.pullEvents(timeout);
-      await this.promise;
-      const end = Date.now() - start;
-      timer -= end;
-    } while (timer > 0 && !this.done);
-
-    this.finishedPolling();
+      const timeout = Math.min(this.waitTimeSeconds, 20);
+      this.currentPromise = this.pullEvents(timeout);
+      await this.currentPromise;
+    } while (!this.isStopped);
   }
 
   async pullEvents(timeout: number) {
@@ -79,9 +78,9 @@ export class SQSEventBridgeSpy extends EventBridgeSpy {
   }
 
   async stopPolling() {
-    this.done = true;
+    this.isStopped = true;
     // to avoid unresoled promises after a test ends,
     // we wait until the last poll is finished
-    await this.promise;
+    await this.currentPromise;
   }
 }

@@ -1,10 +1,15 @@
 import { EventBridgeEvent } from 'aws-lambda';
 import { uniqBy } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
+import { EventBridgeMatcherOptions } from '../../matchers';
 
 type EventMatcher = (
   event: EventBridgeEvent<string, unknown>[],
 ) => boolean | null;
+
+export type EventBridgeSpyConfig = {
+  matcherDefaultTimeout?: number;
+};
 
 /**
  * A basic class for spying on EventBridge events.
@@ -12,9 +17,11 @@ type EventMatcher = (
 export class EventBridgeSpy {
   events: EventBridgeEvent<string, unknown>[] = [];
   subject: BehaviorSubject<EventBridgeEvent<string, unknown>[]>;
+  matcherTimeout: number;
 
-  constructor() {
+  constructor(config: EventBridgeSpyConfig = {}) {
     this.subject = new BehaviorSubject(this.events);
+    this.matcherTimeout = config.matcherDefaultTimeout ?? 10000;
   }
 
   async pollEvents() {
@@ -24,13 +31,18 @@ export class EventBridgeSpy {
   appendEvents(events: EventBridgeEvent<string, unknown>[]) {
     const uniqueEvents = uniqBy(events, 'id');
     this.events = uniqBy([...this.events, ...uniqueEvents], 'id');
-    this.subject.next(this.events);
+    this.subject.next(events);
   }
 
   awaitEvents(
     matcher: EventMatcher,
+    config?: EventBridgeMatcherOptions,
   ): Promise<EventBridgeEvent<string, unknown>[]> {
     return new Promise<EventBridgeEvent<string, unknown>[]>((resolve) => {
+      const timer = setTimeout(() => {
+        sub.unsubscribe();
+        resolve(this.events);
+      }, config?.timeout ?? this.matcherTimeout);
       const sub = this.subject.subscribe({
         next: (events) => {
           if (matcher(events)) {
@@ -39,24 +51,23 @@ export class EventBridgeSpy {
           }
         },
         complete: () => {
+          clearTimeout(timer);
           resolve(this.events);
         },
       });
     });
   }
 
-  finishedPolling() {
+  reset() {
+    this.events = [];
     this.subject.complete();
+    this.subject = new BehaviorSubject(this.events);
   }
 
-  async mockReset() {
+  async stop() {
     await this.stopPolling();
-    this.clearMock();
+    this.reset();
   }
 
   async stopPolling() {}
-
-  clearMock() {
-    this.events = [];
-  }
 }

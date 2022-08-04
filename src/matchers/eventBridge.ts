@@ -9,16 +9,21 @@ type AssertionResponse = {
   pass: boolean;
 };
 
+export type EventBridgeMatcherOptions = {
+  timeout?: number;
+};
+
 export const toHaveEventMatchingObject = async function (
   this: MatcherState,
   spy: EventBridgeSpy,
   expected: Partial<EventBridgeEvent<string, unknown>>,
+  options?: EventBridgeMatcherOptions,
 ): Promise<AssertionResponse> {
   const events = await spy.awaitEvents((events) => {
     return events.some((event) =>
       equals(event, expected, [iterableEquality, subsetEquality]),
     );
-  });
+  }, options);
 
   const pass = events.some((event) =>
     equals(event, expected, [iterableEquality, subsetEquality]),
@@ -52,13 +57,14 @@ export const toHaveEventMatchingObjectTimes = async function (
   spy: EventBridgeSpy,
   expected: Partial<EventBridgeEvent<string, unknown>>,
   expectedTimes: number,
+  options?: EventBridgeMatcherOptions,
 ): Promise<AssertionResponse> {
   const events = await spy.awaitEvents((events) => {
     const found = events.filter((event) =>
       equals(event, expected, [iterableEquality, subsetEquality]),
     );
     return found.length > expectedTimes;
-  });
+  }, options);
 
   const found = events.filter((event) =>
     equals(event, expected, [iterableEquality, subsetEquality]),
