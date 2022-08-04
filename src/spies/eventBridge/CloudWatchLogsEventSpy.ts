@@ -71,13 +71,14 @@ export class CloudWatchLogsEventBridgeSpy extends EventBridgeSpy {
 
     const lastTime = last(this.events)?.time;
     // use the last event's time, but only if there is no nextToken
-    this.startTime =
-      lastTime && !this.nextToken ? Date.parse(lastTime) : this.startTime;
+    if (lastTime && !this.nextToken) {
+      this.startTime = Date.parse(lastTime);
+    }
   }
 
   async stopPolling() {
     this.intervalTimer && clearInterval(this.intervalTimer);
-    // to avoid unresoled promises after a test ends,
+    // to avoid unresolved promises after a test ends,
     // we wait until the last poll is finished
     await this.currentPromise;
   }

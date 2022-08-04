@@ -16,7 +16,7 @@ export type SqsEventSpyConfig = EventBridgeSpyConfig & {
 };
 
 /**
- * An implementation of the EventBdridgeSpy, using SQS as
+ * An implementation of the EventBridgeSpy, using SQS as
  * an event subscriber.
  * */
 export class SQSEventBridgeSpy extends EventBridgeSpy {
@@ -78,7 +78,7 @@ export class SQSEventBridgeSpy extends EventBridgeSpy {
 
   async stopPolling() {
     this.isStopped = true;
-    // to avoid unresoled promises after a test ends,
+    // to avoid unresolved promises after a test ends,
     // we wait until the last poll is finished
     await this.currentPromise;
   }
