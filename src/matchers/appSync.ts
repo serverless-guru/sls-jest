@@ -8,6 +8,7 @@ import {
 import { MatcherState } from 'expect';
 import {
   AppSyncClient,
+  AppSyncClientConfig,
   EvaluateMappingTemplateCommand,
 } from '@aws-sdk/client-appsync';
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
@@ -19,9 +20,21 @@ import { maybeParseJson } from './utils';
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
 
+const appSyncClients: Record<string, AppSyncClient> = {};
+
+const getAppSyncClient = (config: AppSyncClientConfig = {}) => {
+  const key = JSON.stringify(config);
+  if (!appSyncClients[key]) {
+    appSyncClients[key] = new AppSyncClient(config);
+  }
+
+  return appSyncClients[key];
+};
+
 export type VtlTemplateInput = {
   template: string;
   context: O.Partial<AppSyncResolverEvent<Record<string, unknown>>, 'deep'>;
+  clientConfig?: AppSyncClientConfig;
 };
 
 export const toEvaluateTo = async function (
@@ -34,7 +47,7 @@ export const toEvaluateTo = async function (
     isNot: this.isNot,
   };
 
-  const client = new AppSyncClient({});
+  const client = getAppSyncClient(params.clientConfig);
 
   let { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
@@ -78,7 +91,7 @@ export const toEvaluateToSnapshot = async function (
   params: VtlTemplateInput,
   ...rest: any
 ) {
-  const client = new AppSyncClient({});
+  const client = getAppSyncClient(params.clientConfig);
 
   const { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
@@ -96,7 +109,7 @@ export const toEvaluateToInlineSnapshot = async function (
   params: VtlTemplateInput,
   ...rest: any
 ) {
-  const client = new AppSyncClient({});
+  const client = getAppSyncClient(params.clientConfig);
 
   this.error = new Error();
 
