@@ -3,7 +3,7 @@ import {
   EventBridgeClient,
   PutEventsCommand,
 } from '@aws-sdk/client-eventbridge';
-import { v4 as uuid } from 'uuid';
+import crypto from 'crypto';
 
 jest.setTimeout(30000);
 
@@ -51,7 +51,7 @@ describe.each([
 
   it('should have event matching object', async () => {
     const order = {
-      id: uuid(),
+      id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     };
 
@@ -79,7 +79,7 @@ describe.each([
 
   it('should have event matching object times', async () => {
     const order = {
-      id: uuid(),
+      id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     };
 
@@ -110,7 +110,7 @@ describe.each([
 
   it('should not have event matching object', async () => {
     const order = {
-      id: uuid(),
+      id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     };
     await expect(spy).not.toHaveEventMatchingObject({
