@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Mapping Template should evaluate a template snapshot 1`] = `
+"
+{
+  \\"id\\": \\"456\\"
+}
+"
+`;

@@ -24,6 +24,7 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "@aws-sdk/client-appsync": "^3.142.0",
     "@aws-sdk/client-cloudwatch-logs": "^3.137.0",
     "@aws-sdk/client-dynamodb": "^3.137.0",
     "@aws-sdk/client-sqs": "^3.142.0",
