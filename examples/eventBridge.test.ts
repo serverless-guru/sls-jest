@@ -1,53 +1,87 @@
-import * as asserts from '../lib/assertions';
-import { eventBridgeSpy } from '../lib/spies/cloudwatch';
+import { EventBridgeSpy, eventBridgeSpy, EventBridgeSpyParams } from 'sls-jest';
 import {
   EventBridgeClient,
   PutEventsCommand,
 } from '@aws-sdk/client-eventbridge';
-
-expect.extend(asserts);
+import crypto from 'crypto';
 
 jest.setTimeout(30000);
 
 const client = new EventBridgeClient({});
 
-describe('EventBridge Spy', () => {
-  it('should have matching event', async () => {
-    const spy = eventBridgeSpy({
-      logGroupName: '/aws/events/event-bridge-spy',
-    });
-
-    await client.send(
-      new PutEventsCommand({
-        Entries: [
-          {
-            EventBusName: 'default',
-            DetailType: 'orderCreated',
-            Source: 'sls-jest',
-            Detail: JSON.stringify({
-              id: '123',
-              createdAt: '2020-01-01T00:00:00.000Z',
-            }),
-          },
-        ],
-      }),
-    );
-
-    await expect(spy).toHaveEventMatching({
-      'detail-type': 'orderCreated',
-      detail: {
-        id: '123',
-        createdAt: '2020-01-01T00:00:00.000Z',
+describe.each([
+  [
+    'SQS',
+    {
+      type: 'sqs',
+      config: {
+        clientConfig: { region: 'us-east-1' },
+        waitTimeSeconds: 2000,
+        matcherDefaultTimeout: 10_000,
+        queueUrl:
+          'https://sqs.us-east-1.amazonaws.com/379730309663/spy-queue.fifo',
       },
-    });
+    } as EventBridgeSpyParams,
+  ],
+  [
+    'CloudWatchLogs',
+    {
+      type: 'cloudWatchLogs',
+      config: {
+        clientConfig: { region: 'us-east-1' },
+        matcherDefaultTimeout: 15_000,
+        logGroupName: '/aws/events/event-bridge-spy',
+      },
+    } as EventBridgeSpyParams,
+  ],
+])('EventBridge Spy with %s', (type, config) => {
+  let spy: EventBridgeSpy;
 
-    await spy.reset();
+  beforeAll(async () => {
+    spy = eventBridgeSpy(config);
   });
 
-  it('should have matching event times', async () => {
-    const spy = eventBridgeSpy({
-      logGroupName: '/aws/events/event-bridge-spy',
+  afterEach(() => {
+    spy.reset();
+  });
+
+  afterAll(async () => {
+    await spy.stop();
+  });
+
+  it('should have event matching object', async () => {
+    const order = {
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+    };
+
+    // AWS SDK error wrapper for TimeoutError: socket hang up
+    await client.send(
+      new PutEventsCommand({
+        Entries: [
+          {
+            EventBusName: 'default',
+            DetailType: 'orderCreated',
+            Source: 'sls-jest',
+            Detail: JSON.stringify(order),
+          },
+        ],
+      }),
+    );
+
+    await expect(spy).toHaveEventMatchingObject({
+      'detail-type': 'orderCreated',
+      detail: {
+        id: order.id,
+      },
     });
+  });
+
+  it('should have event matching object times', async () => {
+    const order = {
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+    };
 
     await client.send(
       new PutEventsCommand({
@@ -56,43 +90,34 @@ describe('EventBridge Spy', () => {
             EventBusName: 'default',
             DetailType: 'orderCreated',
             Source: 'sls-jest',
-            Detail: JSON.stringify({
-              id: '456',
-              createdAt: '2020-01-01T00:00:00.000Z',
-            }),
+            Detail: JSON.stringify(order),
           },
         ],
       }),
     );
 
-    // natches an event exactly once
-    await expect(spy).toHaveEventMatchingTimes(
+    // matches an event exactly once
+    await expect(spy).toHaveEventMatchingObjectTimes(
       {
         'detail-type': 'orderCreated',
         detail: {
-          id: '456',
-          createdAt: '2020-01-01T00:00:00.000Z',
+          id: order.id,
         },
       },
       1,
     );
-
-    await spy.reset();
   });
 
-  it('should hnot ave matching event', async () => {
-    const spy = eventBridgeSpy({
-      logGroupName: '/aws/events/event-bridge-spy',
-    });
-
-    await expect(spy).not.toHaveEventMatching({
+  it('should not have event matching object', async () => {
+    const order = {
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+    };
+    await expect(spy).not.toHaveEventMatchingObject({
       'detail-type': 'orderCreated',
       detail: {
-        id: '123',
-        createdAt: '2020-01-01T00:00:00.000Z',
+        id: order.id,
       },
     });
-
-    await spy.reset();
   });
 });

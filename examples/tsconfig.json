@@ -1,11 +1,9 @@
 {
+  "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
-    "sourceMap": true,
-    "lib": ["es2020"],
-    "module": "commonjs",
-    "target": "es2020",
-    "strict": true
+    "declaration": true,
+    "outDir": "lib"
   },
-  "include": ["**/*.ts", "../types/index.d.ts"],
-  "exclude": ["./node_modules"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
