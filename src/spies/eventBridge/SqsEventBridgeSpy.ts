@@ -7,6 +7,7 @@ import {
 import { EventBridgeEvent } from 'aws-lambda';
 import { clamp } from 'lodash';
 import { EventBridgeSpy, EventBridgeSpyConfig } from './EventBridgeSpy';
+import { v4 as uuid } from 'uuid';
 
 export type SqsEventSpyConfig = EventBridgeSpyConfig & {
   queueUrl: string;
@@ -67,7 +68,7 @@ export class SQSEventBridgeSpy extends EventBridgeSpy {
         new DeleteMessageBatchCommand({
           QueueUrl: this.queueUrl,
           Entries: result.Messages?.map((message) => ({
-            Id: message.MessageId,
+            Id: uuid(),
             ReceiptHandle: message.ReceiptHandle,
           })),
         }),
