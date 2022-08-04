@@ -4,11 +4,6 @@ import { MatcherState } from 'expect';
 import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { EventBridgeSpy } from '../spies/eventBridge/EventBridgeSpy';
 
-type AssertionResponse = {
-  message: () => string;
-  pass: boolean;
-};
-
 export type EventBridgeMatcherOptions = {
   timeout?: number;
 };
@@ -18,7 +13,7 @@ export const toHaveEventMatchingObject = async function (
   spy: EventBridgeSpy,
   expected: Partial<EventBridgeEvent<string, unknown>>,
   options?: EventBridgeMatcherOptions,
-): Promise<AssertionResponse> {
+) {
   const events = await spy.awaitEvents((events) => {
     return events.some((event) =>
       equals(event, expected, [iterableEquality, subsetEquality]),
@@ -32,7 +27,7 @@ export const toHaveEventMatchingObject = async function (
   const message = pass
     ? () => {
         return (
-          matcherHint('toHaveEventMatchingObject', 'eventsSpy', 'expected') +
+          matcherHint('toHaveEventMatchingObject', 'spy', 'expected') +
           '\n\n' +
           `Expected: not ${printExpected(expected)}\n` +
           `Number of events: ${printReceived(events.length)}`
@@ -40,7 +35,7 @@ export const toHaveEventMatchingObject = async function (
       }
     : () => {
         return (
-          matcherHint('toHaveEventMatchingObject', 'eventsSpy', 'expected') +
+          matcherHint('toHaveEventMatchingObject', 'spy', 'expected') +
           '\n\n' +
           `Expected: ${printExpected(expected)}\n` +
           (events.length > 0
@@ -58,7 +53,7 @@ export const toHaveEventMatchingObjectTimes = async function (
   expected: Partial<EventBridgeEvent<string, unknown>>,
   expectedTimes: number,
   options?: EventBridgeMatcherOptions,
-): Promise<AssertionResponse> {
+) {
   const events = await spy.awaitEvents((events) => {
     const found = events.filter((event) =>
       equals(event, expected, [iterableEquality, subsetEquality]),
@@ -76,7 +71,7 @@ export const toHaveEventMatchingObjectTimes = async function (
     ? () =>
         matcherHint(
           'toHaveEventMatchingObjectTimes',
-          'eventsSpy',
+          'spy',
           'expected, times',
         ) +
         `\n\n` +
@@ -84,7 +79,7 @@ export const toHaveEventMatchingObjectTimes = async function (
     : () =>
         matcherHint(
           'toHaveEventMatchingObjectTimes',
-          'eventsSpy',
+          'spy',
           'expected, times',
         ) +
         '\n\n' +

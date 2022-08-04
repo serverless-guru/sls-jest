@@ -23,7 +23,7 @@ export class CloudWatchLogsEventBridgeSpy extends EventBridgeSpy {
   interval: number;
   nextToken?: string;
   logGroupName: string;
-  cloudWatchLogs: CloudWatchLogsClient;
+  cloudWatchLogsClient: CloudWatchLogsClient;
   currentPromise?: Promise<void>;
 
   constructor(config: CloudWatchEventSpyConfig) {
@@ -36,7 +36,7 @@ export class CloudWatchLogsEventBridgeSpy extends EventBridgeSpy {
 
     super(defaultConfig);
 
-    this.cloudWatchLogs = new CloudWatchLogsClient(clientConfig);
+    this.cloudWatchLogsClient = new CloudWatchLogsClient(clientConfig);
     this.logGroupName = logGroupName;
     this.startTime = Date.now() - 2000;
     this.interval = interval;
@@ -51,7 +51,7 @@ export class CloudWatchLogsEventBridgeSpy extends EventBridgeSpy {
   }
 
   async pullEvents() {
-    const result = await this.cloudWatchLogs.send(
+    const result = await this.cloudWatchLogsClient.send(
       new FilterLogEventsCommand({
         logGroupName: this.logGroupName,
         startTime: this.startTime,

@@ -29,9 +29,8 @@ export class EventBridgeSpy {
   }
 
   protected appendEvents(events: EventBridgeEvent<string, unknown>[]) {
-    const uniqueEvents = uniqBy(events, 'id');
-    this.events = uniqBy([...this.events, ...uniqueEvents], 'id');
-    this.subject.next(events);
+    this.events = uniqBy([...this.events, ...events], 'id');
+    this.subject.next(this.events);
   }
 
   awaitEvents(

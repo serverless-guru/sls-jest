@@ -5,6 +5,7 @@ import {
   SQSClientConfig,
 } from '@aws-sdk/client-sqs';
 import { EventBridgeEvent } from 'aws-lambda';
+import { clamp } from 'lodash';
 import { EventBridgeSpy, EventBridgeSpyConfig } from './EventBridgeSpy';
 
 export type SqsEventSpyConfig = EventBridgeSpyConfig & {
@@ -41,19 +42,17 @@ export class SQSEventBridgeSpy extends EventBridgeSpy {
 
   async startPolling() {
     do {
-      const timeout = Math.min(this.waitTimeSeconds, 20);
-      this.currentPromise = this.pullEvents(timeout);
+      this.currentPromise = this.pullEvents();
       await this.currentPromise;
     } while (!this.isStopped);
   }
 
-  async pullEvents(timeout: number) {
+  async pullEvents() {
     const result = await this.sqsClient.send(
       new ReceiveMessageCommand({
         QueueUrl: this.queueUrl,
         MaxNumberOfMessages: 10,
-        WaitTimeSeconds: timeout,
-        VisibilityTimeout: Math.ceil(timeout / 1000),
+        WaitTimeSeconds: clamp(this.waitTimeSeconds, 0, 20),
       }),
     );
 
@@ -63,7 +62,6 @@ export class SQSEventBridgeSpy extends EventBridgeSpy {
     );
 
     if (events) {
-      this.subject;
       this.appendEvents(events);
       this.sqsClient.send(
         new DeleteMessageBatchCommand({
