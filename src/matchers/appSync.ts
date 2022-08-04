@@ -33,7 +33,7 @@ const getAppSyncClient = (config: AppSyncClientConfig = {}) => {
 
 export type VtlTemplateInput = {
   template: string;
-  context: O.Partial<AppSyncResolverEvent<Record<string, unknown>>, 'deep'>;
+  context: O.Partial<AppSyncResolverEvent<Record<string, any>>, 'deep'>;
   clientConfig?: AppSyncClientConfig;
 };
 
@@ -56,7 +56,7 @@ export const toEvaluateTo = async function (
     }),
   );
 
-  if (received && typeof expected === 'object') {
+  if (typeof expected === 'object') {
     try {
       received = maybeParseJson(received);
     } catch (error) {}
