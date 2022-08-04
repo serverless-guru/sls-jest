@@ -24,11 +24,11 @@ export class EventBridgeSpy {
     this.matcherTimeout = config.matcherDefaultTimeout ?? 10000;
   }
 
-  async pollEvents() {
+  async startPolling() {
     throw new Error('Not implemented. Implement this in a child class.');
   }
 
-  appendEvents(events: EventBridgeEvent<string, unknown>[]) {
+  protected appendEvents(events: EventBridgeEvent<string, unknown>[]) {
     const uniqueEvents = uniqBy(events, 'id');
     this.events = uniqBy([...this.events, ...uniqueEvents], 'id');
     this.subject.next(events);
@@ -47,6 +47,7 @@ export class EventBridgeSpy {
         next: (events) => {
           if (matcher(events)) {
             sub.unsubscribe();
+            clearTimeout(timer);
             resolve(events);
           }
         },
@@ -69,5 +70,7 @@ export class EventBridgeSpy {
     this.reset();
   }
 
-  async stopPolling() {}
+  protected async stopPolling() {
+    throw new Error('Not implemented. Implement this in a child class.');
+  }
 }

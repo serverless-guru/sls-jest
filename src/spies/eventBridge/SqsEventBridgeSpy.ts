@@ -39,7 +39,7 @@ export class SQSEventBridgeSpy extends EventBridgeSpy {
     this.waitTimeSeconds = waitTimeSeconds;
   }
 
-  async pollEvents(): Promise<void> {
+  async startPolling() {
     do {
       const timeout = Math.min(this.waitTimeSeconds, 20);
       this.currentPromise = this.pullEvents(timeout);

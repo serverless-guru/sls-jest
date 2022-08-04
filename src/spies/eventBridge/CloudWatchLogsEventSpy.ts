@@ -42,7 +42,7 @@ export class CloudWatchLogsEventBridgeSpy extends EventBridgeSpy {
     this.interval = interval;
   }
 
-  async pollEvents(): Promise<void> {
+  async startPolling() {
     // start polling events
     this.intervalTimer = setInterval(async () => {
       this.currentPromise = this.pullEvents();

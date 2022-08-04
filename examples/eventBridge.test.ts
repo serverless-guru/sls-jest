@@ -1,10 +1,9 @@
-import { eventBridgeSpy, EventBridgeSpyParams } from 'sls-jest';
+import { EventBridgeSpy, eventBridgeSpy, EventBridgeSpyParams } from 'sls-jest';
 import {
   EventBridgeClient,
   PutEventsCommand,
 } from '@aws-sdk/client-eventbridge';
 import { v4 as uuid } from 'uuid';
-import { EventBridgeSpy } from '../lib/spies/eventBridge/EventBridgeSpy';
 
 jest.setTimeout(30000);
 

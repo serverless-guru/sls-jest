@@ -5,6 +5,8 @@ import {
 import { EventBridgeSpy } from './EventBridgeSpy';
 import { SQSEventBridgeSpy, SqsEventSpyConfig } from './SqsEventBridgeSpy';
 
+export type { EventBridgeSpy } from './EventBridgeSpy';
+
 export type EventBridgeSpyParams =
   | {
       type: 'cloudWatchLogs';
@@ -30,6 +32,6 @@ export const eventBridgeSpy = (
     throw new Error(`Unknown eventBridgeSpy type: ${type}`);
   }
 
-  spy.pollEvents();
+  spy.startPolling();
   return spy;
 };
