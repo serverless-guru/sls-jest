@@ -4,7 +4,6 @@ import {
 } from './CloudWatchLogsEventSpy';
 import { EventBridgeSpy } from './EventBridgeSpy';
 import { SQSEventBridgeSpy, SqsEventSpyConfig } from './SqsEventBridgeSpy';
-
 export type { EventBridgeSpy } from './EventBridgeSpy';
 
 export type EventBridgeSpyParams =

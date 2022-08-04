@@ -1,3 +1,5 @@
+import { vtlMappingTemplate } from 'sls-jest';
+
 const template = `
 #set($id=$ctx.args.id)
 {
@@ -12,36 +14,42 @@ describe('Mapping Template', () => {
   "id": "123"
 }
 `;
-    await expect({
-      template,
-      context: {
-        arguments: {
-          id: '123',
+    await expect(
+      vtlMappingTemplate({
+        template,
+        context: {
+          arguments: {
+            id: '123',
+          },
         },
-      },
-    }).toEvaluateTo(expected);
+      }),
+    ).toEvaluateTo(expected);
   });
 
   it('should evaluate a template snapshot', async () => {
-    await expect({
-      template,
-      context: {
-        arguments: {
-          id: '456',
+    await expect(
+      vtlMappingTemplate({
+        template,
+        context: {
+          arguments: {
+            id: '456',
+          },
         },
-      },
-    }).toEvaluateToSnapshot();
+      }),
+    ).toEvaluateToSnapshot();
   });
 
   it('should evaluate a template inline snapshot', async () => {
-    await expect({
-      template,
-      context: {
-        arguments: {
-          id: '789',
+    await expect(
+      vtlMappingTemplate({
+        template,
+        context: {
+          arguments: {
+            id: '789',
+          },
         },
-      },
-    }).toEvaluateToInlineSnapshot(`
+      }),
+    ).toEvaluateToInlineSnapshot(`
       "
       {
         \\"id\\": \\"789\\"

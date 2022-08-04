@@ -12,13 +12,15 @@ import {
 } from '@aws-sdk/client-appsync';
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { equals } from '@jest/expect-utils';
+import { AppSyncResolverEvent } from 'aws-lambda';
+import { O } from 'ts-toolbelt';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
 
 export type VtlTemplateInput = {
   template: string;
-  context: Record<string, unknown>;
+  context: O.Partial<AppSyncResolverEvent<Record<string, unknown>>, 'deep'>;
 };
 
 export const toEvaluateTo = async function (
