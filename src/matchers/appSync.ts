@@ -14,6 +14,7 @@ import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { AppSyncResolverEvent } from 'aws-lambda';
 import { O } from 'ts-toolbelt';
+import { maybeParseJson } from './utils';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -44,7 +45,7 @@ export const toEvaluateTo = async function (
 
   if (received && typeof expected === 'object') {
     try {
-      received = JSON.parse(received);
+      received = maybeParseJson(received);
     } catch (error) {}
   }
 
@@ -87,7 +88,7 @@ export const toEvaluateToSnapshot = async function (
   );
 
   // @ts-ignore
-  return toMatchSnapshot.call(this, received, ...rest);
+  return toMatchSnapshot.call(this, maybeParseJson(received), ...rest);
 };
 
 export const toEvaluateToInlineSnapshot = async function (
@@ -107,5 +108,5 @@ export const toEvaluateToInlineSnapshot = async function (
   );
 
   // @ts-ignore
-  return toMatchInlineSnapshot.call(this, received, ...rest);
+  return toMatchInlineSnapshot.call(this, maybeParseJson(received), ...rest);
 };

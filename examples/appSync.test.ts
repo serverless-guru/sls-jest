@@ -39,7 +39,7 @@ describe('Mapping Template', () => {
     ).toEvaluateTo({ id: '123' });
   });
 
-  it('should evaluate a template snapshot', async () => {
+  it('should evaluate a template snapshot as object', async () => {
     await expect(
       vtlMappingTemplate({
         template,
@@ -52,7 +52,7 @@ describe('Mapping Template', () => {
     ).toEvaluateToSnapshot();
   });
 
-  it('should evaluate a template inline snapshot', async () => {
+  it('should evaluate a template inline snapshot as object', async () => {
     await expect(
       vtlMappingTemplate({
         template,
@@ -63,11 +63,35 @@ describe('Mapping Template', () => {
         },
       }),
     ).toEvaluateToInlineSnapshot(`
-      "
-      {
-        \\"id\\": \\"789\\"
+      Object {
+        "id": "789",
       }
-      "
     `);
+  });
+
+  it('should evaluate a template snapshot as string', async () => {
+    await expect(
+      vtlMappingTemplate({
+        template: 'hello ${ctx.args.id}',
+        context: {
+          arguments: {
+            id: '456',
+          },
+        },
+      }),
+    ).toEvaluateToSnapshot();
+  });
+
+  it('should evaluate a template inline snapshot', async () => {
+    await expect(
+      vtlMappingTemplate({
+        template: 'hello ${ctx.args.id}',
+        context: {
+          arguments: {
+            id: '789',
+          },
+        },
+      }),
+    ).toEvaluateToInlineSnapshot(`"hello 789"`);
   });
 });

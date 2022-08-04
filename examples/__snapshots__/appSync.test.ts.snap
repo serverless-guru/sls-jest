@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Mapping Template should evaluate a template snapshot 1`] = `
-"
-{
-  \\"id\\": \\"456\\"
+exports[`Mapping Template should evaluate a template snapshot as object 1`] = `
+Object {
+  "id": "456",
 }
-"
 `;
+
+exports[`Mapping Template should evaluate a template snapshot as string 1`] = `"hello 456"`;
