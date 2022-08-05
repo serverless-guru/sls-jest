@@ -1,5 +1,5 @@
 {
-  "name": "@serverless-guru/sls-jest",
+  "name": "@sls-jest/core",
   "version": "0.0.0",
   "description": "A collection of matchers and spies for testing AWS serverless applications",
   "main": "lib/index.js",
