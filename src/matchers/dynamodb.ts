@@ -66,12 +66,12 @@ export const toExist = async function (
   };
 };
 
-export const toHaveItemMatchingObject = async function (
+export const toExistAndMatchObject = async function (
   this: MatcherState,
   input: DynamodbItemInput,
   expected: DocumentClient.AttributeMap,
 ) {
-  const matcherName = 'toHaveItemMatchingObject';
+  const matcherName = 'toExistAndMatchObject';
   const options: MatcherHintOptions = {
     isNot: this.isNot,
   };
@@ -111,7 +111,7 @@ export const toHaveItemMatchingObject = async function (
   return { actual: received, expected, message, name: matcherName, pass };
 };
 
-export const toHaveItemMatchingSnapshot = async function (
+export const toExistAndMatchingSnapshot = async function (
   this: MatcherState,
   input: DynamodbItemInput,
   ...rest: any
@@ -135,7 +135,7 @@ export const toHaveItemMatchingSnapshot = async function (
   );
 };
 
-export const toHaveItemMatchingInlineSnapshot = async function (
+export const toExistAndMatchingInlineSnapshot = async function (
   this: MatcherState,
   input: DynamodbItemInput,
   ...rest: any
