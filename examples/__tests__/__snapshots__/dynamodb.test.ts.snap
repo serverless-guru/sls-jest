@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`toHaveItemMatchingSnapshot should print values when item exists 1`] = `
+exports[`toExistAndMatchingSnapshot should print values when item exists 1`] = `
 Object {
   "id": "123",
   "title": "Buy milk",
 }
 `;
 
-exports[`toHaveItemMatchingSnapshot should prints undefined when item does not exists 1`] = `undefined`;
+exports[`toExistAndMatchingSnapshot should prints undefined when item does not exists 1`] = `undefined`;

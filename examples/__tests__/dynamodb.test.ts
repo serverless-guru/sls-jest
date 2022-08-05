@@ -1,9 +1,9 @@
-import { dynamodbItemInput } from 'sls-jest';
+import { dynamodbItem } from 'sls-jest';
 
 describe('toExist', () => {
   it('should succeed when item exists in the database', async () => {
     await expect(
-      dynamodbItemInput({
+      dynamodbItem({
         tableName: 'todos',
         key: {
           id: '123',
@@ -15,7 +15,7 @@ describe('toExist', () => {
   it('should fails when item does not exist in the database', async () => {
     try {
       await expect(
-        dynamodbItemInput({
+        dynamodbItem({
           tableName: 'todos',
           key: {
             id: '456',
@@ -32,7 +32,7 @@ describe('toExist', () => {
   it('should fails when database does not exist', async () => {
     try {
       await expect(
-        dynamodbItemInput({
+        dynamodbItem({
           tableName: 'toDos',
           key: {
             id: '456',
@@ -47,7 +47,7 @@ describe('toExist', () => {
 
     try {
       await expect(
-        dynamodbItemInput({
+        dynamodbItem({
           tableName: 'toDos',
           key: {
             id: '456',
@@ -68,7 +68,7 @@ describe('toExist', () => {
 describe('.not.toExist', () => {
   it('should succeed when item does not exist in the database', async () => {
     await expect(
-      dynamodbItemInput({
+      dynamodbItem({
         tableName: 'todos',
         key: {
           id: '456',
@@ -80,7 +80,7 @@ describe('.not.toExist', () => {
   it('should fail when item exists in the database', async () => {
     try {
       await expect(
-        dynamodbItemInput({
+        dynamodbItem({
           tableName: 'todos',
           key: {
             id: '123',
@@ -95,16 +95,16 @@ describe('.not.toExist', () => {
   });
 });
 
-describe('toHaveItemMatchingObject', () => {
+describe('toExistAndMatchingObject', () => {
   it('should succeed when item exists and matches the expected object', async () => {
     await expect(
-      dynamodbItemInput({
+      dynamodbItem({
         tableName: 'todos',
         key: {
           id: '123',
         },
       }),
-    ).toHaveItemMatchingObject({
+    ).toExistAndMatchingObject({
       id: '123',
       title: 'Buy milk',
     });
@@ -113,19 +113,19 @@ describe('toHaveItemMatchingObject', () => {
   it("should fail when item exists but doesn't match the expected object", async () => {
     try {
       await expect(
-        dynamodbItemInput({
+        dynamodbItem({
           tableName: 'todos',
           key: {
             id: '123',
           },
         }),
-      ).toHaveItemMatchingObject({
+      ).toExistAndMatchingObject({
         id: '123',
         title: 'Play Fifa',
       });
     } catch (e) {
       expect(e).toMatchInlineSnapshot(`
-        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoExistAndMatchObject[2m([22m[32mexpected[39m[2m)[22m
+        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoExistAndMatchingObject[2m([22m[32mexpected[39m[2m)[22m
 
         [32m- Expected  - 1[39m
         [31m+ Received  + 1[39m
@@ -142,19 +142,19 @@ describe('toHaveItemMatchingObject', () => {
   it('should fail when item does not exists', async () => {
     try {
       await expect(
-        dynamodbItemInput({
+        dynamodbItem({
           tableName: 'todos',
           key: {
             id: '456',
           },
         }),
-      ).toHaveItemMatchingObject({
+      ).toExistAndMatchingObject({
         id: '456',
         title: 'Play Fifa',
       });
     } catch (e) {
       expect(e).toMatchInlineSnapshot(`
-        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoExistAndMatchObject[2m([22m[32mexpected[39m[2m)[22m
+        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoExistAndMatchingObject[2m([22m[32mexpected[39m[2m)[22m
 
         Expected: [32m{"id": "456", "title": "Play Fifa"}[39m
         Received: [31mundefined[39m]
@@ -163,23 +163,23 @@ describe('toHaveItemMatchingObject', () => {
   });
 });
 
-describe('.not.toHaveItemMatchingObject', () => {
+describe('.not.toExistAndMatchingObject', () => {
   it('should fail when item exists and matches the expected object', async () => {
     try {
       await expect(
-        dynamodbItemInput({
+        dynamodbItem({
           tableName: 'todos',
           key: {
             id: '123',
           },
         }),
-      ).not.toHaveItemMatchingObject({
+      ).not.toExistAndMatchingObject({
         id: '123',
         title: 'Buy milk',
       });
     } catch (e) {
       expect(e).toMatchInlineSnapshot(`
-        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoExistAndMatchObject[2m([22m[32mexpected[39m[2m)[22m
+        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoExistAndMatchingObject[2m([22m[32mexpected[39m[2m)[22m
 
         Expected: not [32m{"id": "123", "title": "Buy milk"}[39m
         Received:     [31m{"id": "123", "title": "Buy milk"}[39m]
@@ -189,13 +189,13 @@ describe('.not.toHaveItemMatchingObject', () => {
 
   it("should succeed when item exists but doesn't match the expected object", async () => {
     await expect(
-      dynamodbItemInput({
+      dynamodbItem({
         tableName: 'todos',
         key: {
           id: '123',
         },
       }),
-    ).not.toHaveItemMatchingObject({
+    ).not.toExistAndMatchingObject({
       id: '123',
       title: 'Play Fifa',
     });
@@ -203,53 +203,53 @@ describe('.not.toHaveItemMatchingObject', () => {
 
   it('should succeed when item does not exists', async () => {
     await expect(
-      dynamodbItemInput({
+      dynamodbItem({
         tableName: 'todos',
         key: {
           id: '456',
         },
       }),
-    ).not.toHaveItemMatchingObject({
+    ).not.toExistAndMatchingObject({
       id: '456',
       title: 'Play Fifa',
     });
   });
 });
 
-describe('toHaveItemMatchingSnapshot', () => {
+describe('toExistAndMatchingSnapshot', () => {
   it('should print values when item exists', async () => {
     await expect(
-      dynamodbItemInput({
+      dynamodbItem({
         tableName: 'todos',
         key: {
           id: '123',
         },
       }),
-    ).toHaveItemMatchingSnapshot();
+    ).toExistAndMatchingSnapshot();
   });
 
   it('should prints undefined when item does not exists', async () => {
     await expect(
-      dynamodbItemInput({
+      dynamodbItem({
         tableName: 'todos',
         key: {
           id: '456',
         },
       }),
-    ).toHaveItemMatchingSnapshot();
+    ).toExistAndMatchingSnapshot();
   });
 });
 
-describe('toHaveItemMatchingInlineSnapshot', () => {
+describe('toExistAndMatchingInlineSnapshot', () => {
   it('should print values when item exists', async () => {
     await expect(
-      dynamodbItemInput({
+      dynamodbItem({
         tableName: 'todos',
         key: {
           id: '123',
         },
       }),
-    ).toHaveItemMatchingInlineSnapshot(`
+    ).toExistAndMatchingInlineSnapshot(`
       Object {
         "id": "123",
         "title": "Buy milk",
@@ -259,12 +259,12 @@ describe('toHaveItemMatchingInlineSnapshot', () => {
 
   it('should prints undefined when item does not exists', async () => {
     await expect(
-      dynamodbItemInput({
+      dynamodbItem({
         tableName: 'todos',
         key: {
           id: '456',
         },
       }),
-    ).toHaveItemMatchingInlineSnapshot(`undefined`);
+    ).toExistAndMatchingInlineSnapshot(`undefined`);
   });
 });
