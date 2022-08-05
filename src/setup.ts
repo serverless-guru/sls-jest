@@ -1,4 +1,4 @@
-import * as matchers from './matchers/index';
+import * as matchers from './matchers';
 
 if (expect !== undefined) {
   expect.extend(matchers);
