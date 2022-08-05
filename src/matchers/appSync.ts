@@ -33,7 +33,10 @@ const getAppSyncClient = (config: AppSyncClientConfig = {}) => {
 
 export type VtlTemplateInput = {
   template: string;
-  context: O.Partial<AppSyncResolverEvent<Record<string, any>>, 'deep'>;
+  context: O.Partial<
+    AppSyncResolverEvent<Record<string, unknown>, Record<string, unknown>>,
+    'deep'
+  >;
   clientConfig?: AppSyncClientConfig;
 };
 
