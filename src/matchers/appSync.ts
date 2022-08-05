@@ -16,6 +16,7 @@ import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { AppSyncResolverEvent } from 'aws-lambda';
 import { O } from 'ts-toolbelt';
 import { maybeParseJson } from './utils';
+import { canonicalize } from 'json-canonicalize';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -23,7 +24,7 @@ const RECEIVED_LABEL = 'Received';
 const appSyncClients: Record<string, AppSyncClient> = {};
 
 const getAppSyncClient = (config: AppSyncClientConfig = {}) => {
-  const key = JSON.stringify(config);
+  const key = canonicalize(config);
   if (!appSyncClients[key]) {
     appSyncClients[key] = new AppSyncClient(config);
   }
