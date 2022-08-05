@@ -6,5 +6,3 @@ Object {
   "title": "Buy milk",
 }
 `;
-
-exports[`toExistAndMatchingSnapshot should prints undefined when item does not exists 1`] = `undefined`;

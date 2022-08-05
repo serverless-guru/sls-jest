@@ -160,6 +160,27 @@ describe('toExistAndMatchingObject', () => {
         Received: [31mundefined[39m]
       `);
     }
+
+    try {
+      await expect(
+        dynamodbItem({
+          tableName: 'todos',
+          key: {
+            id: '456',
+          },
+          clientConfig: {
+            region: 'us-east-2',
+          },
+        }),
+      ).toExistAndMatchingObject({
+        id: '456',
+        title: 'Play Fifa',
+      });
+    } catch (e) {
+      expect(e).toMatchInlineSnapshot(
+        `[ResourceNotFoundException: Requested resource not found]`,
+      );
+    }
   });
 });
 
@@ -228,15 +249,39 @@ describe('toExistAndMatchingSnapshot', () => {
     ).toExistAndMatchingSnapshot();
   });
 
-  it('should prints undefined when item does not exists', async () => {
-    await expect(
-      dynamodbItem({
-        tableName: 'todos',
-        key: {
-          id: '456',
-        },
-      }),
-    ).toExistAndMatchingSnapshot();
+  it('should fail when item does not exists', async () => {
+    try {
+      await expect(
+        dynamodbItem({
+          tableName: 'todos',
+          key: {
+            id: '456',
+          },
+        }),
+      ).toExistAndMatchingSnapshot();
+    } catch (e) {
+      expect(e).toMatchInlineSnapshot(
+        `[Error: Expected "todos" table to have item with key {"id": "456"}]`,
+      );
+    }
+
+    try {
+      await expect(
+        dynamodbItem({
+          tableName: 'todos',
+          key: {
+            id: '456',
+          },
+          clientConfig: {
+            region: 'us-east-2',
+          },
+        }),
+      ).toExistAndMatchingSnapshot();
+    } catch (e) {
+      expect(e).toMatchInlineSnapshot(
+        `[ResourceNotFoundException: Requested resource not found]`,
+      );
+    }
   });
 });
 
@@ -257,14 +302,59 @@ describe('toExistAndMatchingInlineSnapshot', () => {
     `);
   });
 
-  it('should prints undefined when item does not exists', async () => {
-    await expect(
-      dynamodbItem({
-        tableName: 'todos',
-        key: {
-          id: '456',
-        },
-      }),
-    ).toExistAndMatchingInlineSnapshot(`undefined`);
+  // TODO
+  it.skip('should fail when item does not match snapshot', async () => {
+    try {
+      await expect(
+        dynamodbItem({
+          tableName: 'todos',
+          key: {
+            id: '123',
+          },
+        }),
+      ).toExistAndMatchingInlineSnapshot(`
+        Object {
+          "id": "123",
+          "title": "Buy a new car",
+        }
+      `);
+    } catch (e) {
+      expect(e).toMatchInlineSnapshot();
+    }
+  });
+
+  it('should fail when item does not exists', async () => {
+    try {
+      await expect(
+        dynamodbItem({
+          tableName: 'todos',
+          key: {
+            id: '456',
+          },
+        }),
+      ).toExistAndMatchingInlineSnapshot();
+    } catch (e) {
+      expect(e).toMatchInlineSnapshot(
+        `[Error: Expected "todos" table to have item with key {"id": "456"}]`,
+      );
+    }
+
+    try {
+      await expect(
+        dynamodbItem({
+          tableName: 'todos',
+          key: {
+            id: '456',
+          },
+          clientConfig: {
+            region: 'us-east-2',
+          },
+        }),
+      ).toExistAndMatchingInlineSnapshot();
+    } catch (e) {
+      expect(e).toMatchInlineSnapshot(
+        `[ResourceNotFoundException: Requested resource not found]`,
+      );
+    }
   });
 });

@@ -87,7 +87,7 @@ export const toExistAndMatchingObject = async function (
     }),
   );
 
-  const pass = equals(received, expected);
+  const pass = received && equals(received, expected) ? true : false;
 
   const message = pass
     ? () =>
@@ -127,6 +127,14 @@ export const toExistAndMatchingSnapshot = async function (
     }),
   );
 
+  if (!received) {
+    return {
+      message: () =>
+        `Expected "${tableName}" table to have item with key ${stringify(key)}`,
+      pass: false,
+    };
+  }
+
   return toMatchSnapshot.call(
     this,
     received,
@@ -152,6 +160,14 @@ export const toExistAndMatchingInlineSnapshot = async function (
       Key: key,
     }),
   );
+
+  if (!received) {
+    return {
+      message: () =>
+        `Expected "${tableName}" table to have item with key ${stringify(key)}`,
+      pass: false,
+    };
+  }
 
   return toMatchInlineSnapshot.call(
     this,
