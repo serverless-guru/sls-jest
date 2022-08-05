@@ -1,4 +1,4 @@
-import { vtlMappingTemplate } from 'sls-jest';
+import { vtlMappingTemplate } from '@serverless-guru/sls-jest';
 
 const template = `
 #set($id=$ctx.args.id)

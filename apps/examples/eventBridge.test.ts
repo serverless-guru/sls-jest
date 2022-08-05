@@ -1,4 +1,4 @@
-import { EventBridgeSpy, eventBridgeSpy, EventBridgeSpyParams } from 'sls-jest';
+import { EventBridgeSpy, eventBridgeSpy, EventBridgeSpyParams } from '@serverless-guru/sls-jest';
 import {
   EventBridgeClient,
   PutEventsCommand,
