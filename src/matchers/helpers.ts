@@ -4,4 +4,4 @@ import { DynamodbItemInput } from './dynamodb';
 export const vtlMappingTemplate = (mappingTemplate: VtlTemplateInput) =>
   mappingTemplate;
 
-export const dynamodbItemInput = (input: DynamodbItemInput) => input;
+export const dynamodbItem = (input: DynamodbItemInput) => input;
