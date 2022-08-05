@@ -1,4 +1,4 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, DynamoDBClientConfig } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
 import { equals } from '@jest/expect-utils';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
@@ -12,6 +12,7 @@ import {
   stringify,
 } from 'jest-matcher-utils';
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
+import { canonicalize } from 'json-canonicalize';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -19,22 +20,29 @@ const RECEIVED_LABEL = 'Received';
 export type DynamodbItemInput = {
   tableName: string;
   key: DocumentClient.Key;
-  region?: string;
+  clientConfig?: DynamoDBClientConfig;
+};
+
+const appSyncClients: Record<string, DynamoDBDocumentClient> = {};
+
+const getDynamoDBDocumentClient = (config: DynamoDBClientConfig = {}) => {
+  const key = canonicalize(config);
+  if (!appSyncClients[key]) {
+    appSyncClients[key] = DynamoDBDocumentClient.from(
+      new DynamoDBClient(config),
+    );
+  }
+
+  return appSyncClients[key];
 };
 
 export const toExist = async function (
   this: MatcherState,
-  input: DynamodbItemInput,
+  params: DynamodbItemInput,
 ) {
-  const { tableName, key, region } = input;
+  const { tableName, key, clientConfig } = params;
 
-  // Note: we create a new client instance each time this matcher is called
-  // TODO improve this by reusing the same client instance??
-  const client = DynamoDBDocumentClient.from(
-    new DynamoDBClient({
-      region,
-    }),
-  );
+  const client = getDynamoDBDocumentClient(clientConfig);
 
   const { Item: received } = await client.send(
     new GetCommand({
@@ -68,15 +76,9 @@ export const toHaveItemMatchingObject = async function (
     isNot: this.isNot,
   };
 
-  const { tableName, key, region } = input;
+  const { tableName, key, clientConfig } = input;
 
-  // Note: we create a new client instance each time this matcher is called
-  // TODO improve this by reusing the same client instance??
-  const client = DynamoDBDocumentClient.from(
-    new DynamoDBClient({
-      region,
-    }),
-  );
+  const client = getDynamoDBDocumentClient(clientConfig);
 
   const { Item: received } = await client.send(
     new GetCommand({
@@ -114,15 +116,9 @@ export const toHaveItemMatchingSnapshot = async function (
   input: DynamodbItemInput,
   ...rest: any
 ) {
-  const { tableName, key, region } = input;
+  const { tableName, key, clientConfig } = input;
 
-  // Note: we create a new client instance each time this matcher is called
-  // TODO improve this by reusing the same client instance??
-  const client = DynamoDBDocumentClient.from(
-    new DynamoDBClient({
-      region,
-    }),
-  );
+  const client = getDynamoDBDocumentClient(clientConfig);
 
   const { Item: received } = await client.send(
     new GetCommand({
@@ -144,17 +140,11 @@ export const toHaveItemMatchingInlineSnapshot = async function (
   input: DynamodbItemInput,
   ...rest: any
 ) {
-  const { tableName, key, region } = input;
+  const { tableName, key, clientConfig } = input;
 
   this.error = new Error();
 
-  // Note: we create a new client instance each time this matcher is called
-  // TODO improve this by reusing the same client instance??
-  const client = DynamoDBDocumentClient.from(
-    new DynamoDBClient({
-      region,
-    }),
-  );
+  const client = getDynamoDBDocumentClient(clientConfig);
 
   const { Item: received } = await client.send(
     new GetCommand({
