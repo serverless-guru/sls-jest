@@ -302,7 +302,7 @@ describe('toExistAndMatchingInlineSnapshot', () => {
     `);
   });
 
-  // TODO
+  // FIXME: I'm note sure why .toExistAndMatchingInlineSnapshot is throwing an error that is not caught by the try catch block
   it.skip('should fail when item does not match snapshot', async () => {
     try {
       await expect(
