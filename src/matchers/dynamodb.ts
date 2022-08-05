@@ -66,12 +66,12 @@ export const toExist = async function (
   };
 };
 
-export const toExistAndMatchObject = async function (
+export const toExistAndMatchingObject = async function (
   this: MatcherState,
   input: DynamodbItemInput,
   expected: DocumentClient.AttributeMap,
 ) {
-  const matcherName = 'toExistAndMatchObject';
+  const matcherName = 'toExistAndMatchingObject';
   const options: MatcherHintOptions = {
     isNot: this.isNot,
   };

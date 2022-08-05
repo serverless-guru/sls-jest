@@ -8,7 +8,7 @@ declare global {
   namespace jest {
     interface Matchers<R> {
       toExist(): R;
-      toExistAndMatchObject(params: DocumentClient.AttributeMap): R;
+      toExistAndMatchingObject(params: DocumentClient.AttributeMap): R;
       toExistAndMatchingSnapshot(propertiesOrHint?: string, hint?: string): R;
       toExistAndMatchingInlineSnapshot(
         propertiesOrHint?: string,
