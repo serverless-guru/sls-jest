@@ -95,7 +95,7 @@ describe('.not.toExist', () => {
   });
 });
 
-describe('toExistAndMatchingObject', () => {
+describe('toExistAndMatchObject', () => {
   it('should succeed when item exists and matches the expected object', async () => {
     await expect(
       dynamodbItem({
@@ -104,7 +104,7 @@ describe('toExistAndMatchingObject', () => {
           id: '123',
         },
       }),
-    ).toExistAndMatchingObject({
+    ).toExistAndMatchObject({
       id: '123',
       title: 'Buy milk',
     });
@@ -119,13 +119,13 @@ describe('toExistAndMatchingObject', () => {
             id: '123',
           },
         }),
-      ).toExistAndMatchingObject({
+      ).toExistAndMatchObject({
         id: '123',
         title: 'Play Fifa',
       });
     } catch (e) {
       expect(e).toMatchInlineSnapshot(`
-        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoExistAndMatchingObject[2m([22m[32mexpected[39m[2m)[22m
+        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoExistAndMatchObject[2m([22m[32mexpected[39m[2m)[22m
 
         [32m- Expected  - 1[39m
         [31m+ Received  + 1[39m
@@ -148,13 +148,13 @@ describe('toExistAndMatchingObject', () => {
             id: '456',
           },
         }),
-      ).toExistAndMatchingObject({
+      ).toExistAndMatchObject({
         id: '456',
         title: 'Play Fifa',
       });
     } catch (e) {
       expect(e).toMatchInlineSnapshot(`
-        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoExistAndMatchingObject[2m([22m[32mexpected[39m[2m)[22m
+        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoExistAndMatchObject[2m([22m[32mexpected[39m[2m)[22m
 
         Expected: [32m{"id": "456", "title": "Play Fifa"}[39m
         Received: [31mundefined[39m]
@@ -172,7 +172,7 @@ describe('toExistAndMatchingObject', () => {
             region: 'us-east-2',
           },
         }),
-      ).toExistAndMatchingObject({
+      ).toExistAndMatchObject({
         id: '456',
         title: 'Play Fifa',
       });
@@ -184,7 +184,7 @@ describe('toExistAndMatchingObject', () => {
   });
 });
 
-describe('.not.toExistAndMatchingObject', () => {
+describe('.not.toExistAndMatchObject', () => {
   it('should fail when item exists and matches the expected object', async () => {
     try {
       await expect(
@@ -194,13 +194,13 @@ describe('.not.toExistAndMatchingObject', () => {
             id: '123',
           },
         }),
-      ).not.toExistAndMatchingObject({
+      ).not.toExistAndMatchObject({
         id: '123',
         title: 'Buy milk',
       });
     } catch (e) {
       expect(e).toMatchInlineSnapshot(`
-        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoExistAndMatchingObject[2m([22m[32mexpected[39m[2m)[22m
+        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoExistAndMatchObject[2m([22m[32mexpected[39m[2m)[22m
 
         Expected: not [32m{"id": "123", "title": "Buy milk"}[39m
         Received:     [31m{"id": "123", "title": "Buy milk"}[39m]
@@ -216,7 +216,7 @@ describe('.not.toExistAndMatchingObject', () => {
           id: '123',
         },
       }),
-    ).not.toExistAndMatchingObject({
+    ).not.toExistAndMatchObject({
       id: '123',
       title: 'Play Fifa',
     });
@@ -230,7 +230,7 @@ describe('.not.toExistAndMatchingObject', () => {
           id: '456',
         },
       }),
-    ).not.toExistAndMatchingObject({
+    ).not.toExistAndMatchObject({
       id: '456',
       title: 'Play Fifa',
     });
