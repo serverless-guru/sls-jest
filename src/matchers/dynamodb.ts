@@ -1,6 +1,6 @@
 import { DynamoDBClient, DynamoDBClientConfig } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
-import { equals } from '@jest/expect-utils';
+import { equals, iterableEquality, subsetEquality } from '@jest/expect-utils';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { MatcherState } from 'expect';
 import {
@@ -87,7 +87,7 @@ export const toExistAndMatchObject = async function (
     }),
   );
 
-  const pass = received && equals(received, expected) ? true : false;
+  const pass = received ? equals(received, expected) : false;
 
   const message = pass
     ? () =>
