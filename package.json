@@ -8,7 +8,7 @@
     "lib"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest src",
     "typecheck": "tsc --noEmit",
     "build": "npx rimraf ./lib && tsc",
     "lint": "eslint src --ext .ts",
@@ -29,11 +29,12 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^6.0.0",
+    "jest": "^28.1.3",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
+    "ts-jest": "^28.0.7",
     "ts-toolbelt": "^9.6.0",
-    "typescript": "^4.7.4",
-    "husky": "^6.0.0"
+    "typescript": "^4.7.4"
   },
   "dependencies": {
     "@aws-sdk/client-appsync": "^3.142.0",
