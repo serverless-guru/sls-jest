@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx rimraf ./lib && tsc"
+    "build": "npx rimraf ./lib && tsc",
+    "lint": "eslint src --ext .ts"
   },
   "author": "Serverless Guru LLC",
   "license": "ISC",
@@ -19,10 +20,14 @@
     "@types/jest": "^28.1.6",
     "@types/lodash": "^4.14.182",
     "@types/node": "^18.6.3",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
     "aws-lambda": "^1.0.7",
+    "eslint": "^8.21.0",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "ts-toolbelt": "^9.6.0"
+    "ts-toolbelt": "^9.6.0",
+    "typescript": "^4.7.4"
   },
   "dependencies": {
     "@aws-sdk/client-appsync": "^3.142.0",
@@ -34,7 +39,6 @@
     "jest-snapshot": "^28.1.3",
     "json-canonicalize": "^1.0.4",
     "lodash": "^4.17.21",
-    "rxjs": "^7.5.6",
-    "typescript": "^4.7.4"
+    "rxjs": "^7.5.6"
   }
 }
