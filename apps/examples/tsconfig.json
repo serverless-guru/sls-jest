@@ -5,6 +5,5 @@
     "outDir": "lib"
   },
   "include": ["src"],
-  "exclude": ["node_modules"],
-  "files": ["./node_modules/sls-jest/lib/index.d.ts"]
+  "exclude": ["node_modules"]
 }
