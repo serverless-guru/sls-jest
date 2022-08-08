@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "typecheck": "tsc --noEmit",
     "build": "npx rimraf ./lib && tsc",
     "lint": "eslint src --ext .ts",
     "prepare": "husky install"
