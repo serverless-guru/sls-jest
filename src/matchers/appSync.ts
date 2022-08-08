@@ -61,9 +61,7 @@ export const toEvaluateTo = async function (
   );
 
   if (typeof expected === 'object') {
-    try {
-      received = maybeParseJson(received);
-    } catch (error) {}
+    received = maybeParseJson(received);
   }
 
   const pass = equals(received, expected, [iterableEquality, subsetEquality]);
@@ -104,6 +102,7 @@ export const toEvaluateToSnapshot = async function (
     }),
   );
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return toMatchSnapshot.call(this, maybeParseJson(received), ...rest);
 };
@@ -124,6 +123,7 @@ export const toEvaluateToInlineSnapshot = async function (
     }),
   );
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return toMatchInlineSnapshot.call(this, maybeParseJson(received), ...rest);
 };

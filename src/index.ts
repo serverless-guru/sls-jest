@@ -5,6 +5,7 @@ export * from './spies/eventBridge';
 export * from './matchers/helpers';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
     interface Matchers<R> {
       toHaveItem(key: DocumentClient.Key): R;
