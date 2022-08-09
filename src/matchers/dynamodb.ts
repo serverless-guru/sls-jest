@@ -87,7 +87,9 @@ export const toExistAndMatchObject = async function (
     }),
   );
 
-  const pass = received ? equals(received, expected) : false;
+  const pass = received
+    ? equals(received, expected, [iterableEquality, subsetEquality])
+    : false;
 
   const message = pass
     ? () =>
