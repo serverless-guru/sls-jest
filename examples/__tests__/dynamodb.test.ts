@@ -237,7 +237,7 @@ describe('.not.toExistAndMatchObject', () => {
   });
 });
 
-describe('toExistAndMatchingSnapshot', () => {
+describe('toExistAndMatchSnapshot', () => {
   it('should print values when item exists', async () => {
     await expect(
       dynamodbItem({
@@ -246,7 +246,7 @@ describe('toExistAndMatchingSnapshot', () => {
           id: '123',
         },
       }),
-    ).toExistAndMatchingSnapshot();
+    ).toExistAndMatchSnapshot();
   });
 
   it('should fail when item does not exists', async () => {
@@ -258,7 +258,7 @@ describe('toExistAndMatchingSnapshot', () => {
             id: '456',
           },
         }),
-      ).toExistAndMatchingSnapshot();
+      ).toExistAndMatchSnapshot();
     } catch (e) {
       expect(e).toMatchInlineSnapshot(
         `[Error: Expected "todos" table to have item with key {"id": "456"}]`,
@@ -276,7 +276,7 @@ describe('toExistAndMatchingSnapshot', () => {
             region: 'us-east-2',
           },
         }),
-      ).toExistAndMatchingSnapshot();
+      ).toExistAndMatchSnapshot();
     } catch (e) {
       expect(e).toMatchInlineSnapshot(
         `[ResourceNotFoundException: Requested resource not found]`,
@@ -285,7 +285,7 @@ describe('toExistAndMatchingSnapshot', () => {
   });
 });
 
-describe('toExistAndMatchingInlineSnapshot', () => {
+describe('toExistAndMatchInlineSnapshot', () => {
   it('should print values when item exists', async () => {
     await expect(
       dynamodbItem({
@@ -294,7 +294,7 @@ describe('toExistAndMatchingInlineSnapshot', () => {
           id: '123',
         },
       }),
-    ).toExistAndMatchingInlineSnapshot(`
+    ).toExistAndMatchInlineSnapshot(`
       Object {
         "id": "123",
         "title": "Buy milk",
@@ -302,7 +302,7 @@ describe('toExistAndMatchingInlineSnapshot', () => {
     `);
   });
 
-  // FIXME: I'm note sure why .toExistAndMatchingInlineSnapshot is throwing an error that is not caught by the try catch block
+  // FIXME: I'm note sure why .toExistAndMatchInlineSnapshot is throwing an error that is not caught by the try catch block
   it.skip('should fail when item does not match snapshot', async () => {
     try {
       await expect(
@@ -312,7 +312,7 @@ describe('toExistAndMatchingInlineSnapshot', () => {
             id: '123',
           },
         }),
-      ).toExistAndMatchingInlineSnapshot(`
+      ).toExistAndMatchInlineSnapshot(`
         Object {
           "id": "123",
           "title": "Buy a new car",
@@ -332,7 +332,7 @@ describe('toExistAndMatchingInlineSnapshot', () => {
             id: '456',
           },
         }),
-      ).toExistAndMatchingInlineSnapshot();
+      ).toExistAndMatchInlineSnapshot();
     } catch (e) {
       expect(e).toMatchInlineSnapshot(
         `[Error: Expected "todos" table to have item with key {"id": "456"}]`,
@@ -350,7 +350,7 @@ describe('toExistAndMatchingInlineSnapshot', () => {
             region: 'us-east-2',
           },
         }),
-      ).toExistAndMatchingInlineSnapshot();
+      ).toExistAndMatchInlineSnapshot();
     } catch (e) {
       expect(e).toMatchInlineSnapshot(
         `[ResourceNotFoundException: Requested resource not found]`,

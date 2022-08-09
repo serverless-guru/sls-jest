@@ -9,8 +9,8 @@ declare global {
     interface Matchers<R> {
       toExist(): R;
       toExistAndMatchObject(params: DocumentClient.AttributeMap): R;
-      toExistAndMatchingSnapshot(propertiesOrHint?: string, hint?: string): R;
-      toExistAndMatchingInlineSnapshot(
+      toExistAndMatchSnapshot(propertiesOrHint?: string, hint?: string): R;
+      toExistAndMatchInlineSnapshot(
         propertiesOrHint?: string,
         hint?: string,
       ): R;

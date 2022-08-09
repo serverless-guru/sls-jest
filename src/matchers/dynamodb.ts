@@ -23,17 +23,17 @@ export type DynamodbItemInput = {
   clientConfig?: DynamoDBClientConfig;
 };
 
-const appSyncClients: Record<string, DynamoDBDocumentClient> = {};
+const dynamoDbDocumentClients: Record<string, DynamoDBDocumentClient> = {};
 
 const getDynamoDBDocumentClient = (config: DynamoDBClientConfig = {}) => {
   const key = canonicalize(config);
-  if (!appSyncClients[key]) {
-    appSyncClients[key] = DynamoDBDocumentClient.from(
+  if (!dynamoDbDocumentClients[key]) {
+    dynamoDbDocumentClients[key] = DynamoDBDocumentClient.from(
       new DynamoDBClient(config),
     );
   }
 
-  return appSyncClients[key];
+  return dynamoDbDocumentClients[key];
 };
 
 export const toExist = async function (
@@ -111,7 +111,7 @@ export const toExistAndMatchObject = async function (
   return { actual: received, expected, message, name: matcherName, pass };
 };
 
-export const toExistAndMatchingSnapshot = async function (
+export const toExistAndMatchSnapshot = async function (
   this: MatcherState,
   input: DynamodbItemInput,
   ...rest: any
@@ -143,7 +143,7 @@ export const toExistAndMatchingSnapshot = async function (
   );
 };
 
-export const toExistAndMatchingInlineSnapshot = async function (
+export const toExistAndMatchInlineSnapshot = async function (
   this: MatcherState,
   input: DynamodbItemInput,
   ...rest: any
