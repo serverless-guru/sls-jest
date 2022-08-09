@@ -23,7 +23,9 @@
     "aws-lambda": "^1.0.7",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "ts-toolbelt": "^9.6.0"
+    "ts-node": "^10.9.1",
+    "ts-toolbelt": "^9.6.0",
+    "@sls-jest/infrastructure": "*"
   },
   "dependencies": {
     "@aws-sdk/client-appsync": "^3.142.0",
