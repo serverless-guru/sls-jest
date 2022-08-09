@@ -8,8 +8,12 @@
 import { infrastructure } from './index';
 
 const run = async () => {
-  await infrastructure.deployTestResources();
-  await infrastructure.destroyTestResources();
+  await infrastructure.deployTestResources({
+    suffix: 'nice123',
+  });
+  await infrastructure.destroyTestResources({
+    suffix: 'nice123',
+  });
 };
 
-run();
+run().catch((error) => console.error('something wrong happened', error));

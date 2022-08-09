@@ -1,42 +1,70 @@
-import { spawn } from 'child_process';
+import { spawnSync } from 'child_process';
 import { resolve } from 'path';
 
-export const deploy = () =>
-  new Promise((ok, reject) => {
-    const child = spawn(
-      'cdk',
-      ['deploy', 'SlsJestStack', '--require-approval', 'never'],
-      {
-        stdio: 'inherit',
-        cwd: resolve(__dirname, '..'),
-      },
-    );
+export type DeployParams = {
+  suffix: string;
+};
 
-    child.on('close', (code) => {
-      ok(code);
-    });
+export const deploy = (params: DeployParams) => {
+  console.log('Deploying test resources');
 
-    child.on('error', (err) => {
-      reject(err);
-    });
-  });
+  const { output, error, status, stderr } = spawnSync(
+    'cdk',
+    [
+      'deploy',
+      `SlsJestStack-${params.suffix}`, // explicitly set the stack name to avoid deploying another stack
+      '--require-approval',
+      'never',
+      '-c',
+      `suffix=${params.suffix}`,
+    ],
+    {
+      cwd: resolve(__dirname, '..'),
+    },
+  );
 
-export const destroy = () =>
-  new Promise((ok, reject) => {
-    const child = spawn(
-      'cdk',
-      ['destroy', 'SlsJestStack', '--force'],
-      {
-        stdio: 'inherit',
-        cwd: resolve(__dirname, '..'),
-      },
-    );
+  if (status !== 0 || error) {
+    if (error) {
+      throw error;
+    }
+    throw new Error(stderr.toString());
+  }
 
-    child.on('close', (code) => {
-      ok(code);
-    });
+  console.log('Test resources are deployed successfully');
 
-    child.on('error', (err) => {
-      reject(err);
-    });
-  });
+  return output;
+};
+
+export type DestroyParams = {
+  suffix: string;
+};
+
+export const destroy = (params: DestroyParams) => {
+  console.log('Destroying test resources');
+
+  const { output, error, status, stderr } = spawnSync(
+    'cdk',
+    [
+      'destroy',
+      `SlsJestStack-${params.suffix}`, // explicitly set the stack name to avoid destroying a wrong stack
+      '--force',
+      'never',
+      '-c',
+      `suffix=${params.suffix}`,
+    ],
+    {
+      cwd: resolve(__dirname, '..'),
+    },
+  );
+
+  if (status !== 0 || error) {
+    if (error) {
+      throw error;
+    }
+    throw new Error(stderr.toString());
+  }
+
+  console.log('Test resources are destroyed successfully');
+
+  return output;
+};

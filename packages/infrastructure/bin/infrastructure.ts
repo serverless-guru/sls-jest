@@ -5,10 +5,24 @@ import { SlsJestStack } from '../lib/infrastructure-stack';
 
 const app = new cdk.App();
 
-new SlsJestStack(app, 'SlsJestStack', {
+export type Context = {
+  suffix: string;
+};
+
+const suffix = app.node.tryGetContext('suffix');
+if (
+  suffix === undefined ||
+  !(typeof suffix === 'string') ||
+  suffix.trim() === ''
+) {
+  throw new Error("Must pass a '-c suffix=<Suffix>' context parameter");
+}
+
+new SlsJestStack(app, `SlsJestStack-${suffix}`, {
   eventBridgeSpy: {
-    sqs: true,
-    cloudWatchLogs: true,
+    // TODO make following parameters customizable
+    sqs: false,
+    cloudWatchLogs: false,
     eventBusName: 'default',
   },
 });
