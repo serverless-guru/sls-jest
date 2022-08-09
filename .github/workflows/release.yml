@@ -10,7 +10,7 @@ jobs:
     name: Build & Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repository
+      - name: Checkout
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -23,5 +23,9 @@ jobs:
         run: npm ci
       - name: Building
         run: npm run build
-      - name: Release
-        run: echo "TODO" # TODO: release to npm
+      # TODO Uncomment this when we are ready to release
+      # - name: Release
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #   run: npx semantic-release
