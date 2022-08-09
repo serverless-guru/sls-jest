@@ -87,9 +87,15 @@ export const toExistAndMatchObject = async function (
     }),
   );
 
-  const pass = received
-    ? equals(received, expected, [iterableEquality, subsetEquality])
-    : false;
+  if (!received) {
+    return {
+      message: () =>
+        `Expected "${tableName}" table to have item with key ${stringify(key)}`,
+      pass: false,
+    };
+  }
+
+  const pass = equals(received, expected, [iterableEquality, subsetEquality]);
 
   const message = pass
     ? () =>

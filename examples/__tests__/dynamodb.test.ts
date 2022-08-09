@@ -153,12 +153,9 @@ describe('toExistAndMatchObject', () => {
         title: 'Play Fifa',
       });
     } catch (e) {
-      expect(e).toMatchInlineSnapshot(`
-        [Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoExistAndMatchObject[2m([22m[32mexpected[39m[2m)[22m
-
-        Expected: [32m{"id": "456", "title": "Play Fifa"}[39m
-        Received: [31mundefined[39m]
-      `);
+      expect(e).toMatchInlineSnapshot(
+        `[Error: Expected "todos" table to have item with key {"id": "456"}]`,
+      );
     }
 
     try {
