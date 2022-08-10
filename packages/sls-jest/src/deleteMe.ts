@@ -5,15 +5,23 @@
  * Running "ts-node ./packages/sls-jest/src/deleteMe.ts" will deploy then destroy the app 🔥
  */
 
-import { infrastructure } from './index';
+import { SlsJest } from './index';
 
 const run = async () => {
-  await infrastructure.deployTestResources({
-    suffix: 'nice123',
+  const slsJest = await SlsJest.create({
+    id: 'nice123',
+    eventBusName: 'dev-sls-jest-playground-Bus',
+    eventBusTestComponent: {
+      type: 'cloudwatch',
+      config: {
+        clientConfig: {
+          region: 'us-east-1',
+        },
+      },
+    },
   });
-  await infrastructure.destroyTestResources({
-    suffix: 'nice123',
-  });
+
+  await slsJest.destroy();
 };
 
 run().catch((error) => console.error('something wrong happened', error));

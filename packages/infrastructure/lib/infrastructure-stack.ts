@@ -1,7 +1,13 @@
-import { Stack, StackProps, Duration, CfnOutput } from 'aws-cdk-lib';
-import { Queue } from 'aws-cdk-lib/aws-sqs';
+import {
+  CfnOutput,
+  Duration,
+  RemovalPolicy,
+  Stack,
+  StackProps,
+} from 'aws-cdk-lib';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as eventTargets from 'aws-cdk-lib/aws-events-targets';
+import { Queue } from 'aws-cdk-lib/aws-sqs';
 
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
@@ -11,59 +17,73 @@ interface SlsJestStackProps extends StackProps {
     sqs?: boolean;
     cloudWatchLogs?: boolean;
     eventBusName?: string;
-    eventPattern?: events.EventPattern;
   };
 }
 
 export class SlsJestStack extends Stack {
-  public readonly eventBridgeSpyLogGroupName?: LogGroup;
-  public readonly eventBridgeSpyQueueUrl?: Queue;
+  public readonly eventBridgeSpyLogGroup?: LogGroup;
+  public readonly eventBridgeSpyQueue?: Queue;
 
   constructor(scope: Construct, id: string, props?: SlsJestStackProps) {
     super(scope, id, props);
 
     const { eventBridgeSpy } = props || {};
 
-    const targets: events.IRuleTarget[] = [];
-    if (eventBridgeSpy?.sqs) {
-      const queue = new Queue(this, 'EventBridgeSpyQueue', {
-        visibilityTimeout: Duration.seconds(30),
-        fifo: true,
-      });
-      targets.push(
-        new eventTargets.SqsQueue(queue, { messageGroupId: 'default' }),
-      );
-      this.eventBridgeSpyQueueUrl = queue;
-      new CfnOutput(this, 'EventBridgeSpyQueueUrl', {
-        value: queue.queueUrl,
-        exportName: 'eventBridgeSpyQueueUrl',
-      });
-    }
-    if (eventBridgeSpy?.cloudWatchLogs) {
-      const logGroup = new LogGroup(this, 'EventBridgeSpyLogGroup', {
-        retention: RetentionDays.ONE_DAY,
-      });
-      targets.push(new eventTargets.CloudWatchLogGroup(logGroup));
-      this.eventBridgeSpyLogGroupName = logGroup;
-      new CfnOutput(this, 'EventBridgeSpyLogGroupName', {
-        value: logGroup.logGroupName,
-        exportName: 'eventBridgeSpyLogGroupName',
-      });
-    }
+    if (eventBridgeSpy?.eventBusName) {
+      const targets: events.IRuleTarget[] = [];
+      if (eventBridgeSpy?.sqs) {
+        this.eventBridgeSpyQueue = new Queue(this, 'EventBridgeSpyQueue', {
+          fifo: true,
+          queueName: `${Stack.of(this).stackName}.fifo`,
+          visibilityTimeout: Duration.seconds(30),
+          removalPolicy: RemovalPolicy.DESTROY,
+          contentBasedDeduplication: true,
+        });
 
-    if (targets.length > 0) {
-      new events.Rule(this, 'EventBridgeSpyRule', {
-        targets,
-        eventBus: events.EventBus.fromEventBusName(
+        targets.push(
+          new eventTargets.SqsQueue(this.eventBridgeSpyQueue, {
+            messageGroupId: 'default',
+          }),
+        );
+
+        new CfnOutput(this, 'EventBridgeSpyQueueUrl', {
+          value: this.eventBridgeSpyQueue.queueUrl,
+        });
+      }
+      if (eventBridgeSpy?.cloudWatchLogs) {
+        this.eventBridgeSpyLogGroup = new LogGroup(
           this,
-          'EventBridgeSpyEventBus',
-          eventBridgeSpy?.eventBusName || 'default',
-        ),
-        ruleName: 'sls-jest-event-bridge-spy',
-        eventPattern: eventBridgeSpy?.eventPattern || {
-          account: [Stack.of(this).account],
-        },
-      });
+          'EventBridgeSpyLogGroup',
+          {
+            logGroupName: Stack.of(this).stackName,
+            retention: RetentionDays.ONE_DAY,
+            removalPolicy: RemovalPolicy.DESTROY,
+          },
+        );
+
+        targets.push(
+          new eventTargets.CloudWatchLogGroup(this.eventBridgeSpyLogGroup),
+        );
+
+        new CfnOutput(this, 'EventBridgeSpyLogGroupName', {
+          value: this.eventBridgeSpyLogGroup.logGroupName,
+        });
+      }
+
+      if (targets.length > 0) {
+        new events.Rule(this, 'EventBridgeSpyRule', {
+          targets,
+          eventBus: events.EventBus.fromEventBusName(
+            this,
+            'EventBridgeSpyEventBus',
+            eventBridgeSpy.eventBusName,
+          ),
+          ruleName: `${Stack.of(this).stackName}-EventBridgeRuleName`,
+          eventPattern: {
+            account: [Stack.of(this).account],
+          },
+        });
+      }
     }
   }
 }

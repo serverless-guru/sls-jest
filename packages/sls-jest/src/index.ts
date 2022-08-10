@@ -3,7 +3,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
 export * from './spies/eventBridge';
 export * from './matchers/helpers';
-export * as infrastructure from './infrastructure';
+export * from './SlsJest';
 
 declare global {
   namespace jest {

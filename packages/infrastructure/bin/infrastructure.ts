@@ -1,28 +1,29 @@
 #!/usr/bin/env node
-import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
+import 'source-map-support/register';
 import { SlsJestStack } from '../lib/infrastructure-stack';
 
 const app = new cdk.App();
 
-export type Context = {
-  suffix: string;
-};
-
-const suffix = app.node.tryGetContext('suffix');
-if (
-  suffix === undefined ||
-  !(typeof suffix === 'string') ||
-  suffix.trim() === ''
-) {
-  throw new Error("Must pass a '-c suffix=<Suffix>' context parameter");
+const id = app.node.tryGetContext('id');
+if (id === undefined || !(typeof id === 'string') || id.trim() === '') {
+  throw new Error("Must pass a '-c id=<ID>' context parameter");
 }
 
-new SlsJestStack(app, `SlsJestStack-${suffix}`, {
+const eventBusName = app.node.tryGetContext('eventBusName') as string;
+
+const deployEventBridgeSqsSpy = app.node.tryGetContext(
+  'deployEventBridgeSqsSpy',
+) as string;
+
+const deployEventBridgeCloudwatchSpy = app.node.tryGetContext(
+  'deployEventBridgeCloudwatchSpy',
+) as string;
+
+new SlsJestStack(app, `SlsJestStack-${id}`, {
   eventBridgeSpy: {
-    // TODO make following parameters customizable
-    sqs: false,
-    cloudWatchLogs: false,
-    eventBusName: 'default',
+    eventBusName: eventBusName,
+    sqs: deployEventBridgeSqsSpy === 'true' || false,
+    cloudWatchLogs: deployEventBridgeCloudwatchSpy === 'true' || false,
   },
 });
