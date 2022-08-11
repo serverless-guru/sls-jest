@@ -1,5 +1,0 @@
-{
-  "SlsJestStack-sls-jest-playground": {
-    "EventBridgeSpyQueueUrl": "https://sqs.us-east-1.amazonaws.com/481213622749/SlsJestStack-sls-jest-playground.fifo"
-  }
-}
