@@ -1,0 +1,27 @@
+{
+  "name": "@sls-jest/cli",
+  "version": "0.0.0",
+  "main": "bin/index.js",
+  "bin": {
+    "sls-jest": "bin/index.js"
+  },
+  "types": "bin/index.d.ts",
+  "files": [
+    "bin"
+  ],
+  "scripts": {
+    "build": "npx rimraf ./bin && tsc"
+  },
+  "author": "Serverless Guru LLC",
+  "license": "ISC",
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.3",
+    "@types/command-line-args": "^5.2.0",
+    "@sls-jest/infrastructure": "*",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "command-line-args": "^5.2.1",
+    "commander": "^9.4.0"
+  }
+}

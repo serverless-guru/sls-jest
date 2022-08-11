@@ -2,7 +2,6 @@
   "name": "sls-jest",
   "version": "1.0.0",
   "description": "Monorepo of the sls-jest project",
-  "main": "index.js",
   "workspaces": [
     "apps/*",
     "packages/*"
