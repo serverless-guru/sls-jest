@@ -8,7 +8,7 @@
     "lib"
   ],
   "scripts": {
-    "test": "jest src",
+    "test": "jest src/__tests__",
     "typecheck": "tsc --noEmit",
     "build": "npx rimraf ./lib && tsc",
     "lint": "eslint src --ext .ts",
