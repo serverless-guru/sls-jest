@@ -1,29 +1,19 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
 import 'source-map-support/register';
-import { SlsJestStack } from '../lib/infrastructure-stack';
+import { EventBridgeSpyStack } from '../lib/EventBridgeSpyStack';
 
 const app = new cdk.App();
 
-const id = app.node.tryGetContext('id');
-if (id === undefined || !(typeof id === 'string') || id.trim() === '') {
-  throw new Error("Must pass a '-c id=<ID>' context parameter");
-}
+const eventBusNamesString = app.node.tryGetContext('event-bus-names') as string;
 
-const eventBusName = app.node.tryGetContext('eventBusName') as string;
+const eventBusNames = eventBusNamesString?.split(',') || [];
 
-const deployEventBridgeSqsSpy = app.node.tryGetContext(
-  'deployEventBridgeSqsSpy',
-) as string;
+eventBusNames.forEach((eventBusName) => {
+  const useCW = app.node.tryGetContext('use-cw') as string;
 
-const deployEventBridgeCloudwatchSpy = app.node.tryGetContext(
-  'deployEventBridgeCloudwatchSpy',
-) as string;
-
-new SlsJestStack(app, `SlsJestStack-${id}`, {
-  eventBridgeSpy: {
-    eventBusName: eventBusName,
-    sqs: deployEventBridgeSqsSpy === 'true' || false,
-    cloudWatchLogs: deployEventBridgeCloudwatchSpy === 'true' || false,
-  },
+  new EventBridgeSpyStack(app, `sls-jest-eb-spy-${eventBusName}`, {
+    eventBusName,
+    use: useCW === 'true' ? 'cw' : 'sqs',
+  });
 });
