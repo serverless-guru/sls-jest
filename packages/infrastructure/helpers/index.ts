@@ -2,6 +2,85 @@ import { spawnSync } from 'child_process';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
+export type DeployAllStacksParams = {
+  eventBusNames: string[];
+  useCw?: boolean;
+};
+
+export const deployAllStacks = (params: DeployAllStacksParams) => {
+  const { eventBusNames, useCw } = params;
+
+  console.log('Deploying all test stacks');
+
+  const args = [
+    'deploy',
+    '--all',
+    '--require-approval',
+    'never',
+    '--outputs-file',
+    './outputs.json',
+  ];
+
+  if (eventBusNames.length > 0) {
+    args.push('-c', `event-bus-names=${eventBusNames.join(',')}`);
+  }
+
+  if (useCw) {
+    args.push('-c');
+    args.push('use-cw=true');
+  }
+
+  const { error, status, stderr } = spawnSync('cdk', args, {
+    cwd: resolve(__dirname, '..'),
+  });
+
+  if (status !== 0 || error) {
+    if (error) {
+      throw error;
+    }
+    throw new Error(stderr.toString());
+  }
+
+  console.log(`All test stack are deployed successfully`);
+
+  const outputs = JSON.parse(
+    readFileSync(resolve(__dirname, '../outputs.json'), 'utf8'),
+  );
+
+  return outputs;
+};
+
+export type DestroyAllStacksParams = {
+  eventBusNames: string[];
+};
+
+export const destroyAllStacks = (params: DestroyAllStacksParams) => {
+  const { eventBusNames } = params;
+
+  console.log(`Destroying all test stacks`);
+
+  const args = ['destroy', '--all', '--force'];
+
+  if (eventBusNames.length > 0) {
+    args.push('-c', `event-bus-names=${eventBusNames.join(',')}`);
+  }
+
+  const { output, error, status, stderr } = spawnSync('cdk', args, {
+    cwd: resolve(__dirname, '..'),
+  });
+
+  if (status !== 0 || error) {
+    if (error) {
+      throw error;
+    }
+    throw new Error(stderr.toString());
+  }
+
+  console.log(`All test stacks are destroyed successfully`);
+
+  return output.toString();
+};
+
 export type DeployEventBridgeSpyStackParams = {
   eventBusName: string;
   useCw?: boolean;
