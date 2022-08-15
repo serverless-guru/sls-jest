@@ -1,3 +1,6 @@
+export * from './matchers/helpers';
+export * from './spies/eventBridge';
+
 import { EventBridgeEvent } from 'aws-lambda';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
@@ -8,8 +11,13 @@ export * from './EventBridge';
 declare global {
   namespace jest {
     interface Matchers<R> {
-      toHaveItem(key: DocumentClient.Key): R;
-      toHaveItems(key: DocumentClient.Key[]): R;
+      toExist(): R;
+      toExistAndMatchObject(params: DocumentClient.AttributeMap): R;
+      toExistAndMatchSnapshot(propertiesOrHint?: string, hint?: string): R;
+      toExistAndMatchInlineSnapshot(
+        propertiesOrHint?: string,
+        hint?: string,
+      ): R;
       toHaveEventMatchingObject(
         expected: Partial<EventBridgeEvent<string, unknown>>,
       ): R;
