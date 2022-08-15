@@ -4,3 +4,11 @@ To start using sls-jest matchers you need to add `"./node_modules/sls-jest/lib/s
 ```ts
 setupFilesAfterEnv: ["./node_modules/sls-jest/lib/setup.js"]
 ```
+# Publish the package locally
+```ts
+npm run link .
+```
+
+Now you can run npm `link sls-jest` in the projects where you want to install and use this package 🥳️
+
+**Note**: the project should be built before running the above command, you can build the project by running `npm run build` from the project root or from `/packages/sls-jest-cli`.
