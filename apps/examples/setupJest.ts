@@ -1,2 +1,2 @@
-import 'sls-jest/lib/index';
-import 'sls-jest/lib/setup';
+import '@sls-jest/core/lib/index';
+import '@sls-jest/core/lib/setup';

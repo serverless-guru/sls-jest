@@ -1,4 +1,4 @@
-import { dynamodbItem } from 'sls-jest';
+import { dynamodbItem } from '@sls-jest/core';
 
 describe('toExist', () => {
   it('should succeed when item exists in the database', async () => {
