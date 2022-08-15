@@ -1,14 +1,14 @@
 import { spawnSync } from 'child_process';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import { EventBridgeSpyStack } from '../lib/EventBridgeSpyStack';
 
-export type DeployAllStacksParams = {
+export const deployAllStacks = (params: {
+  tag: string;
   eventBusNames: string[];
   useCw?: boolean;
-};
-
-export const deployAllStacks = (params: DeployAllStacksParams) => {
-  const { eventBusNames, useCw } = params;
+}) => {
+  const { tag, eventBusNames, useCw } = params;
 
   console.log('Deploying all test stacks');
 
@@ -19,6 +19,8 @@ export const deployAllStacks = (params: DeployAllStacksParams) => {
     'never',
     '--outputs-file',
     './outputs.json',
+    '-c',
+    `tag=${tag}`,
   ];
 
   if (eventBusNames.length > 0) {
@@ -50,60 +52,39 @@ export const deployAllStacks = (params: DeployAllStacksParams) => {
   return outputs;
 };
 
-export type DestroyAllStacksParams = {
-  eventBusNames: string[];
+export const destroyAllStacks = (params: { tag: string }) => {
+  // TODO
+  // 1. fetch stacks for the tag
+  // 2. destroy them
 };
 
-export const destroyAllStacks = (params: DestroyAllStacksParams) => {
-  const { eventBusNames } = params;
-
-  console.log(`Destroying all test stacks`);
-
-  const args = ['destroy', '--all', '--force'];
-
-  if (eventBusNames.length > 0) {
-    args.push('-c', `event-bus-names=${eventBusNames.join(',')}`);
-  }
-
-  const { output, error, status, stderr } = spawnSync('cdk', args, {
-    cwd: resolve(__dirname, '..'),
-  });
-
-  if (status !== 0 || error) {
-    if (error) {
-      throw error;
-    }
-    throw new Error(stderr.toString());
-  }
-
-  console.log(`All test stacks are destroyed successfully`);
-
-  return output.toString();
-};
-
-export type DeployEventBridgeSpyStackParams = {
+export const deployEventBridgeSpyStack = (params: {
+  tag: string;
   eventBusName: string;
   useCw?: boolean;
-};
-
-export const deployEventBridgeSpyStack = (
-  params: DeployEventBridgeSpyStackParams,
-) => {
-  const { eventBusName, useCw } = params;
+}) => {
+  const { tag, eventBusName, useCw } = params;
 
   if (!eventBusName) {
     throw new Error('"eventBusName" parameter is required');
   }
 
-  console.log(`Deploying test stack "sls-jest-eb-spy-${eventBusName}"`);
+  console.log(`Deploying test stack`);
+
+  const stackName = EventBridgeSpyStack.getStackName({
+    tag,
+    eventBusName,
+  });
 
   const args = [
     'deploy',
-    `sls-jest-eb-spy-${eventBusName}`,
+    stackName,
     '--require-approval',
     'never',
     '--outputs-file',
     './outputs.json',
+    '-c',
+    `tag=${tag}`,
     '-c',
     `event-bus-names=${eventBusName}`,
   ];
@@ -124,40 +105,49 @@ export const deployEventBridgeSpyStack = (
     throw new Error(stderr.toString());
   }
 
-  console.log(
-    `Test stack "sls-jest-eb-spy-${eventBusName}" is deployed successfully`,
-  );
+  console.log(`Test stack is deployed successfully`);
 
   const outputs = JSON.parse(
     readFileSync(resolve(__dirname, '../outputs.json'), 'utf8'),
   );
 
   return {
-    EventBridgeSpyQueueUrl: outputs?.[`sls-jest-eb-spy-${eventBusName}`]
-      ?.EventBridgeSpyQueueUrl as string | undefined,
-    EventBridgeSpyLogGroupName: outputs?.[`sls-jest-eb-spy-${eventBusName}`]
+    EventBridgeSpyQueueUrl: outputs?.[stackName]?.EventBridgeSpyQueueUrl as
+      | string
+      | undefined,
+    EventBridgeSpyLogGroupName: outputs?.[stackName]
       ?.EventBridgeSpyLogGroupName as string | undefined,
   };
 };
 
-export type DestroyEventBridgeSpyStackParams = {
+export const destroyEventBridgeSpyStack = (params: {
+  tag: string;
   eventBusName: string;
-};
-
-export const destroyEventBridgeSpyStack = (
-  params: DestroyEventBridgeSpyStackParams,
-) => {
-  const { eventBusName } = params;
+}) => {
+  const { tag, eventBusName } = params;
 
   if (!eventBusName) {
     throw new Error('"eventBusName" parameter is required');
   }
 
-  console.log(`Destroying test stack "sls-jest-eb-spy-${eventBusName}"`);
+  console.log(`Destroying test stack`);
+
+  const stackName = EventBridgeSpyStack.getStackName({
+    tag,
+    eventBusName,
+  });
 
   const { output, error, status, stderr } = spawnSync(
     'cdk',
-    ['destroy', '-c', `event-bus-names=${eventBusName}`, '--force'],
+    [
+      'destroy',
+      stackName,
+      '--force',
+      '-c',
+      `tag=${tag}`,
+      '-c',
+      `event-bus-names=${eventBusName}`,
+    ],
     {
       cwd: resolve(__dirname, '..'),
     },
@@ -170,9 +160,7 @@ export const destroyEventBridgeSpyStack = (
     throw new Error(stderr.toString());
   }
 
-  console.log(
-    `Test stack "sls-jest-eb-spy-${eventBusName}" is destroyed successfully`,
-  );
+  console.log(`Test stack is destroyed successfully`);
 
   return output.toString();
 };

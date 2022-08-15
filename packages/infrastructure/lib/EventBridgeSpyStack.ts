@@ -3,7 +3,7 @@ import {
   Duration,
   RemovalPolicy,
   Stack,
-  StackProps,
+  StackProps
 } from 'aws-cdk-lib';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as eventTargets from 'aws-cdk-lib/aws-events-targets';
@@ -34,7 +34,6 @@ export class EventBridgeSpyStack extends Stack {
 
     if (use === 'cw') {
       this.cw = new LogGroup(this, 'EventBridgeSpyLogGroup', {
-        // logGroupName: Stack.of(this).stackName,
         retention: RetentionDays.ONE_DAY,
         removalPolicy: RemovalPolicy.DESTROY,
       });
@@ -49,7 +48,6 @@ export class EventBridgeSpyStack extends Stack {
     else {
       this.queue = new Queue(this, 'EventBridgeSpyQueue', {
         fifo: true,
-        // queueName: `${Stack.of(this).stackName}.fifo`,
         visibilityTimeout: Duration.seconds(30),
         removalPolicy: RemovalPolicy.DESTROY,
         contentBasedDeduplication: true,
@@ -73,10 +71,13 @@ export class EventBridgeSpyStack extends Stack {
         'EventBridgeSpyEventBus',
         eventBusName,
       ),
-      // ruleName: `${Stack.of(this).stackName}-EventBridgeRuleName`,
       eventPattern: {
         account: [Stack.of(this).account],
       },
     });
+  }
+
+  static getStackName(params: { tag: string; eventBusName: string }): string {
+    return `sls-jest-${params.tag}-eb-spy-${params.eventBusName}`;
   }
 }
