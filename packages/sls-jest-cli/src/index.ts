@@ -1,27 +1,35 @@
 #!/usr/bin/env node
 
+import { helpers } from '@sls-jest/infrastructure';
 import { program } from 'commander';
-import * as helpers from '@sls-jest/infrastructure/helpers';
 
 program.name('sls-jest').version('0.0.1').description('SLS Jest CLI');
 
 program
   .command('deploy')
+  .requiredOption('-t, --tag <tag>', 'Tag to use for the stack')
   .option('-e, --event-bus-names <names...>', 'Event bus names')
   .option('-c, --use-cw', 'Use Cloudwatch Spy')
-  .action(async (args: { eventBusNames?: string[]; useCw?: boolean }) => {
-    await helpers.deployAllStacks({
-      eventBusNames: args.eventBusNames || [],
-      useCw: args.useCw || false,
-    });
-  });
+  .action(
+    async (args: {
+      tag: string;
+      eventBusNames?: string[];
+      useCw?: boolean;
+    }) => {
+      await helpers.deployAllStacks({
+        tag: args.tag,
+        eventBusNames: args.eventBusNames || [],
+        useCw: args.useCw || false,
+      });
+    },
+  );
 
 program
   .command('destroy')
-  .option('-e, --event-bus-names <names...>', 'Event bus names')
-  .action(async (args: { eventBusNames?: string[] }) => {
+  .requiredOption('-t, --tag <tag>', 'Tag to use for the stack')
+  .action(async (args: { tag: string }) => {
     await helpers.destroyAllStacks({
-      eventBusNames: args.eventBusNames || [],
+      tag: args.tag,
     });
   });
 
