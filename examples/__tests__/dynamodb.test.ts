@@ -1,5 +1,7 @@
 import { dynamodbItem } from 'sls-jest';
 
+jest.setTimeout(120000);
+
 describe('toExist', () => {
   it('should succeed when item exists in the database', async () => {
     await expect(
@@ -19,6 +21,9 @@ describe('toExist', () => {
           tableName: 'todos',
           key: {
             id: '456',
+          },
+          retries: {
+            retries: 0,
           },
         }),
       ).toExist();
@@ -85,6 +90,9 @@ describe('.not.toExist', () => {
           key: {
             id: '123',
           },
+          retries: {
+            retries: 0,
+          },
         }),
       ).not.toExist();
     } catch (e) {
@@ -117,6 +125,9 @@ describe('toExistAndMatchObject', () => {
           tableName: 'todos',
           key: {
             id: '123',
+          },
+          retries: {
+            retries: 0,
           },
         }),
       ).toExistAndMatchObject({
@@ -190,6 +201,9 @@ describe('.not.toExistAndMatchObject', () => {
           key: {
             id: '123',
           },
+          retries: {
+            retries: 0,
+          },
         }),
       ).not.toExistAndMatchObject({
         id: '123',
@@ -254,6 +268,9 @@ describe('toExistAndMatchSnapshot', () => {
           key: {
             id: '456',
           },
+          retries: {
+            retries: 0,
+          },
         }),
       ).toExistAndMatchSnapshot();
     } catch (e) {
@@ -308,6 +325,9 @@ describe('toExistAndMatchInlineSnapshot', () => {
           key: {
             id: '123',
           },
+          retries: {
+            retries: 0,
+          },
         }),
       ).toExistAndMatchInlineSnapshot(`
         Object {
@@ -327,6 +347,9 @@ describe('toExistAndMatchInlineSnapshot', () => {
           tableName: 'todos',
           key: {
             id: '456',
+          },
+          retries: {
+            retries: 0,
           },
         }),
       ).toExistAndMatchInlineSnapshot();
