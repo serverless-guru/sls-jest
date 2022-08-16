@@ -36,22 +36,29 @@ export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {
 
   let spy: EventBridgeSpy;
 
-  const { stackName, outputs } = await helpers.deployEventBridgeSpyStack({
-    tag,
-    eventBusName,
-    useCw: eventBusTestComponent?.type === 'cw',
-  });
+  const { stackName, logGroupName, queueUrl } =
+    await helpers.deployEventBridgeSpyStack({
+      tag,
+      eventBusName,
+      useCw: eventBusTestComponent?.type === 'cw',
+    });
 
   if (eventBusTestComponent?.type === 'cw') {
+    if (!logGroupName) {
+      throw new Error('"logGroupName" parameter is required');
+    }
     spy = new CloudWatchLogsEventBridgeSpy({
       ...eventBusTestComponent.config,
-      logGroupName: outputs.EventBridgeSpyLogGroupName as string,
+      logGroupName,
       stackName,
     });
   } else {
     // defaults to sqs
+    if (!queueUrl) {
+      throw new Error('"queueUrl" parameter is required');
+    }
     spy = new SQSEventBridgeSpy({
-      queueUrl: outputs.EventBridgeSpyQueueUrl as string,
+      queueUrl,
       stackName,
     });
   }

@@ -76,7 +76,7 @@ export class EventBridgeSpy {
   }
 
   /**
-   * Destroy the stack where the test resources are deployed.
+   * Destroy the stack where test resources are deployed.
    */
   async destroyStack() {
     if (!this.config.stackName) {

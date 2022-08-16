@@ -91,11 +91,16 @@ export const deployEventBridgeSpyStack = (params: {
     readFileSync(resolve(__dirname, '../outputs.json'), 'utf8'),
   );
 
+  const queueUrl = outputs?.[stackName].EventBridgeSpyQueueUrl as
+    | string
+    | undefined;
+  const logGroupName = outputs?.[stackName].EventBridgeSpyLogGroupName as
+    | string
+    | undefined;
+
   return {
     stackName,
-    outputs: outputs?.[stackName] as {
-      EventBridgeSpyQueueUrl?: string;
-      EventBridgeSpyLogGroupName?: string;
-    },
+    queueUrl,
+    logGroupName,
   };
 };

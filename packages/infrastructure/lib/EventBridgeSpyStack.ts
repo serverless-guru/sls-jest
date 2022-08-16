@@ -27,7 +27,7 @@ export class EventBridgeSpyStack extends Stack {
     const { eventBusName, use } = props || {};
 
     if (!eventBusName) {
-      throw new Error('"eventBusName" prop is required');
+      throw new Error('"eventBusName" parameter is required');
     }
 
     const targets: events.IRuleTarget[] = [];
