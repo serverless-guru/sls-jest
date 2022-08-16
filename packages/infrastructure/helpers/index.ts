@@ -9,55 +9,6 @@ import { resolve } from 'path';
 import { SLS_JEST_TAG } from '../constants';
 import { EventBridgeSpyStack } from '../lib/EventBridgeSpyStack';
 
-export const deployAllStacks = (params: {
-  tag: string;
-  eventBusNames: string[];
-  useCw?: boolean;
-}) => {
-  const { tag, eventBusNames, useCw } = params;
-
-  console.log('Deploying all test stacks');
-
-  const args = [
-    'deploy',
-    '--all',
-    '--require-approval',
-    'never',
-    '--outputs-file',
-    './outputs.json',
-    '-c',
-    `tag=${tag}`,
-  ];
-
-  if (eventBusNames.length > 0) {
-    args.push('-c', `event-bus-names=${eventBusNames.join(',')}`);
-  }
-
-  if (useCw) {
-    args.push('-c');
-    args.push('use-cw=true');
-  }
-
-  const { error, status, stderr } = spawnSync('cdk', args, {
-    cwd: resolve(__dirname, '..'),
-  });
-
-  if (status !== 0 || error) {
-    if (error) {
-      throw error;
-    }
-    throw new Error(stderr.toString());
-  }
-
-  console.log(`All test stack are deployed successfully`);
-
-  const outputs = JSON.parse(
-    readFileSync(resolve(__dirname, '../outputs.json'), 'utf8'),
-  );
-
-  return outputs;
-};
-
 export const destroyAllStacks = async (params: { tag: string }) => {
   // fetch stacks with the given tag
   const client = new CloudFormationClient({});
@@ -147,49 +98,4 @@ export const deployEventBridgeSpyStack = (params: {
       EventBridgeSpyLogGroupName?: string;
     },
   };
-};
-
-export const destroyEventBridgeSpyStack = (params: {
-  tag: string;
-  eventBusName: string;
-}) => {
-  const { tag, eventBusName } = params;
-
-  if (!eventBusName) {
-    throw new Error('"eventBusName" parameter is required');
-  }
-
-  console.log(`Destroying test stack`);
-
-  const stackName = EventBridgeSpyStack.getStackName({
-    tag,
-    eventBusName,
-  });
-
-  const { output, error, status, stderr } = spawnSync(
-    'cdk',
-    [
-      'destroy',
-      stackName,
-      '--force',
-      '-c',
-      `tag=${tag}`,
-      '-c',
-      `event-bus-names=${eventBusName}`,
-    ],
-    {
-      cwd: resolve(__dirname, '..'),
-    },
-  );
-
-  if (status !== 0 || error) {
-    if (error) {
-      throw error;
-    }
-    throw new Error(stderr.toString());
-  }
-
-  console.log(`Test stack is destroyed successfully`);
-
-  return output.toString();
 };
