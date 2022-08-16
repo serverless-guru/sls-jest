@@ -37,8 +37,8 @@ export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {
   const { stackName, logGroupName, queueUrl } =
     await helpers.deployEventBridgeSpyStack({
       tag,
-      eventBusName,
-      useCw: eventBusTestComponent?.type === 'cw',
+      busName: eventBusName,
+      adapter: eventBusTestComponent?.type,
     });
 
   if (eventBusTestComponent?.type === 'cw') {

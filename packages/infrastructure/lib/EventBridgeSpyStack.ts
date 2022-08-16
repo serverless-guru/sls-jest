@@ -7,14 +7,14 @@ import {
 } from 'aws-cdk-lib';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as eventTargets from 'aws-cdk-lib/aws-events-targets';
-import { Queue } from 'aws-cdk-lib/aws-sqs';
-
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
+import { z } from 'zod';
 
-interface EventBridgeSpyStackProps extends StackProps {
-  eventBusName: string;
-  use?: 'sqs' | 'cw';
+export interface EventBridgeSpyStackProps extends StackProps {
+  busName: string;
+  adapter?: 'sqs' | 'cw';
 }
 
 export class EventBridgeSpyStack extends Stack {
@@ -24,15 +24,15 @@ export class EventBridgeSpyStack extends Stack {
   constructor(scope: Construct, id: string, props?: EventBridgeSpyStackProps) {
     super(scope, id, props);
 
-    const { eventBusName, use } = props || {};
+    const { busName, adapter } = props || {};
 
-    if (!eventBusName) {
-      throw new Error('"eventBusName" parameter is required');
+    if (!busName) {
+      throw new Error('"busName" parameter is required');
     }
 
     const targets: events.IRuleTarget[] = [];
 
-    if (use === 'cw') {
+    if (adapter === 'cw') {
       this.cw = new LogGroup(this, 'EventBridgeSpyLogGroup', {
         retention: RetentionDays.ONE_DAY,
         removalPolicy: RemovalPolicy.DESTROY,
@@ -68,7 +68,7 @@ export class EventBridgeSpyStack extends Stack {
       eventBus: events.EventBus.fromEventBusName(
         this,
         'EventBridgeSpyEventBus',
-        eventBusName,
+        busName,
       ),
       eventPattern: {
         account: [Stack.of(this).account],
@@ -76,7 +76,7 @@ export class EventBridgeSpyStack extends Stack {
     });
   }
 
-  static getStackName(params: { tag: string; eventBusName: string }): string {
-    return `sls-jest-${params.tag}-eb-spy-${params.eventBusName}`;
+  static getStackName(params: { tag: string; busName: string }): string {
+    return `sls-jest-${params.tag}-eb-spy-${params.busName}`;
   }
 }

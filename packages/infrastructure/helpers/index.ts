@@ -8,6 +8,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { SLS_JEST_TAG } from '../constants';
 import { EventBridgeSpyStack } from '../lib/EventBridgeSpyStack';
+import { ContextParameter } from '../utils';
 
 export const destroyAllStacks = async (params: { tag: string }) => {
   // fetch stacks with the given tag
@@ -40,20 +41,20 @@ export const destroyStack = async (params: { stackName: string }) => {
 
 export const deployEventBridgeSpyStack = (params: {
   tag: string;
-  eventBusName: string;
-  useCw?: boolean;
+  busName: string;
+  adapter?: 'sqs' | 'cw';
 }) => {
-  const { tag, eventBusName, useCw } = params;
+  const { tag, busName, adapter = 'sqs' } = params;
 
-  if (!eventBusName) {
-    throw new Error('"eventBusName" parameter is required');
+  if (!busName) {
+    throw new Error('"busName" parameter is required');
   }
 
   console.log(`Deploying test stack`);
 
   const stackName = EventBridgeSpyStack.getStackName({
     tag,
-    eventBusName,
+    busName,
   });
 
   const args = [
@@ -66,13 +67,13 @@ export const deployEventBridgeSpyStack = (params: {
     '-c',
     `tag=${tag}`,
     '-c',
-    `event-bus-names=${eventBusName}`,
+    `eb-spies=${ContextParameter.ebSpies.toString([
+      {
+        busName,
+        adapter,
+      },
+    ])}`,
   ];
-
-  if (useCw) {
-    args.push('-c');
-    args.push('use-cw=true');
-  }
 
   const { error, status, stderr } = spawnSync('cdk', args, {
     cwd: resolve(__dirname, '..'),
