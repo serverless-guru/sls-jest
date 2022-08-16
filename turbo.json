@@ -1,12 +1,9 @@
 {
   "pipeline": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "lib/**"
-      ]
-    }
+      "dependsOn": ["^build"],
+      "outputs": ["lib/**"]
+    },
+    "test": {}
   }
 }
