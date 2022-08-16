@@ -1,10 +1,8 @@
-import { dynamodbItem, feedTables } from 'sls-jest';
-import { feedTable, truncateTable } from 'sls-jest';
+import { dynamodbItem, truncateTable, feedTables } from 'sls-jest';
 
 describe('toExist', () => {
   beforeAll(async () => {
     await truncateTable('todos', ['id']);
-
     await feedTables({
       todos: [
         {
