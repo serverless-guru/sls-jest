@@ -1,6 +1,17 @@
 import { dynamodbItem } from 'sls-jest';
+import { feedTable, truncateTable } from 'sls-jest';
 
 describe('toExist', () => {
+  beforeAll(async () => {
+    await truncateTable('todos');
+    await feedTable('todos', [
+      {
+        id: '123',
+        title: 'Buy milk',
+      },
+    ]);
+  });
+
   it('should succeed when item exists in the database', async () => {
     await expect(
       dynamodbItem({

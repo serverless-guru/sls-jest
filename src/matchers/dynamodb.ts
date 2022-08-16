@@ -1,5 +1,5 @@
-import { DynamoDBClient, DynamoDBClientConfig } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClientConfig } from '@aws-sdk/client-dynamodb';
+import { GetCommand } from '@aws-sdk/lib-dynamodb';
 import { equals, iterableEquality, subsetEquality } from '@jest/expect-utils';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { MatcherState } from 'expect';
@@ -12,7 +12,7 @@ import {
   stringify,
 } from 'jest-matcher-utils';
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
-import { canonicalize } from 'json-canonicalize';
+import { getDynamoDBDocumentClient } from '../utils/internal';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -21,19 +21,6 @@ export type DynamodbItemInput = {
   tableName: string;
   key: DocumentClient.Key;
   clientConfig?: DynamoDBClientConfig;
-};
-
-const dynamoDbDocumentClients: Record<string, DynamoDBDocumentClient> = {};
-
-const getDynamoDBDocumentClient = (config: DynamoDBClientConfig = {}) => {
-  const key = canonicalize(config);
-  if (!dynamoDbDocumentClients[key]) {
-    dynamoDbDocumentClients[key] = DynamoDBDocumentClient.from(
-      new DynamoDBClient(config),
-    );
-  }
-
-  return dynamoDbDocumentClients[key];
 };
 
 export const toExist = async function (

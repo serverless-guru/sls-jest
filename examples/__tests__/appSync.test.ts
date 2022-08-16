@@ -1,4 +1,4 @@
-import { vtlMappingTemplate } from 'sls-jest';
+import { truncateTable, vtlMappingTemplate } from 'sls-jest';
 
 const template = `
 #set($id=$ctx.args.id)
