@@ -1,4 +1,4 @@
-import { helpers } from '@sls-jest/infrastructure';
+import * as helpers from '@sls-jest/infrastructure/helpers';
 import {
   CloudWatchEventSpyConfig,
   CloudWatchLogsEventBridgeSpy,

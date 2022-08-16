@@ -1,11 +1,8 @@
 {
   "name": "@sls-jest/infrastructure",
   "version": "0.1.0",
-  "main": "index.ts",
-  "types": "index.ts",
   "bin": {
-    "infrastructure": "bin/infrastructure.js",
-    "sls-jest-deploy": "bin/sls-jest-deploy.sh"
+    "infrastructure": "bin/infrastructure.js"
   },
   "scripts": {
     "build": "tsc",
@@ -24,6 +21,7 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
+    "@aws-sdk/client-cloudformation": "^3.150.0",
     "aws-cdk-lib": "2.35.0",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"

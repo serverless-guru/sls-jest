@@ -1,6 +1,12 @@
+import {
+  CloudFormationClient,
+  DeleteStackCommand,
+  DescribeStacksCommand,
+} from '@aws-sdk/client-cloudformation';
 import { spawnSync } from 'child_process';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import { SLS_JEST_TAG } from '../constants';
 import { EventBridgeSpyStack } from '../lib/EventBridgeSpyStack';
 
 export const deployAllStacks = (params: {
@@ -52,10 +58,27 @@ export const deployAllStacks = (params: {
   return outputs;
 };
 
-export const destroyAllStacks = (params: { tag: string }) => {
-  // TODO
-  // 1. fetch stacks for the tag
-  // 2. destroy them
+export const destroyAllStacks = async (params: { tag: string }) => {
+  // fetch stacks with the given tag
+  const client = new CloudFormationClient({});
+  const describeCommand = new DescribeStacksCommand({});
+  const describeResult = await client.send(describeCommand);
+  const stacks = describeResult.Stacks?.filter((stack) =>
+    stack.Tags?.some(
+      (tag) => tag.Key === SLS_JEST_TAG && tag.Value === params.tag,
+    ),
+  );
+
+  // delete them
+  const deleteCommands = stacks?.map(
+    (stack) =>
+      new DeleteStackCommand({
+        StackName: stack.StackName,
+      }),
+  );
+  if (deleteCommands && deleteCommands.length > 0) {
+    await Promise.all(deleteCommands.map((command) => client.send(command)));
+  }
 };
 
 export const deployEventBridgeSpyStack = (params: {

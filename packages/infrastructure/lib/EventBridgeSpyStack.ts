@@ -3,7 +3,7 @@ import {
   Duration,
   RemovalPolicy,
   Stack,
-  StackProps
+  StackProps,
 } from 'aws-cdk-lib';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as eventTargets from 'aws-cdk-lib/aws-events-targets';
@@ -44,7 +44,7 @@ export class EventBridgeSpyStack extends Stack {
         value: this.cw.logGroupName,
       });
     }
-    // Note: defaults to sqs
+    // defaults to sqs
     else {
       this.queue = new Queue(this, 'EventBridgeSpyQueue', {
         fifo: true,

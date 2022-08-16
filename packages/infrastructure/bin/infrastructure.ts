@@ -8,18 +8,15 @@ import { EventBridgeSpyStack } from '../lib/EventBridgeSpyStack';
 const app = new cdk.App();
 
 const tag = app.node.tryGetContext('tag') as string;
-
 if (tag === undefined || !(typeof tag === 'string') || tag.trim() === '') {
   throw new Error("Must pass a '-c tag=<TAG>' context parameter");
 }
 
 const eventBusNamesString = app.node.tryGetContext('event-bus-names') as string;
-
 const eventBusNames = eventBusNamesString?.split(',') || [];
 
+const useCW = app.node.tryGetContext('use-cw') as string;
 eventBusNames.forEach((eventBusName) => {
-  const useCW = app.node.tryGetContext('use-cw') as string;
-
   const stackName = EventBridgeSpyStack.getStackName({
     tag,
     eventBusName,
