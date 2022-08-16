@@ -22,15 +22,13 @@ export type EventBridgeSpyParams = {
 };
 
 export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {
-  const {
-    tag = process.env.SLS_JEST_TAG,
-    eventBusName,
-    eventBusTestComponent,
-  } = params;
+  const { eventBusName, eventBusTestComponent } = params;
+
+  const tag = process.env.SLS_JEST_TAG;
 
   if (!tag) {
     throw new Error(
-      'Either "tag" parameter should be passed or environment variable "SLS_JEST_TAG" should be set',
+      'Environment variable "SLS_JEST_TAG" should be set in order to deploy the test stack',
     );
   }
 
