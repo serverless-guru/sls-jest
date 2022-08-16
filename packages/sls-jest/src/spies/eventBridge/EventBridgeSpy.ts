@@ -1,3 +1,4 @@
+import { destroyStack } from '@sls-jest/infrastructure/helpers';
 import { EventBridgeEvent } from 'aws-lambda';
 import { uniqBy } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
@@ -8,6 +9,7 @@ type EventMatcher = (
 ) => boolean | null;
 
 export type EventBridgeSpyConfig = {
+  stackName?: string;
   matcherDefaultTimeout?: number;
 };
 
@@ -19,7 +21,7 @@ export class EventBridgeSpy {
   subject: BehaviorSubject<EventBridgeEvent<string, unknown>[]>;
   matcherTimeout: number;
 
-  constructor(config: EventBridgeSpyConfig = {}) {
+  constructor(private config: EventBridgeSpyConfig = {}) {
     this.subject = new BehaviorSubject(this.events);
     this.matcherTimeout = config.matcherDefaultTimeout ?? 10000;
   }
@@ -71,5 +73,17 @@ export class EventBridgeSpy {
 
   protected async stopPolling() {
     throw new Error('Not implemented. Implement this in a child class.');
+  }
+
+  /**
+   * Destroy the stack where the test resources are deployed.
+   */
+  async destroyStack() {
+    if (!this.config.stackName) {
+      throw new Error('Stack name not provided');
+    }
+    await destroyStack({
+      stackName: this.config.stackName,
+    });
   }
 }

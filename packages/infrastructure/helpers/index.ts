@@ -70,15 +70,21 @@ export const destroyAllStacks = async (params: { tag: string }) => {
   );
 
   // delete them
-  const deleteCommands = stacks?.map(
-    (stack) =>
-      new DeleteStackCommand({
-        StackName: stack.StackName,
-      }),
-  );
-  if (deleteCommands && deleteCommands.length > 0) {
-    await Promise.all(deleteCommands.map((command) => client.send(command)));
+  const stackNames = stacks?.map((stack) => stack.StackName as string);
+
+  if (stackNames && stackNames.length > 0) {
+    await Promise.all(
+      stackNames.map((stackName) => destroyStack({ stackName })),
+    );
   }
+};
+
+export const destroyStack = async (params: { stackName: string }) => {
+  const client = new CloudFormationClient({});
+  const deleteCommand = new DeleteStackCommand({
+    StackName: params.stackName,
+  });
+  return client.send(deleteCommand);
 };
 
 export const deployEventBridgeSpyStack = (params: {
@@ -135,11 +141,11 @@ export const deployEventBridgeSpyStack = (params: {
   );
 
   return {
-    EventBridgeSpyQueueUrl: outputs?.[stackName]?.EventBridgeSpyQueueUrl as
-      | string
-      | undefined,
-    EventBridgeSpyLogGroupName: outputs?.[stackName]
-      ?.EventBridgeSpyLogGroupName as string | undefined,
+    stackName,
+    outputs: outputs?.[stackName] as {
+      EventBridgeSpyQueueUrl?: string;
+      EventBridgeSpyLogGroupName?: string;
+    },
   };
 };
 

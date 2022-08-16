@@ -43,9 +43,8 @@ export class EventBridgeSpyStack extends Stack {
       new CfnOutput(this, 'EventBridgeSpyLogGroupName', {
         value: this.cw.logGroupName,
       });
-    }
-    // defaults to sqs
-    else {
+    } else {
+      // defaults to sqs
       this.queue = new Queue(this, 'EventBridgeSpyQueue', {
         fifo: true,
         visibilityTimeout: Duration.seconds(30),

@@ -36,7 +36,7 @@ export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {
 
   let spy: EventBridgeSpy;
 
-  const stackOutputs = await helpers.deployEventBridgeSpyStack({
+  const { stackName, outputs } = await helpers.deployEventBridgeSpyStack({
     tag,
     eventBusName,
     useCw: eventBusTestComponent?.type === 'cw',
@@ -45,16 +45,16 @@ export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {
   if (eventBusTestComponent?.type === 'cw') {
     spy = new CloudWatchLogsEventBridgeSpy({
       ...eventBusTestComponent.config,
-      logGroupName: stackOutputs.EventBridgeSpyLogGroupName as string,
-    });
-  } else if (eventBusTestComponent?.type === 'sqs') {
-    spy = new SQSEventBridgeSpy({
-      ...eventBusTestComponent.config,
-      queueUrl: stackOutputs.EventBridgeSpyQueueUrl as string,
+      logGroupName: outputs.EventBridgeSpyLogGroupName as string,
+      stackName,
     });
   } else {
-    throw new Error(`Unknown eventBridgeSpy type: ${eventBusTestComponent}`);
+    // defaults to sqs
+    spy = new SQSEventBridgeSpy({
+      queueUrl: outputs.EventBridgeSpyQueueUrl as string,
+      stackName,
+    });
   }
 
-  return spy; // TODO return also the stack reference or name?? so user would be able to do something like: await spy.getStack().destroy();
+  return spy;
 };
