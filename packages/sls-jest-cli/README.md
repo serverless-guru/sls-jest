@@ -17,19 +17,8 @@ Now you can use the command `sls-jest` from everywhere 🥳️
 ```bash
 sls-jest --help
 ```
-### Deploy
-```bash
-# deploy resources needed for testing "default" event bridge buses.
-
-sls-jest deploy -e default
-
-# deploy resources needed for testing "default" AND "custom-bus-1" event bridge buses.
-
-sls-jest deploy -e default custom-bus-1
-```
-
 ### Destroy
 ```bash
-# Destroy resources created by the above command
-sls-jest destroy -e default custom-bus-1
+# Destroy resources created with tag "my-tag"
+sls-jest destroy --tag my-tag
 ```
