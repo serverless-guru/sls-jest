@@ -1,12 +1,12 @@
 import { BatchWriteCommand, ScanCommand } from '@aws-sdk/lib-dynamodb';
 import { AttributeValue, DescribeTableCommand } from '@aws-sdk/client-dynamodb';
-import { chunk, map, pick } from 'lodash';
+import { chunk, flatten, map, pick } from 'lodash';
 import { getDynamoDBDocumentClient } from './internal';
 
 type DynamoDBItemsCollection =
   | Record<string, any>[]
   | {
-      [key: string]: Record<string, any>[];
+      [key: string]: Record<string, any> | Record<string, any>[];
     };
 
 export const feedTable = async (
@@ -15,7 +15,9 @@ export const feedTable = async (
 ) => {
   const client = getDynamoDBDocumentClient();
 
-  const dynamoDbItems = Array.isArray(items) ? items : Object.values(items);
+  const dynamoDbItems = flatten(
+    Array.isArray(items) ? items : Object.values(items),
+  );
 
   // put items in batches of 25
   const chuncks = chunk(dynamoDbItems, 25);
@@ -34,10 +36,17 @@ export const feedTable = async (
   }
 };
 
+export const feedTables = async (
+  items: Record<string, DynamoDBItemsCollection>,
+) => {
+  for (const [tableName, tableItems] of Object.entries(items)) {
+    await feedTable(tableName, tableItems);
+  }
+};
+
 const tableKeys: Record<string, string[]> = {};
 
 const getTableKeys = async (tableName: string) => {
-  console.log('resolving keys');
   if (!tableKeys[tableName]) {
     const client = getDynamoDBDocumentClient();
     const { Table } = await client.send(
@@ -62,9 +71,9 @@ const getTableKeys = async (tableName: string) => {
   return tableKeys[tableName];
 };
 
-export const truncateTable = async (tableName: string) => {
+export const truncateTable = async (tableName: string, keys?: string[]) => {
   const client = getDynamoDBDocumentClient();
-  const key = await getTableKeys(tableName);
+  const key = keys ?? (await getTableKeys(tableName));
 
   let lastEvaluatedKey: Record<string, AttributeValue> | undefined;
   do {
