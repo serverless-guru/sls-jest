@@ -76,7 +76,11 @@ export class EventBridgeSpyStack extends Stack {
     });
   }
 
-  static getStackName(params: { tag: string; busName: string }): string {
-    return `sls-jest-${params.tag}-eb-spy-${params.busName}`;
+  static getStackName(params: {
+    tag: string;
+    busName: string;
+    adapter: string;
+  }): string {
+    return `sls-jest-${params.tag}-eb-spy-${params.busName}-${params.adapter}`;
   }
 }

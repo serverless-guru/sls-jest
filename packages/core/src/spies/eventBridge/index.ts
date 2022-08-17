@@ -61,5 +61,6 @@ export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {
     });
   }
 
+  spy.startPolling();
   return spy;
 };

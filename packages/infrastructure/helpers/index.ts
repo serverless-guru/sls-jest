@@ -20,7 +20,6 @@ export const destroyAllStacks = async (params: { tag: string }) => {
       (tag) => tag.Key === SLS_JEST_TAG && tag.Value === params.tag,
     ),
   );
-
   // delete them
   const stackNames = stacks?.map((stack) => stack.StackName as string);
 
@@ -55,15 +54,23 @@ export const deployEventBridgeSpyStack = (params: {
   const stackName = EventBridgeSpyStack.getStackName({
     tag,
     busName,
+    adapter,
   });
 
+  const outputFileName = `${process.cwd()}/.sls-jest/${stackName}.json`;
+
   const args = [
+    'cdk',
     'deploy',
     stackName,
     '--require-approval',
     'never',
+    '--app',
+    '"npx infrastructure"',
+    '--output',
+    './.sls-jest/cdk.out',
     '--outputs-file',
-    './outputs.json',
+    outputFileName,
     '-c',
     `tag=${tag}`,
     '-c',
@@ -75,8 +82,8 @@ export const deployEventBridgeSpyStack = (params: {
     ])}`,
   ];
 
-  const { error, status, stderr } = spawnSync('cdk', args, {
-    cwd: resolve(__dirname, '..'),
+  const { error, status, stderr } = spawnSync('npx', args, {
+    cwd: process.cwd(),
   });
 
   if (status !== 0 || error) {
@@ -88,9 +95,7 @@ export const deployEventBridgeSpyStack = (params: {
 
   console.log(`Test stack is deployed successfully`);
 
-  const outputs = JSON.parse(
-    readFileSync(resolve(__dirname, '../outputs.json'), 'utf8'),
-  );
+  const outputs = JSON.parse(readFileSync(outputFileName, 'utf8'));
 
   const queueUrl = outputs?.[stackName].EventBridgeSpyQueueUrl as
     | string

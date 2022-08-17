@@ -1,4 +1,8 @@
-import { EventBridgeSpy, eventBridgeSpy, EventBridgeSpyParams } from '@sls-jest/core';
+import {
+  EventBridgeSpy,
+  eventBridgeSpy,
+  EventBridgeSpyParams,
+} from '@sls-jest/core';
 import {
   EventBridgeClient,
   PutEventsCommand,
@@ -14,23 +18,22 @@ describe.each([
     'SQS',
     {
       type: 'sqs',
+      eventBusName: 'default',
       config: {
         clientConfig: { region: 'us-east-1' },
         waitTimeSeconds: 2000,
         matcherDefaultTimeout: 10_000,
-        queueUrl:
-          'https://sqs.us-east-1.amazonaws.com/379730309663/spy-queue.fifo',
       },
     } as EventBridgeSpyParams,
   ],
   [
     'CloudWatchLogs',
     {
-      type: 'cloudWatchLogs',
+      type: 'cw',
+      eventBusName: 'default',
       config: {
         clientConfig: { region: 'us-east-1' },
         matcherDefaultTimeout: 15_000,
-        logGroupName: '/aws/events/event-bridge-spy',
       },
     } as EventBridgeSpyParams,
   ],
@@ -38,7 +41,7 @@ describe.each([
   let spy: EventBridgeSpy;
 
   beforeAll(async () => {
-    spy = eventBridgeSpy(config);
+    spy = await eventBridgeSpy(config);
   });
 
   afterEach(() => {

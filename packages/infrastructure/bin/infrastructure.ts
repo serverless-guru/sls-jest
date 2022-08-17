@@ -19,6 +19,7 @@ if (ebSpies && ebSpies.length > 0) {
     const stackName = EventBridgeSpyStack.getStackName({
       tag,
       busName,
+      adapter,
     });
 
     const stack = new EventBridgeSpyStack(app, stackName, {
