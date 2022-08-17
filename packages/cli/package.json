@@ -17,8 +17,7 @@
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
     "@types/command-line-args": "^5.2.0",
-    "@sls-jest/infrastructure": "*",
-    "rimraf": "^3.0.2"
+    "@sls-jest/infrastructure": "*"
   },
   "dependencies": {
     "command-line-args": "^5.2.1",
