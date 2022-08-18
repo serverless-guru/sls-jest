@@ -5,7 +5,6 @@ import {
 } from '@aws-sdk/client-cloudformation';
 import { spawnSync } from 'child_process';
 import { readFileSync } from 'fs';
-import { resolve } from 'path';
 import { SLS_JEST_TAG } from '../constants';
 import { EventBridgeSpyStack } from '../lib/EventBridgeSpyStack';
 import { ContextParameter } from '../utils';
@@ -13,17 +12,29 @@ import { ContextParameter } from '../utils';
 export const destroyAllStacks = async (params: { tag: string }) => {
   // fetch stacks with the given tag
   const client = new CloudFormationClient({});
-  const describeCommand = new DescribeStacksCommand({});
-  const describeResult = await client.send(describeCommand);
-  const stacks = describeResult.Stacks?.filter((stack) =>
-    stack.Tags?.some(
-      (tag) => tag.Key === SLS_JEST_TAG && tag.Value === params.tag,
-    ),
-  );
-  // delete them
-  const stackNames = stacks?.map((stack) => stack.StackName as string);
+  let nextToken: string | undefined;
+  const stackNames: string[] = [];
 
-  if (stackNames && stackNames.length > 0) {
+  do {
+    const describeCommand = new DescribeStacksCommand({
+      NextToken: nextToken,
+    });
+    const { NextToken, Stacks } = await client.send(describeCommand);
+    nextToken = NextToken;
+
+    Stacks?.forEach((stack) => {
+      if (
+        stack.Tags?.some(
+          (tag) => tag.Key === SLS_JEST_TAG && tag.Value === params.tag,
+        ) &&
+        stack.StackName
+      ) {
+        stackNames.push(stack.StackName);
+      }
+    });
+  } while (nextToken);
+
+  if (stackNames.length > 0) {
     await Promise.all(
       stackNames.map((stackName) => destroyStack({ stackName })),
     );
