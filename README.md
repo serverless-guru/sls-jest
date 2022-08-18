@@ -1,6 +1,13 @@
+# Installing sls-jest
+
+```bash
+npm i @sls-jest/core
+```
+
 # Setup Jest
-To start using sls-jest matchers you need to add `"./node_modules/sls-jest/lib/setup.js"` path to the `setupFilesAfterEnv` jest config option like so: 
+
+To start using sls-jest matchers you need to add `"./node_modules/sls-jest/lib/setup.js"` path to the `setupFilesAfterEnv` jest config option like so:
 
 ```ts
-setupFilesAfterEnv: ["./node_modules/sls-jest/lib/setup.js"]
+setupFilesAfterEnv: ['./node_modules/sls-jest/lib/setup.js'];
 ```
