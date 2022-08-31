@@ -1,6 +1,6 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  setupFilesAfterEnv: ['../../node_modules/@sls-jest/core/lib/setup.js'],
+  setupFilesAfterEnv: ['./setupJest.ts'],
   testRegex: '(.*\\.test\\.(tsx?|jsx?))$',
 };

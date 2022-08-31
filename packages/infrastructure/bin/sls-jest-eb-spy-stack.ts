@@ -8,21 +8,20 @@ import { ContextParameter } from '../utils';
 
 const app = new cdk.App();
 
-const tag = app.node.tryGetContext('tag') as string;
-if (tag === undefined || !(typeof tag === 'string') || tag.trim() === '') {
+const tag = app.node.tryGetContext('tag') as string | undefined;
+if (!tag) {
   throw new Error("Must pass a '-c tag=<TAG>' context parameter");
+}
+
+const stackName = app.node.tryGetContext('stackName') as string | undefined;
+if (!stackName) {
+  throw new Error("Must pass a '-c stackName=<stackName>' context parameter");
 }
 
 const config = app.node.tryGetContext('config') as string | undefined;
 
 const { adapter, busName } =
   ContextParameter.eventBridgeSpyConfig.parse(config);
-
-const stackName = EventBridgeSpyStack.getStackName({
-  tag,
-  busName,
-  adapter,
-});
 
 const stack = new EventBridgeSpyStack(app, stackName, {
   busName,

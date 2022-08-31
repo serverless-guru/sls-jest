@@ -6,11 +6,102 @@ import {
 import { spawnSync } from 'child_process';
 import { readFileSync } from 'fs';
 import { SLS_JEST_TAG } from '../constants';
-import { EventBridgeSpyStack } from '../lib/EventBridgeSpyStack';
-import { ContextParameter } from '../utils';
+export * from './event-bridge';
 import * as fs from 'fs';
 
 const BASE_PATH = `${process.cwd()}/.sls-jest`;
+
+interface IStackDetails {
+  stackName: string;
+  [key: string]: string | undefined;
+}
+
+export const getStackName = (stackSuffix: string) => {
+  return `sls-jest-${process.env.SLS_JEST_TAG}-${stackSuffix}`;
+};
+
+export const getStackDetailsFilePath = (stackName: string) => {
+  return `${BASE_PATH}/${stackName}.json`;
+};
+
+export const getStackDetails = (params: {
+  stackSuffix: string;
+  app: string;
+  config: string;
+}): IStackDetails => {
+  const { app, stackSuffix, config } = params;
+
+  if (!process.env.SLS_JEST_TAG) {
+    throw new Error(
+      'Environment variable "SLS_JEST_TAG" should be set in order to deploy the test stack',
+    );
+  }
+
+  const stackName = getStackName(stackSuffix);
+  const outputFileName = getStackDetailsFilePath(stackName);
+
+  // If cache does not exist, deploy
+  if (!fs.existsSync(outputFileName)) {
+    deployStack({
+      stackName,
+      app,
+      config,
+    });
+  }
+
+  const stackDetails = JSON.parse(readFileSync(outputFileName, 'utf8'))?.[
+    stackName
+  ];
+
+  if (!stackDetails) {
+    throw new Error(`Could not find stack details for ${stackName}.`);
+  }
+
+  return {
+    stackName: stackName,
+    ...stackDetails,
+  };
+};
+
+export const deployStack = (params: {
+  stackName: string;
+  app: string;
+  config: string;
+}) => {
+  const { app, stackName, config } = params;
+
+  const args = [
+    'cdk',
+    'deploy',
+    '--all',
+    '--app',
+    `"npx ${app}"`,
+    '--require-approval',
+    'never',
+    '--output',
+    `${BASE_PATH}/cdk.out`,
+    '--outputs-file',
+    getStackDetailsFilePath(stackName),
+    '-c',
+    `tag=${process.env.SLS_JEST_TAG}`,
+    '-c',
+    `stackName=${stackName}`,
+    '-c',
+    `config=${config}`,
+  ];
+
+  const { error, status, stderr } = spawnSync('npx', args, {
+    cwd: process.cwd(),
+  });
+
+  if (status !== 0 || error) {
+    if (error) {
+      throw error;
+    }
+
+    throw new Error(stderr.toString());
+  }
+};
 
 export const destroyAllStacks = async (params: { tag: string }) => {
   // fetch stacks with the given tag
@@ -57,93 +148,4 @@ export const destroyStack = async (params: { stackName: string }) => {
     StackName: params.stackName,
   });
   return client.send(deleteCommand);
-};
-
-const getStackDetailsFilePath = (stackName: string) => {
-  return `${BASE_PATH}/${stackName}.json`;
-};
-
-const getStackDetails = (stackName: string) => {
-  const outputFileName = getStackDetailsFilePath(stackName);
-  if (fs.existsSync(outputFileName)) {
-    const stackDetails = JSON.parse(readFileSync(outputFileName, 'utf8'));
-
-    const { LogGroupName: logGroupName, QueueUrl: queueUrl } =
-      stackDetails?.[stackName] || {};
-
-    if (logGroupName || queueUrl) {
-      return {
-        stackName,
-        logGroupName,
-        queueUrl,
-      };
-    }
-  }
-
-  return undefined;
-};
-
-export const deployEventBridgeSpyStack = (params: {
-  tag: string;
-  busName: string;
-  adapter?: 'sqs' | 'cw';
-}) => {
-  const { tag, busName, adapter = 'sqs' } = params;
-
-  if (!busName) {
-    throw new Error('"busName" parameter is required');
-  }
-
-  const stackName = EventBridgeSpyStack.getStackName({
-    tag,
-    busName,
-    adapter,
-  });
-
-  const stackDetails = getStackDetails(stackName);
-
-  if (stackDetails) {
-    return stackDetails;
-  }
-
-  const args = [
-    'cdk',
-    'deploy',
-    '--all',
-    '--app',
-    '"npx sls-jest-eb-spy-stack"',
-    '--require-approval',
-    'never',
-    '--output',
-    `${BASE_PATH}/cdk.out`,
-    '--outputs-file',
-    getStackDetailsFilePath(stackName),
-    '-c',
-    `tag=${tag}`,
-    '-c',
-    `config=${ContextParameter.eventBridgeSpyConfig.toString({
-      busName,
-      adapter,
-    })}`,
-  ];
-
-  const { error, status, stderr } = spawnSync('npx', args, {
-    cwd: process.cwd(),
-  });
-
-  if (status !== 0 || error) {
-    if (error) {
-      throw error;
-    }
-
-    throw new Error(stderr.toString());
-  }
-
-  const deployedStackDetails = getStackDetails(stackName);
-
-  if (!deployedStackDetails) {
-    throw new Error(`Could not find stack details for ${stackName}.`);
-  }
-
-  return deployedStackDetails;
 };

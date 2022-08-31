@@ -23,22 +23,12 @@ export type EventBridgeSpyParams = {
 export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {
   const { eventBusName, adapter, config } = params;
 
-  const tag = process.env.SLS_JEST_TAG;
-
-  if (!tag) {
-    throw new Error(
-      'Environment variable "SLS_JEST_TAG" should be set in order to deploy the test stack',
-    );
-  }
-
   let spy: EventBridgeSpy;
 
-  const { stackName, logGroupName, queueUrl } =
-    await helpers.deployEventBridgeSpyStack({
-      tag,
-      busName: eventBusName,
-      adapter,
-    });
+  const { stackName, logGroupName, queueUrl } = helpers.getEventBridgeSpyStack({
+    busName: eventBusName,
+    adapter,
+  });
 
   if (adapter === 'cw') {
     if (!logGroupName) {

@@ -10,7 +10,6 @@ import * as eventTargets from 'aws-cdk-lib/aws-events-targets';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
-import { z } from 'zod';
 
 export interface EventBridgeSpyStackProps extends StackProps {
   busName: string;
@@ -70,13 +69,5 @@ export class EventBridgeSpyStack extends Stack {
         account: [Stack.of(this).account],
       },
     });
-  }
-
-  static getStackName(params: {
-    tag: string;
-    busName: string;
-    adapter: string;
-  }): string {
-    return `sls-jest-${params.tag}-eb-spy-${params.busName}-${params.adapter}`;
   }
 }
