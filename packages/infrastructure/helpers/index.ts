@@ -8,6 +8,7 @@ import { readFileSync } from 'fs';
 import { SLS_JEST_TAG } from '../constants';
 import { EventBridgeSpyStack } from '../lib/EventBridgeSpyStack';
 import { ContextParameter } from '../utils';
+import * as fs from 'fs';
 
 export const destroyAllStacks = async (params: { tag: string }) => {
   // fetch stacks with the given tag
@@ -49,6 +50,26 @@ export const destroyStack = async (params: { stackName: string }) => {
   return client.send(deleteCommand);
 };
 
+const getStackDetails = (stackName: string) => {
+  const outputFileName = `${process.cwd()}/.sls-jest/${stackName}.json`;
+  if (fs.existsSync(outputFileName)) {
+    const stackDetails = JSON.parse(readFileSync(outputFileName, 'utf8'));
+
+    const { LogGroupName: logGroupName, QueueUrl: queueUrl } =
+      stackDetails?.[stackName] || {};
+
+    if (logGroupName || queueUrl) {
+      return {
+        stackName,
+        logGroupName,
+        queueUrl,
+      };
+    }
+  }
+
+  return undefined;
+};
+
 export const deployEventBridgeSpyStack = (params: {
   tag: string;
   busName: string;
@@ -60,8 +81,6 @@ export const deployEventBridgeSpyStack = (params: {
     throw new Error('"busName" parameter is required');
   }
 
-  console.log(`Deploying test stack`);
-
   const stackName = EventBridgeSpyStack.getStackName({
     tag,
     busName,
@@ -70,14 +89,20 @@ export const deployEventBridgeSpyStack = (params: {
 
   const outputFileName = `${process.cwd()}/.sls-jest/${stackName}.json`;
 
+  const stackDetails = getStackDetails(stackName);
+
+  if (stackDetails) {
+    return stackDetails;
+  }
+
   const args = [
     'cdk',
     'deploy',
-    stackName,
+    '--all',
+    '--app',
+    '"npx sls-jest-eb-spy-stack"',
     '--require-approval',
     'never',
-    '--app',
-    '"npx infrastructure"',
     '--output',
     './.sls-jest/cdk.out',
     '--outputs-file',
@@ -85,12 +110,10 @@ export const deployEventBridgeSpyStack = (params: {
     '-c',
     `tag=${tag}`,
     '-c',
-    `eb-spies=${ContextParameter.ebSpies.toString([
-      {
-        busName,
-        adapter,
-      },
-    ])}`,
+    `config=${ContextParameter.eventBridgeSpyConfig.toString({
+      busName,
+      adapter,
+    })}`,
   ];
 
   const { error, status, stderr } = spawnSync('npx', args, {
@@ -101,23 +124,15 @@ export const deployEventBridgeSpyStack = (params: {
     if (error) {
       throw error;
     }
+
     throw new Error(stderr.toString());
   }
 
-  console.log(`Test stack is deployed successfully`);
+  const deployedStackDetails = getStackDetails(stackName);
 
-  const outputs = JSON.parse(readFileSync(outputFileName, 'utf8'));
+  if (!deployedStackDetails) {
+    throw new Error(`Could not find stack details for ${stackName}.`);
+  }
 
-  const queueUrl = outputs?.[stackName].EventBridgeSpyQueueUrl as
-    | string
-    | undefined;
-  const logGroupName = outputs?.[stackName].EventBridgeSpyLogGroupName as
-    | string
-    | undefined;
-
-  return {
-    stackName,
-    queueUrl,
-    logGroupName,
-  };
+  return deployedStackDetails;
 };

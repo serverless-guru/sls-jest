@@ -40,12 +40,12 @@ export class EventBridgeSpyStack extends Stack {
 
       targets.push(new eventTargets.CloudWatchLogGroup(this.cw));
 
-      new CfnOutput(this, 'EventBridgeSpyLogGroupName', {
+      new CfnOutput(this, 'LogGroupName', {
         value: this.cw.logGroupName,
       });
     } else {
       // defaults to sqs
-      this.queue = new Queue(this, 'EventBridgeSpyQueue', {
+      this.queue = new Queue(this, 'Queue', {
         fifo: true,
         visibilityTimeout: Duration.seconds(30),
         removalPolicy: RemovalPolicy.DESTROY,
@@ -58,18 +58,14 @@ export class EventBridgeSpyStack extends Stack {
         }),
       );
 
-      new CfnOutput(this, 'EventBridgeSpyQueueUrl', {
+      new CfnOutput(this, 'QueueUrl', {
         value: this.queue.queueUrl,
       });
     }
 
-    new events.Rule(this, 'EventBridgeSpyRule', {
+    new events.Rule(this, 'Rule', {
       targets,
-      eventBus: events.EventBus.fromEventBusName(
-        this,
-        'EventBridgeSpyEventBus',
-        busName,
-      ),
+      eventBus: events.EventBus.fromEventBusName(this, 'EventBus', busName),
       eventPattern: {
         account: [Stack.of(this).account],
       },

@@ -17,7 +17,7 @@ describe.each([
   [
     'SQS',
     {
-      type: 'sqs',
+      adapter: 'sqs',
       eventBusName: 'default',
       config: {
         clientConfig: { region: 'us-east-1' },
@@ -29,7 +29,7 @@ describe.each([
   [
     'CloudWatchLogs',
     {
-      type: 'cw',
+      adapter: 'cw',
       eventBusName: 'default',
       config: {
         clientConfig: { region: 'us-east-1' },

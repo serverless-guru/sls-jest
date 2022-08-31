@@ -1,25 +1,28 @@
 import { z } from 'zod';
 
-const EbSpiesContextParameterSchema = z.object({
+const ebSpiesContextParameterSchema = z.object({
   adapter: z.enum(['sqs', 'cw']).default('sqs'),
   busName: z.string(),
 });
 
-type EbSpiesContextParameter = z.infer<typeof EbSpiesContextParameterSchema>;
+type EbSpiesContextParameter = z.infer<typeof ebSpiesContextParameterSchema>;
 
 export const ContextParameter = {
-  ebSpies: {
-    parse: (param: string): EbSpiesContextParameter[] => {
+  eventBridgeSpyConfig: {
+    parse: (param?: string): EbSpiesContextParameter => {
+      if (!param) {
+        throw new Error('"config" context parameter is required');
+      }
       try {
         const parsedString = JSON.parse(param);
-        return z.array(EbSpiesContextParameterSchema).parse(parsedString);
+        return ebSpiesContextParameterSchema.parse(parsedString);
       } catch (e) {
         throw new Error(`Invalid context parameter string: ${param}`);
       }
     },
-    toString: (param: EbSpiesContextParameter[]): string => {
+    toString: (param: EbSpiesContextParameter): string => {
       try {
-        const validParam = z.array(EbSpiesContextParameterSchema).parse(param);
+        const validParam = ebSpiesContextParameterSchema.parse(param);
         return JSON.stringify(validParam);
       } catch (e) {
         throw new Error(`Invalid context parameter object: ${param}`);

@@ -13,20 +13,21 @@ if (tag === undefined || !(typeof tag === 'string') || tag.trim() === '') {
   throw new Error("Must pass a '-c tag=<TAG>' context parameter");
 }
 
-const ebSpies = app.node.tryGetContext('eb-spies') as string | undefined;
-if (ebSpies && ebSpies.length > 0) {
-  for (const { adapter, busName } of ContextParameter.ebSpies.parse(ebSpies)) {
-    const stackName = EventBridgeSpyStack.getStackName({
-      tag,
-      busName,
-      adapter,
-    });
+const config = app.node.tryGetContext('config') as string | undefined;
 
-    const stack = new EventBridgeSpyStack(app, stackName, {
-      busName,
-      adapter,
-    });
+const { adapter, busName } =
+  ContextParameter.eventBridgeSpyConfig.parse(config);
 
-    Tags.of(stack).add(SLS_JEST_TAG, tag);
-  }
-}
+const stackName = EventBridgeSpyStack.getStackName({
+  tag,
+  busName,
+  adapter,
+});
+
+const stack = new EventBridgeSpyStack(app, 'MainStack', {
+  busName,
+  adapter,
+  stackName,
+});
+
+Tags.of(stack).add(SLS_JEST_TAG, tag);
