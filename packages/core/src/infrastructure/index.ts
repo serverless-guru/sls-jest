@@ -5,8 +5,9 @@ import {
 } from '@aws-sdk/client-cloudformation';
 import { spawnSync } from 'child_process';
 import { readFileSync } from 'fs';
-import { SLS_JEST_TAG } from '../constants';
+import { SLS_JEST_TAG } from './constants';
 export * from './event-bridge';
+export * from './helpers';
 import * as fs from 'fs';
 
 const BASE_PATH = `${process.cwd()}/.sls-jest`;
@@ -69,6 +70,21 @@ export const deployStack = (params: {
   config: string;
 }) => {
   const { app, stackName, config } = params;
+
+  console.log(process.cwd());
+  const { status: isInfraInstalled } = spawnSync(
+    'npm',
+    ['ls', '@sls-jest/infrastructure'],
+    {
+      cwd: process.cwd(),
+    },
+  );
+
+  if (isInfraInstalled !== 0) {
+    throw new Error(
+      "Could not find '@sls-jest/infrastructure' module. Did you forget to run 'npm i @sls-jest/infrastructure'?",
+    );
+  }
 
   const args = [
     'cdk',

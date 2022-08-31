@@ -4,7 +4,7 @@ import { Tags } from 'aws-cdk-lib';
 import 'source-map-support/register';
 import { SLS_JEST_TAG } from '../constants';
 import { EventBridgeSpyStack } from '../lib/EventBridgeSpyStack';
-import { ContextParameter } from '../utils';
+import { ContextParameter } from '@sls-jest/core';
 
 const app = new cdk.App();
 

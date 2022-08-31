@@ -1,4 +1,4 @@
-import * as helpers from '@sls-jest/infrastructure/helpers';
+import { getEventBridgeSpyStack } from '../../infrastructure';
 import {
   CloudWatchEventSpyConfig,
   CloudWatchLogsEventBridgeSpy,
@@ -25,7 +25,7 @@ export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {
 
   let spy: EventBridgeSpy;
 
-  const { stackName, logGroupName, queueUrl } = helpers.getEventBridgeSpyStack({
+  const { stackName, logGroupName, queueUrl } = getEventBridgeSpyStack({
     busName: eventBusName,
     adapter,
   });

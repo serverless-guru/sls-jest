@@ -1,5 +1,5 @@
 import { getStackDetails } from '.';
-import { ContextParameter } from '../utils';
+import { ContextParameter } from './helpers';
 
 export const getEventBridgeSpyStack = (params: {
   busName: string;

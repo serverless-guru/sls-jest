@@ -11,10 +11,12 @@
   "devDependencies": {
     "@aws-sdk/client-eventbridge": "^3.141.0",
     "@sls-jest/core": "*",
-    "@sls-jest/infrastructure": "*",
     "@types/jest": "^28.1.6",
     "jest": "^28.1.3",
     "ts-jest": "^28.0.7",
     "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@sls-jest/infrastructure": "^0.0.0-dev"
   }
 }

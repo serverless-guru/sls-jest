@@ -1,11 +1,10 @@
 #!/usr/bin/env node
-
-import * as helpers from '@sls-jest/infrastructure/helpers';
 import { program } from 'commander';
 import fs from 'fs';
 import path from 'path';
+import { destroyAllStacks } from '../infrastructure';
 
-const pathName = fs.realpathSync(path.join(__dirname, '../package.json'));
+const pathName = fs.realpathSync(path.join(__dirname, '../../package.json'));
 const { version } = JSON.parse(fs.readFileSync(pathName, 'utf8'));
 
 program
@@ -17,7 +16,7 @@ program
   .command('destroy')
   .requiredOption('-t, --tag <tag>', 'Tag to use for the stack')
   .action(async (args: { tag: string }) => {
-    await helpers.destroyAllStacks({
+    await destroyAllStacks({
       tag: args.tag,
     });
   });

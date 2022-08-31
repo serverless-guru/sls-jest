@@ -1,7 +1,7 @@
-import { destroyStack } from '@sls-jest/infrastructure/helpers';
 import { EventBridgeEvent } from 'aws-lambda';
 import { uniqBy } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
+import { destroyStack } from '../../infrastructure';
 import { EventBridgeMatcherOptions } from '../../matchers';
 
 type EventMatcher = (
