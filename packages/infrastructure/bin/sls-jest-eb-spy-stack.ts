@@ -24,10 +24,9 @@ const stackName = EventBridgeSpyStack.getStackName({
   adapter,
 });
 
-const stack = new EventBridgeSpyStack(app, 'MainStack', {
+const stack = new EventBridgeSpyStack(app, stackName, {
   busName,
   adapter,
-  stackName,
 });
 
 Tags.of(stack).add(SLS_JEST_TAG, tag);

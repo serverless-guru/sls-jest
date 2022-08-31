@@ -10,6 +10,8 @@ import { EventBridgeSpyStack } from '../lib/EventBridgeSpyStack';
 import { ContextParameter } from '../utils';
 import * as fs from 'fs';
 
+const BASE_PATH = `${process.cwd()}/.sls-jest`;
+
 export const destroyAllStacks = async (params: { tag: string }) => {
   // fetch stacks with the given tag
   const client = new CloudFormationClient({});
@@ -37,7 +39,14 @@ export const destroyAllStacks = async (params: { tag: string }) => {
 
   if (stackNames.length > 0) {
     await Promise.all(
-      stackNames.map((stackName) => destroyStack({ stackName })),
+      stackNames.map(async (stackName) => {
+        console.log(`Destroying stack ${stackName}`);
+        await destroyStack({ stackName });
+        const filePath = getStackDetailsFilePath(stackName);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(getStackDetailsFilePath(stackName));
+        }
+      }),
     );
   }
 };
@@ -50,8 +59,12 @@ export const destroyStack = async (params: { stackName: string }) => {
   return client.send(deleteCommand);
 };
 
+const getStackDetailsFilePath = (stackName: string) => {
+  return `${BASE_PATH}/${stackName}.json`;
+};
+
 const getStackDetails = (stackName: string) => {
-  const outputFileName = `${process.cwd()}/.sls-jest/${stackName}.json`;
+  const outputFileName = getStackDetailsFilePath(stackName);
   if (fs.existsSync(outputFileName)) {
     const stackDetails = JSON.parse(readFileSync(outputFileName, 'utf8'));
 
@@ -87,8 +100,6 @@ export const deployEventBridgeSpyStack = (params: {
     adapter,
   });
 
-  const outputFileName = `${process.cwd()}/.sls-jest/${stackName}.json`;
-
   const stackDetails = getStackDetails(stackName);
 
   if (stackDetails) {
@@ -104,9 +115,9 @@ export const deployEventBridgeSpyStack = (params: {
     '--require-approval',
     'never',
     '--output',
-    './.sls-jest/cdk.out',
+    `${BASE_PATH}/cdk.out`,
     '--outputs-file',
-    outputFileName,
+    getStackDetailsFilePath(stackName),
     '-c',
     `tag=${tag}`,
     '-c',
