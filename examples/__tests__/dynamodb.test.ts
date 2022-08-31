@@ -2,7 +2,7 @@ import { dynamodbItem } from 'sls-jest';
 
 jest.setTimeout(120000);
 
-describe('toExist', () => {
+describe.only('toExist', () => {
   it('should succeed when item exists in the database', async () => {
     await expect(
       dynamodbItem({
@@ -22,9 +22,6 @@ describe('toExist', () => {
           key: {
             id: '456',
           },
-          retries: {
-            retries: 0,
-          },
         }),
       ).toExist();
     } catch (e) {
@@ -41,6 +38,9 @@ describe('toExist', () => {
           tableName: 'toDos',
           key: {
             id: '456',
+          },
+          retryPolicy: {
+            retries: 3,
           },
         }),
       ).toExist();
@@ -90,7 +90,7 @@ describe('.not.toExist', () => {
           key: {
             id: '123',
           },
-          retries: {
+          retryPolicy: {
             retries: 0,
           },
         }),
@@ -126,7 +126,7 @@ describe('toExistAndMatchObject', () => {
           key: {
             id: '123',
           },
-          retries: {
+          retryPolicy: {
             retries: 0,
           },
         }),
@@ -201,7 +201,7 @@ describe('.not.toExistAndMatchObject', () => {
           key: {
             id: '123',
           },
-          retries: {
+          retryPolicy: {
             retries: 0,
           },
         }),
@@ -268,7 +268,7 @@ describe('toExistAndMatchSnapshot', () => {
           key: {
             id: '456',
           },
-          retries: {
+          retryPolicy: {
             retries: 0,
           },
         }),
@@ -325,7 +325,7 @@ describe('toExistAndMatchInlineSnapshot', () => {
           key: {
             id: '123',
           },
-          retries: {
+          retryPolicy: {
             retries: 0,
           },
         }),
@@ -348,7 +348,7 @@ describe('toExistAndMatchInlineSnapshot', () => {
           key: {
             id: '456',
           },
-          retries: {
+          retryPolicy: {
             retries: 0,
           },
         }),

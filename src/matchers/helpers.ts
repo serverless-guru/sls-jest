@@ -3,7 +3,7 @@ import { VtlTemplateInput } from './appSync';
 import { DynamodbItemInput } from './dynamodb';
 
 type Retryable = {
-  retries?: AsyncRetry.Options;
+  retryPolicy?: AsyncRetry.Options;
 };
 
 export const vtlMappingTemplate = (mappingTemplate: VtlTemplateInput) =>
