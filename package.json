@@ -1,6 +1,6 @@
 {
   "name": "sls-jest",
-  "version": "1.0.0",
+  "version": "0.0.0-dev",
   "description": "Monorepo of the sls-jest project",
   "workspaces": [
     "apps/*",

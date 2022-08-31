@@ -1,8 +1,8 @@
 {
   "name": "@sls-jest/cli",
-  "version": "0.0.3",
+  "version": "0.0.0-dev",
   "bin": {
-    "sls-jest": "bin/src/index.js"
+    "sls-jest": "bin/index.js"
   },
   "files": [
     "bin"

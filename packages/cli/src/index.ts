@@ -2,11 +2,15 @@
 
 import * as helpers from '@sls-jest/infrastructure/helpers';
 import { program } from 'commander';
-import { version } from '../package.json';
+import fs from 'fs';
+import path from 'path';
+
+const pathName = fs.realpathSync(path.join(__dirname, '../package.json'));
+const { version } = JSON.parse(fs.readFileSync(pathName, 'utf8'));
 
 program
   .name('sls-jest')
-  .version(version, '-v, --version', 'output the current version')
+  .version(version, '-v, --version', 'outputs the current version')
   .description('SLS Jest CLI');
 
 program

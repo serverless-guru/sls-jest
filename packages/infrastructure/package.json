@@ -1,6 +1,6 @@
 {
   "name": "@sls-jest/infrastructure",
-  "version": "0.1.0",
+  "version": "0.0.0-dev",
   "bin": {
     "sls-jest-eb-spy-stack": "bin/sls-jest-eb-spy-stack.js"
   },
