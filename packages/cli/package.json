@@ -1,11 +1,9 @@
 {
   "name": "@sls-jest/cli",
-  "version": "0.0.0",
-  "main": "bin/index.js",
+  "version": "0.0.3",
   "bin": {
-    "sls-jest": "bin/index.js"
+    "sls-jest": "bin/src/index.js"
   },
-  "types": "bin/index.d.ts",
   "files": [
     "bin"
   ],
@@ -15,9 +13,9 @@
   "author": "Serverless Guru LLC",
   "license": "ISC",
   "devDependencies": {
+    "@sls-jest/infrastructure": "*",
     "@tsconfig/node16": "^1.0.3",
-    "@types/command-line-args": "^5.2.0",
-    "@sls-jest/infrastructure": "*"
+    "@types/command-line-args": "^5.2.0"
   },
   "dependencies": {
     "command-line-args": "^5.2.1",
