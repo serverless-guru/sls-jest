@@ -2,7 +2,7 @@ import { dynamodbItem } from 'sls-jest';
 
 jest.setTimeout(120000);
 
-describe.only('toExist', () => {
+describe('toExist', () => {
   it('should succeed when item exists in the database', async () => {
     await expect(
       dynamodbItem({
