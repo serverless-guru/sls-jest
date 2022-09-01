@@ -1,8 +1,8 @@
 import { EventBridgeEvent } from 'aws-lambda';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+export * as matchers from './matchers';
 export * from './helpers';
 export * from './spies';
-export * from './setup';
 
 declare global {
   namespace jest {

@@ -1,7 +1,10 @@
 import { DynamoDBClient, DynamoDBClientConfig } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  GetCommandOutput,
+} from '@aws-sdk/lib-dynamodb';
 import { equals, iterableEquality, subsetEquality } from '@jest/expect-utils';
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { MatcherState } from 'expect';
 import {
   matcherHint,
@@ -13,15 +16,10 @@ import {
 } from 'jest-matcher-utils';
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { canonicalize } from 'json-canonicalize';
+import { DynamodbItemInput } from '../helpers';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
-
-export type DynamodbItemInput = {
-  tableName: string;
-  key: DocumentClient.Key;
-  clientConfig?: DynamoDBClientConfig;
-};
 
 const dynamoDbDocumentClients: Record<string, DynamoDBDocumentClient> = {};
 
@@ -69,7 +67,7 @@ export const toExist = async function (
 export const toExistAndMatchObject = async function (
   this: MatcherState,
   input: DynamodbItemInput,
-  expected: DocumentClient.AttributeMap,
+  expected: GetCommandOutput['Item'],
 ) {
   const matcherName = 'toExistAndMatchObject';
   const options: MatcherHintOptions = {

@@ -13,10 +13,9 @@ import {
 } from '@aws-sdk/client-appsync';
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
-import { AppSyncResolverEvent } from 'aws-lambda';
-import { O } from 'ts-toolbelt';
 import { maybeParseJson } from './utils';
 import { canonicalize } from 'json-canonicalize';
+import { VtlTemplateInput } from '../helpers';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -30,15 +29,6 @@ const getAppSyncClient = (config: AppSyncClientConfig = {}) => {
   }
 
   return appSyncClients[key];
-};
-
-export type VtlTemplateInput = {
-  template: string;
-  context: O.Partial<
-    AppSyncResolverEvent<Record<string, unknown>, Record<string, unknown>>,
-    'deep'
-  >;
-  clientConfig?: AppSyncClientConfig;
 };
 
 export const toEvaluateTo = async function (
