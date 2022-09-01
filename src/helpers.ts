@@ -1,5 +1,5 @@
-import { VtlTemplateInput } from './appSync';
-import { DynamodbItemInput } from './dynamodb';
+import { VtlTemplateInput } from './matchers/appSync';
+import { DynamodbItemInput } from './matchers/dynamodb';
 
 export const vtlMappingTemplate = (mappingTemplate: VtlTemplateInput) =>
   mappingTemplate;
