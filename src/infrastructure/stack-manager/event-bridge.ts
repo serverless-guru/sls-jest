@@ -15,7 +15,7 @@ export const getEventBridgeSpyStack = (params: {
 
   const stackDetails = getStackDetails({
     stackSuffix,
-    app: 'sls-jest-eb-spy-stack',
+    stackType: 'eventBridgeSpy',
     config: ContextParameter.eventBridgeSpyConfig.toString({
       busName,
       adapter,

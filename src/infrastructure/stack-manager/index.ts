@@ -24,10 +24,10 @@ export const getStackDetailsFilePath = (stackName: string) => {
 
 export const getStackDetails = (params: {
   stackSuffix: string;
-  app: string;
+  stackType: string;
   config: string;
 }): IStackDetails => {
-  const { app, stackSuffix, config } = params;
+  const { stackSuffix, stackType, config } = params;
 
   if (!process.env.SLS_JEST_TAG) {
     throw new Error(
@@ -42,7 +42,7 @@ export const getStackDetails = (params: {
   if (!fs.existsSync(outputFileName)) {
     deployStack({
       stackName,
-      app,
+      stackType,
       config,
     });
   }
@@ -63,17 +63,17 @@ export const getStackDetails = (params: {
 
 export const deployStack = (params: {
   stackName: string;
-  app: string;
+  stackType: string;
   config: string;
 }) => {
-  const { app, stackName, config } = params;
+  const { stackName, stackType, config } = params;
 
   const args = [
     'cdk',
     'deploy',
     '--all',
     '--app',
-    `"npx ${app}"`,
+    `"npx sls-jest-deploy-stack"`,
     '--require-approval',
     'never',
     '--output',
@@ -84,6 +84,8 @@ export const deployStack = (params: {
     `tag=${process.env.SLS_JEST_TAG}`,
     '-c',
     `stackName=${stackName}`,
+    '-c',
+    `stackType=${stackType}`,
     '-c',
     `config=${config}`,
   ];

@@ -9,7 +9,7 @@
   ],
   "bin": {
     "sls-jest": "lib/bin/sls-jest.js",
-    "sls-jest-eb-spy-stack": "lib/bin/sls-jest-eb-spy-stack.js"
+    "sls-jest-deploy-stack": "lib/bin/sls-jest-deploy-stack.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

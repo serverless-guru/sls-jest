@@ -10,20 +10,20 @@ import * as eventTargets from 'aws-cdk-lib/aws-events-targets';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
+import { ContextParameter } from '../context';
+import { SlsJestStack } from './SlsJestStack';
 
-export interface EventBridgeSpyStackProps extends StackProps {
-  busName: string;
-  adapter?: 'sqs' | 'cw';
-}
-
-export class EventBridgeSpyStack extends Stack {
+export class EventBridgeSpyStack extends SlsJestStack {
   public readonly cw?: LogGroup;
   public readonly queue?: Queue;
 
-  constructor(scope: Construct, id: string, props?: EventBridgeSpyStackProps) {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const { busName, adapter } = props || {};
+    const config = scope.node.tryGetContext('config') as string | undefined;
+
+    const { adapter, busName } =
+      ContextParameter.eventBridgeSpyConfig.parse(config);
 
     if (!busName) {
       throw new Error('"busName" parameter is required');
