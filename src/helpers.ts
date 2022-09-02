@@ -1,8 +1,6 @@
 import { AppSyncClientConfig } from '@aws-sdk/client-appsync';
-import {
-  DynamoDBClientConfig,
-  GetItemCommandInput,
-} from '@aws-sdk/client-dynamodb';
+import { DynamoDBClientConfig } from '@aws-sdk/client-dynamodb';
+import { GetCommandInput } from '@aws-sdk/lib-dynamodb';
 import { AppSyncResolverEvent } from 'aws-lambda';
 import { O } from 'ts-toolbelt';
 
@@ -11,7 +9,7 @@ import { O } from 'ts-toolbelt';
  */
 export type DynamodbItemInput = {
   tableName: string;
-  key: GetItemCommandInput['Key'];
+  key: GetCommandInput['Key'];
   clientConfig?: DynamoDBClientConfig;
 };
 
