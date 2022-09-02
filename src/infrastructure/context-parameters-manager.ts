@@ -7,7 +7,7 @@ const ebSpiesContextParameterSchema = z.object({
 
 type EbSpiesContextParameter = z.infer<typeof ebSpiesContextParameterSchema>;
 
-export const ContextParameter = {
+export const ContextParametersManager = {
   eventBridgeSpyConfig: {
     parse: (param?: string): EbSpiesContextParameter => {
       if (!param) {

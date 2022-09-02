@@ -18,7 +18,7 @@ describe.each([
       config: {
         clientConfig: { region: 'us-east-1' },
         waitTimeSeconds: 2000,
-        matcherDefaultTimeout: 10_000,
+        matcherDefaultTimeout: 20_000,
       },
     } as EventBridgeSpyParams,
   ],
@@ -29,7 +29,7 @@ describe.each([
       eventBusName: 'default',
       config: {
         clientConfig: { region: 'us-east-1' },
-        matcherDefaultTimeout: 15_000,
+        matcherDefaultTimeout: 20_000,
       },
     } as EventBridgeSpyParams,
   ],

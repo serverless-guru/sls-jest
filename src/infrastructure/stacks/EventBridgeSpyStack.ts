@@ -10,7 +10,7 @@ import * as eventTargets from 'aws-cdk-lib/aws-events-targets';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
-import { ContextParameter } from '../context';
+import { ContextParametersManager } from '../context-parameters-manager';
 import { SlsJestStack } from './SlsJestStack';
 
 export class EventBridgeSpyStack extends SlsJestStack {
@@ -23,7 +23,7 @@ export class EventBridgeSpyStack extends SlsJestStack {
     const config = scope.node.tryGetContext('config') as string | undefined;
 
     const { adapter, busName } =
-      ContextParameter.eventBridgeSpyConfig.parse(config);
+      ContextParametersManager.eventBridgeSpyConfig.parse(config);
 
     if (!busName) {
       throw new Error('"busName" parameter is required');

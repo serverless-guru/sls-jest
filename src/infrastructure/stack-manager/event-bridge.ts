@@ -1,5 +1,5 @@
 import { getStackDetails } from '..';
-import { ContextParameter } from '../context';
+import { ContextParametersManager } from '../context-parameters-manager';
 
 export const getEventBridgeSpyStack = (params: {
   busName: string;
@@ -16,7 +16,7 @@ export const getEventBridgeSpyStack = (params: {
   const stackDetails = getStackDetails({
     stackSuffix,
     stackType: 'eventBridgeSpy',
-    config: ContextParameter.eventBridgeSpyConfig.toString({
+    config: ContextParametersManager.eventBridgeSpyConfig.toString({
       busName,
       adapter,
     }),
