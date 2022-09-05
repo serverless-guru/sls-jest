@@ -1,6 +1,20 @@
 # Setup Jest
-To start using sls-jest matchers you need to add `"./node_modules/sls-jest/lib/setup.js"` path to the `setupFilesAfterEnv` jest config option like so: 
+
+Create a setup file:
 
 ```ts
-setupFilesAfterEnv: ["./node_modules/sls-jest/lib/setup.js"]
+// setupJest.ts
+import { matchers } from 'sls-jest';
+
+expect.extend(matchers);
 ```
+
+Then add it to your jestsetup file under `setupFilesAfterEnv`:
+
+```ts
+setupFilesAfterEnv: ['./setupJest.js'];
+```
+
+Add `.sls-jest` to `.gitignore`:
+
+In some casses, sls-jest uses temporary files to deploy and keep track of underlying infrastrucutre (e.g.: for spies). Those files are not meant to be commited to your reposityry.

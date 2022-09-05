@@ -1,2 +1,3 @@
-import 'sls-jest/lib/index';
-import 'sls-jest/lib/setup';
+import { matchers } from 'sls-jest';
+
+expect.extend(matchers);
