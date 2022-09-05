@@ -13,6 +13,7 @@ import {
 } from 'jest-matcher-utils';
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { canonicalize } from 'json-canonicalize';
+import { withRetry } from '../utils/retry';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -36,7 +37,7 @@ const getDynamoDBDocumentClient = (config: DynamoDBClientConfig = {}) => {
   return dynamoDbDocumentClients[key];
 };
 
-export const toExist = async function (
+export const toExist = withRetry(async function (
   this: MatcherState,
   params: DynamodbItemInput,
 ) {
@@ -64,9 +65,9 @@ export const toExist = async function (
           )}`,
     pass: pass,
   };
-};
+});
 
-export const toExistAndMatchObject = async function (
+export const toExistAndMatchObject = withRetry(async function (
   this: MatcherState,
   input: DynamodbItemInput,
   expected: DocumentClient.AttributeMap,
@@ -117,9 +118,9 @@ export const toExistAndMatchObject = async function (
         );
 
   return { actual: received, expected, message, name: matcherName, pass };
-};
+});
 
-export const toExistAndMatchSnapshot = async function (
+export const toExistAndMatchSnapshot = withRetry(async function (
   this: MatcherState,
   input: DynamodbItemInput,
   ...rest: any
@@ -149,9 +150,9 @@ export const toExistAndMatchSnapshot = async function (
     // @ts-ignore
     ...rest,
   );
-};
+});
 
-export const toExistAndMatchInlineSnapshot = async function (
+export const toExistAndMatchInlineSnapshot = withRetry(async function (
   this: MatcherState,
   input: DynamodbItemInput,
   ...rest: any
@@ -183,4 +184,4 @@ export const toExistAndMatchInlineSnapshot = async function (
     // @ts-ignore
     ...rest,
   );
-};
+});
