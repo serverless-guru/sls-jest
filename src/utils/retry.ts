@@ -11,14 +11,13 @@ type MatcherFunction = (...args: any[]) => Promise<MatcherFunctionResult>;
 
 class InvalidResultError extends Error {}
 
-export const withRetry = function <Fn extends MatcherFunction>(
-  matcher: Fn,
-  defaultRetryOptions?: AsyncRetry.Options,
-) {
-  return async function (this: MatcherState, ...args: any[]) {
-    const retryOptions = defaultsDeep(
+export const withRetry = function <Fn extends MatcherFunction>(matcher: Fn) {
+  return async function (
+    this: MatcherState,
+    ...args: any[]
+  ): Promise<MatcherFunctionResult> {
+    const retryOptions: AsyncRetry.Options = defaultsDeep(
       args[0]?.retryPolicy,
-      defaultRetryOptions,
       {
         retries: 2, // 2 retries 3 attempts total)
         minTimeout: 500,
@@ -54,7 +53,15 @@ export const withRetry = function <Fn extends MatcherFunction>(
     };
 
     try {
-      return await AsyncRetry(retryer, retryOptions);
+      const finalResult = await AsyncRetry(retryer, retryOptions);
+
+      if (!finalResult) {
+        // this should never happen
+        // this is to make typescript happy
+        throw new Error('Unexpected error');
+      }
+
+      return finalResult;
     } catch (error) {
       if (result && error instanceof InvalidResultError) {
         // last attempt, return the last known result
