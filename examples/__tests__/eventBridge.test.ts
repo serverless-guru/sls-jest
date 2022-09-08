@@ -13,24 +13,23 @@ describe.each([
   [
     'SQS',
     {
-      type: 'sqs',
+      adapter: 'sqs',
+      eventBusName: 'default',
       config: {
         clientConfig: { region: 'us-east-1' },
         waitTimeSeconds: 2000,
-        matcherDefaultTimeout: 10_000,
-        queueUrl:
-          'https://sqs.us-east-1.amazonaws.com/379730309663/spy-queue.fifo',
+        matcherDefaultTimeout: 20_000,
       },
     } as EventBridgeSpyParams,
   ],
   [
     'CloudWatchLogs',
     {
-      type: 'cloudWatchLogs',
+      adapter: 'cw',
+      eventBusName: 'default',
       config: {
         clientConfig: { region: 'us-east-1' },
-        matcherDefaultTimeout: 15_000,
-        logGroupName: '/aws/events/event-bridge-spy',
+        matcherDefaultTimeout: 20_000,
       },
     } as EventBridgeSpyParams,
   ],
@@ -38,7 +37,7 @@ describe.each([
   let spy: EventBridgeSpy;
 
   beforeAll(async () => {
-    spy = eventBridgeSpy(config);
+    spy = await eventBridgeSpy(config);
   });
 
   afterEach(() => {

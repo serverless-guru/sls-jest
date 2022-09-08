@@ -1,7 +1,10 @@
 import { DynamoDBClient, DynamoDBClientConfig } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  GetCommandOutput,
+} from '@aws-sdk/lib-dynamodb';
 import { equals, iterableEquality, subsetEquality } from '@jest/expect-utils';
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { MatcherState } from 'expect';
 import {
   matcherHint,
@@ -13,15 +16,11 @@ import {
 } from 'jest-matcher-utils';
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { canonicalize } from 'json-canonicalize';
+import { withRetry } from '../utils/retry';
+import { DynamodbItemInput } from '../helpers';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
-
-export type DynamodbItemInput = {
-  tableName: string;
-  key: DocumentClient.Key;
-  clientConfig?: DynamoDBClientConfig;
-};
 
 const dynamoDbDocumentClients: Record<string, DynamoDBDocumentClient> = {};
 
@@ -36,7 +35,7 @@ const getDynamoDBDocumentClient = (config: DynamoDBClientConfig = {}) => {
   return dynamoDbDocumentClients[key];
 };
 
-export const toExist = async function (
+export const toExist = withRetry(async function (
   this: MatcherState,
   params: DynamodbItemInput,
 ) {
@@ -64,12 +63,12 @@ export const toExist = async function (
           )}`,
     pass: pass,
   };
-};
+});
 
-export const toExistAndMatchObject = async function (
+export const toExistAndMatchObject = withRetry(async function (
   this: MatcherState,
   input: DynamodbItemInput,
-  expected: DocumentClient.AttributeMap,
+  expected: GetCommandOutput['Item'],
 ) {
   const matcherName = 'toExistAndMatchObject';
   const options: MatcherHintOptions = {
@@ -117,9 +116,9 @@ export const toExistAndMatchObject = async function (
         );
 
   return { actual: received, expected, message, name: matcherName, pass };
-};
+});
 
-export const toExistAndMatchSnapshot = async function (
+export const toExistAndMatchSnapshot = withRetry(async function (
   this: MatcherState,
   input: DynamodbItemInput,
   ...rest: any
@@ -149,9 +148,9 @@ export const toExistAndMatchSnapshot = async function (
     // @ts-ignore
     ...rest,
   );
-};
+});
 
-export const toExistAndMatchInlineSnapshot = async function (
+export const toExistAndMatchInlineSnapshot = withRetry(async function (
   this: MatcherState,
   input: DynamodbItemInput,
   ...rest: any
@@ -183,4 +182,4 @@ export const toExistAndMatchInlineSnapshot = async function (
     // @ts-ignore
     ...rest,
   );
-};
+});
