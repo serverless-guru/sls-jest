@@ -14,6 +14,8 @@ describe('Mapping Template', () => {
   "id": "123"
 }
 `;
+
+    // test that the template evaluates to the expected value as a string
     await expect(
       vtlMappingTemplate({
         template,
@@ -27,6 +29,7 @@ describe('Mapping Template', () => {
   });
 
   it('should evaluate a template object', async () => {
+    // test that the template evaluates to the expected value as an object
     await expect(
       vtlMappingTemplate({
         template,
@@ -40,6 +43,8 @@ describe('Mapping Template', () => {
   });
 
   it('should evaluate a template snapshot as object', async () => {
+    // test that the template evaluates to the expected snapshot
+    // if the snapshot evaluates to an object, it is parsed before being saved
     await expect(
       vtlMappingTemplate({
         template,
@@ -53,6 +58,8 @@ describe('Mapping Template', () => {
   });
 
   it('should evaluate a template inline snapshot as object', async () => {
+    // test that the template evaluates to the expected inline snapshot
+    // if the snapshot evaluates to an object, it is parsed before being saved
     await expect(
       vtlMappingTemplate({
         template,
@@ -70,6 +77,7 @@ describe('Mapping Template', () => {
   });
 
   it('should evaluate a template snapshot as string', async () => {
+    // test that the template evaluates to the expected snapshot
     await expect(
       vtlMappingTemplate({
         template: 'hello ${ctx.args.id}',
@@ -83,6 +91,7 @@ describe('Mapping Template', () => {
   });
 
   it('should evaluate a template inline snapshot', async () => {
+    // test that the template evaluates to the expected inline snapshot
     await expect(
       vtlMappingTemplate({
         template: 'hello ${ctx.args.id}',

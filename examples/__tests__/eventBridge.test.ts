@@ -54,7 +54,7 @@ describe.each([
       createdAt: new Date().toISOString(),
     };
 
-    // AWS SDK error wrapper for TimeoutError: socket hang up
+    // Put an event into event bridge
     await client.send(
       new PutEventsCommand({
         Entries: [
@@ -68,6 +68,7 @@ describe.each([
       }),
     );
 
+    // Assert that it was seen by the spy
     await expect(spy).toHaveEventMatchingObject({
       'detail-type': 'orderCreated',
       detail: {
@@ -82,6 +83,7 @@ describe.each([
       createdAt: new Date().toISOString(),
     };
 
+    // Put an event into event bridge
     await client.send(
       new PutEventsCommand({
         Entries: [
@@ -95,7 +97,8 @@ describe.each([
       }),
     );
 
-    // matches an event exactly once
+    // Assert that it was seen by the spy
+    // The event should be seen exactly once
     await expect(spy).toHaveEventMatchingObjectTimes(
       {
         'detail-type': 'orderCreated',
@@ -112,6 +115,7 @@ describe.each([
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     };
+    // Assert that no events were seen by the spy
     await expect(spy).not.toHaveEventMatchingObject({
       'detail-type': 'orderCreated',
       detail: {

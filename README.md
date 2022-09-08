@@ -1,3 +1,9 @@
+# Purpose
+
+Testing serverless applications is hard. Ideally, you want to test agains the real infrastrucutre and avoid mocks. e.g. a real DynamoDB table, real Lambda functions. However, the asynchronous nature of serverless can makes it difficult to write tests that work and are deterministic.
+
+This library offers a few tools that will help you solve, or at least mitigate, those issues. It is built on top of the famous [jest](https://jestjs.io/docs/getting-started) library and adds useful serverless-related matchers.
+
 # Installing sls-jest
 
 ```bash
