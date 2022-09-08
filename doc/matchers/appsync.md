@@ -5,24 +5,21 @@ A collection of matchers to test mapping templates.
 Use the `vtlMappingTemplate` helper function with mapping template matchers.
 
 - `template`: A string representing the VTL template
-- `context`: The context to be injected into the template
+- `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference.html#accessing-the-context) to be injected into the template
 
 ## Matchers
 
 ### `toEvaluateTo(value)`
 
-Asserts that a template evaluates to a given string or object. If you pass an object for `value`, the matcher will try to parse the generated template into a javascript object before comparing the values.
+Asserts that a mapping template evaluates to a given string or object for a given context.
+
+If you pass an object as `value`, the matcher will try to parse the generated template into a javascript object before comparing the values.
 
 ```ts
 // matching as a string
 await expect(
   vtlMappingTemplate({
-    template: `
-#set($id=$ctx.args.id)
-{
-  "id": "$id"
-}
-`,
+    template: fs.readFileSync('tempalte.vtl', { encoding: 'utf8' }),
     context: {
       arguments: {
         id: '123',
@@ -37,15 +34,11 @@ await expect(
 ```
 
 ```ts
-// matching as an object
+// matching as an object also works as long as the mapping template evaluates to a valid JSON
+// otherwise, an error will be thrown
 await expect(
   vtlMappingTemplate({
-    template: `
-#set($id=$ctx.args.id)
-{
-  "id": "$id"
-}
-`,
+    template: fs.readFileSync('tempalte.vtl', { encoding: 'utf8' }),
     context: {
       arguments: {
         id: '123',
@@ -64,12 +57,7 @@ Asserts that the evaluated template matches the most recent snapshot. It works s
 ```ts
 await expect(
   vtlMappingTemplate({
-    template: `
-#set($id=$ctx.args.id)
-{
-  "id": "$id"
-}
-`,
+    template: fs.readFileSync('tempalte.vtl', { encoding: 'utf8' }),
     context: {
       arguments: {
         id: '123',
@@ -86,12 +74,7 @@ Asserts that the evaluated template matches the most recent snapshot. It works s
 ```ts
 await expect(
   vtlMappingTemplate({
-    template: `
-#set($id=$ctx.args.id)
-{
-  "id": "$id"
-}
-`,
+    template: fs.readFileSync('tempalte.vtl', { encoding: 'utf8' }),
     context: {
       arguments: {
         id: '789',
