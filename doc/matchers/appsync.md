@@ -1,8 +1,8 @@
-# AppSync VTL templates
+# AppSync Mapping templates
 
-## The `vtlMappingTemplate()` helper
+A collection of matchers to test mapping templates.
 
-Use the `vtlMappingTemplate() helper function to specify the template and context values you are testing. It takes the following input parameters:
+Use the `vtlMappingTemplate` helper function with mapping template matchers.
 
 - `template`: A string representing the VTL template
 - `context`: The context to be injected into the template
@@ -17,7 +17,12 @@ Asserts that a template evaluates to a given string or object. If you pass an ob
 // matching as a string
 await expect(
   vtlMappingTemplate({
-    template,
+    template: `
+#set($id=$ctx.args.id)
+{
+  "id": "$id"
+}
+`,
     context: {
       arguments: {
         id: '123',
@@ -35,7 +40,12 @@ await expect(
 // matching as an object
 await expect(
   vtlMappingTemplate({
-    template,
+    template: `
+#set($id=$ctx.args.id)
+{
+  "id": "$id"
+}
+`,
     context: {
       arguments: {
         id: '123',
@@ -54,9 +64,16 @@ Asserts that the evaluated template matches the most recent snapshot. It works s
 ```ts
 await expect(
   vtlMappingTemplate({
-    tableName: 'todos',
-    key: {
-      id: '123',
+    template: `
+#set($id=$ctx.args.id)
+{
+  "id": "$id"
+}
+`,
+    context: {
+      arguments: {
+        id: '123',
+      },
     },
   }),
 ).toEvaluateToSnapshot();
@@ -69,7 +86,12 @@ Asserts that the evaluated template matches the most recent snapshot. It works s
 ```ts
 await expect(
   vtlMappingTemplate({
-    template,
+    template: `
+#set($id=$ctx.args.id)
+{
+  "id": "$id"
+}
+`,
     context: {
       arguments: {
         id: '789',

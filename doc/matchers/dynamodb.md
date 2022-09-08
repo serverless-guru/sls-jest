@@ -1,14 +1,12 @@
-# DynamoDB
+# DynamoDB items
 
-sls-jest provides a collection of matchers that you can use to assert on DynamoDB items.
-
-## The `dynamodbItem()` helper
+A collection of matchers that you can use to assert on DynamoDB items.
 
 Use the `dynamodbItem() helper function to specify which dynamoDB Item you are testing. It takes the following input parameters:
 
 - `tableName`: The table name where the item should be found.
 - `key`: They key of the item you are looking for
-- `retries`: A [node-retry](https://github.com/tim-kos/node-retry) options config.
+- `retryPolicy`: A [node-retry](https://github.com/tim-kos/node-retry) options config. sls-jest will retry using the given retry policy.
 
 ## Matchers
 

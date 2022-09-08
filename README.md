@@ -1,7 +1,7 @@
 # Installing sls-jest
 
 ```bash
-npm i @sls-jest/core
+npm i sls-jest
 ```
 
 # Setup Jest
@@ -15,7 +15,7 @@ import { matchers } from 'sls-jest';
 expect.extend(matchers);
 ```
 
-Then add it to your jestsetup file under `setupFilesAfterEnv`:
+Then add it to your jest setup file under `setupFilesAfterEnv`:
 
 ```ts
 setupFilesAfterEnv: ['./setupJest.js'];
@@ -23,7 +23,25 @@ setupFilesAfterEnv: ['./setupJest.js'];
 
 # Usage
 
-## Matchers
+## Helper functions
+
+All matchers come with a helper function (e.g. `dynamoDbItem()`). It is recommended to use them for the following reasons:
+
+- Validation
+
+Jest technically allows any value in the `expect()` function, but all values can't be used with all matchers (e.g. you can't do `expect(123).toExist()`). sls-jest uses those helper fucntions to keep track of **what** you are intending to test and makes sure that they can be used with the matcher you are using.
+
+- TypeScript support
+
+If you use TypeScript, you will get intellisense support for the correct input of the matchers.
+
+- Readability
+
+Code becomes much easier to read and more language-natural.
+
+e.g. `expect(dynamodbItem(...)).toExist();`
+
+## General matchers
 
 - [DynamoDB](doc/matchers/dynamodb.md)
 - [AppSync](doc/matchers/appsync.md)
