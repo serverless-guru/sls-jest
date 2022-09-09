@@ -8,12 +8,20 @@ export type EventBridgeMatcherOptions = {
   timeout?: number;
 };
 
+const assertEventBridgeSpy = (input: any) => {
+  if (!(input instanceof EventBridgeSpy)) {
+    throw new Error(`Expected spy to be an instance of EventBridgeSpy`);
+  }
+};
+
 export const toHaveEventMatchingObject = async function (
   this: MatcherState,
   spy: EventBridgeSpy,
   expected: Partial<EventBridgeEvent<string, unknown>>,
   options?: EventBridgeMatcherOptions,
 ) {
+  assertEventBridgeSpy(spy);
+
   const events = await spy.awaitEvents((events) => {
     return events.some((event) =>
       equals(event, expected, [iterableEquality, subsetEquality]),
@@ -54,6 +62,8 @@ export const toHaveEventMatchingObjectTimes = async function (
   expectedTimes: number,
   options?: EventBridgeMatcherOptions,
 ) {
+  assertEventBridgeSpy(spy);
+
   const events = await spy.awaitEvents((events) => {
     const found = events.filter((event) =>
       equals(event, expected, [iterableEquality, subsetEquality]),
