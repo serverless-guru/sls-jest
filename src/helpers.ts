@@ -5,6 +5,23 @@ import AsyncRetry from 'async-retry';
 import { AppSyncResolverEvent } from 'aws-lambda';
 import { O } from 'ts-toolbelt';
 
+/**
+ * General helpers
+ * @internal
+ */
+
+type MatcherHelperInput<Name extends string, T> = T & {
+  _itemType: Name;
+};
+
+type MatcherHelper<Name extends string, T> = (
+  input: T,
+) => MatcherHelperInput<Name, T>;
+
+type RetryableMatcherHelper<Name extends string, T> = (
+  input: T & Retryable,
+) => MatcherHelperInput<Name, T & Retryable>;
+
 type Retryable = {
   retryPolicy?: AsyncRetry.Options;
 };
@@ -18,7 +35,13 @@ export type DynamodbItemInput = {
   clientConfig?: DynamoDBClientConfig;
 };
 
-export const dynamodbItem = (input: DynamodbItemInput & Retryable) => input;
+export const dynamodbItem: RetryableMatcherHelper<
+  'dynamodb',
+  DynamodbItemInput
+> = (dynamoDbItem) => ({
+  _itemType: 'dynamodb',
+  ...dynamoDbItem,
+});
 
 /**
  * AppSync VTL template helper
@@ -33,5 +56,10 @@ export type VtlTemplateInput = {
   clientConfig?: AppSyncClientConfig;
 };
 
-export const vtlMappingTemplate = (mappingTemplate: VtlTemplateInput) =>
-  mappingTemplate;
+export const vtlMappingTemplate: MatcherHelper<
+  'vtlMappingTemplate',
+  VtlTemplateInput
+> = (mappingTemplate) => ({
+  _itemType: 'vtlMappingTemplate',
+  ...mappingTemplate,
+});
