@@ -1,7 +1,7 @@
 import { EventBridgeEvent } from 'aws-lambda';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 export * as matchers from './matchers';
-export * from './helpers/helpers';
+export * from './helpers';
 export * from './spies';
 
 declare global {

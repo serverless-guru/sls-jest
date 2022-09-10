@@ -17,7 +17,7 @@ import {
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { canonicalize } from 'json-canonicalize';
 import { withRetry } from '../utils/retry';
-import { DynamodbItemInput } from '../helpers/helpers';
+import { DynamodbItemInput } from '../helpers/appsync';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';

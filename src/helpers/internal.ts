@@ -1,9 +1,14 @@
+import AsyncRetry from 'async-retry';
+import { z } from 'zod';
+
 /**
  * General helpers
  * @internal
  */
 
-import AsyncRetry from 'async-retry';
+export type HelperZodSchema<T extends (...args: any) => any> = z.ZodType<
+  Parameters<T>[0]
+>;
 
 export type ItemTypes = 'dynamodbItem' | 'vtlMappingTemplate';
 
@@ -26,6 +31,10 @@ type Retryable = {
   retryPolicy?: AsyncRetry.Options;
 };
 
+/**
+ * Validate typeof helpers
+ */
+
 export const assertMatcherHelperInput = <T extends ItemTypes[]>(
   input: any,
   matcherName: string,
@@ -44,4 +53,23 @@ export const assertMatcherHelperInput = <T extends ItemTypes[]>(
   }
 
   return input;
+};
+
+/**
+ * Validate helper inputs
+ */
+
+export const validateInput = (
+  helperName: string,
+  schema: z.ZodTypeAny,
+  input: any,
+) => {
+  const result = schema.safeParse(input);
+  if (result.success) {
+    return result.data;
+  }
+
+  throw new Error(
+    `${helperName}(): ${result.error.errors.map((e) => e.message).join(', ')}`,
+  );
 };

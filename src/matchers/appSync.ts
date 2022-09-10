@@ -15,7 +15,7 @@ import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { maybeParseJson } from './utils';
 import { canonicalize } from 'json-canonicalize';
-import { VtlTemplateInput } from '../helpers/helpers';
+import { VtlTemplateInput } from '../helpers/appsync';
 import { assertMatcherHelperInput } from '../helpers/internal';
 
 const EXPECTED_LABEL = 'Expected';
