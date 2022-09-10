@@ -8,7 +8,7 @@ import {
 } from './internal';
 
 /**
- * DynamoDB Item
+ * DynamoDB Item helper input
  */
 export type DynamodbItemInput = {
   tableName: string;
@@ -19,19 +19,14 @@ export type DynamodbItemInput = {
 /**
  * DynamoDB Item schema
  */
-const dynamodbItemInputSchema: HelperZodSchema<typeof dynamodbItem> = z
-  .object({
-    tableName: z.string({
-      required_error: 'tableName is required',
-      invalid_type_error: 'tableName must be a string',
-    }),
-    key: z.record(z.string(), {
-      required_error: 'key is required',
-      invalid_type_error: 'key must be a valid DynamoDB key',
-    }),
-  })
-  .passthrough();
+const dynamodbItemInputSchema: HelperZodSchema<typeof dynamodbItem> = z.object({
+  tableName: z.string(),
+  key: z.record(z.string()),
+});
 
+/**
+ * DynamoDB Item helper
+ */
 export const dynamodbItem: RetryableMatcherHelper<
   'dynamodbItem',
   DynamodbItemInput

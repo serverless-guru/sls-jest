@@ -3,39 +3,54 @@ import { reduce } from 'lodash';
 import { z, ZodType, ZodTypeAny, ZodTypeDef } from 'zod';
 
 /**
- * General helpers
- * @internal
+ * Helper input schema utility type
  */
-
 export type HelperZodSchema<T extends (...args: any) => any> = z.ZodType<
   Parameters<T>[0]
 >;
 
+/**
+ * Helper input type names
+ */
 export type ItemTypes = 'dynamodbItem' | 'vtlMappingTemplate';
 
+/**
+ * Matcher helper input
+ */
 export interface IMatcherHelperInput<Name extends ItemTypes = ItemTypes> {
   _helperName: Name;
 }
 
+/**
+ * Matcher input type
+ */
 export type MatcherHelperInput<Name extends ItemTypes, T> = T &
   IMatcherHelperInput<Name>;
 
+/**
+ * Helper function
+ */
 export type MatcherHelper<Name extends ItemTypes, T> = (
   input: T,
 ) => MatcherHelperInput<Name, T>;
 
+/**
+ * Retryable matcher function
+ */
 export type RetryableMatcherHelper<Name extends ItemTypes, T> = (
   input: T & Retryable,
 ) => MatcherHelperInput<Name, T & Retryable>;
 
+/**
+ * Retryable matcher input
+ */
 type Retryable = {
   retryPolicy?: AsyncRetry.Options;
 };
 
 /**
- * Validate typeof helpers
+ * Matcher input validator
  */
-
 export const assertMatcherHelperInput = <T extends ItemTypes[]>(
   input: any,
   matcherName: string,
@@ -59,7 +74,6 @@ export const assertMatcherHelperInput = <T extends ItemTypes[]>(
 /**
  * Validate helper inputs
  */
-
 export const validateInput = <
   T extends ZodType<any, any, Record<string, unknown>>,
 >(
@@ -85,6 +99,6 @@ export const validateInput = <
       [] as string[],
     );
 
-    throw new Error(`Invalie ${helperName}() input:\n${errors.join('\n')}`);
+    throw new Error(`Invalid ${helperName}() input:\n${errors.join('\n')}`);
   }
 };

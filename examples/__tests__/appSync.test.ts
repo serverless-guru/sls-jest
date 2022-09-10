@@ -15,14 +15,13 @@ describe('Mapping Template', () => {
 }
 `;
     await expect(
-      // @ts-ignore
       vtlMappingTemplate({
-        // template,
-        // context: {
-        //   arguments: {
-        //     id: '123',
-        //   },
-        // },
+        template,
+        context: {
+          arguments: {
+            id: '123',
+          },
+        },
       }),
     ).toEvaluateTo(expected);
   });

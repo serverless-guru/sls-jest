@@ -16,8 +16,8 @@ import {
 } from 'jest-matcher-utils';
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { canonicalize } from 'json-canonicalize';
-import { DynamodbItemInput } from '../helpers';
 import { withRetry } from '../utils/retry';
+import { DynamodbItemInput } from '../helpers';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';

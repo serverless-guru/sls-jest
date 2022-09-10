@@ -1,13 +1,12 @@
 import { AppSyncClientConfig } from '@aws-sdk/client-appsync';
 import { AppSyncResolverEvent } from 'aws-lambda';
+import { HelperZodSchema, MatcherHelper, validateInput } from './internal';
 import { O } from 'ts-toolbelt';
 import { z } from 'zod';
-import { HelperZodSchema, MatcherHelper, validateInput } from './internal';
 
 /**
- * AppSync VTL template helper
+ * AppSync VTL template helper input
  */
-
 export type VtlTemplateInput = {
   template: string;
   context: O.Partial<
@@ -17,13 +16,18 @@ export type VtlTemplateInput = {
   clientConfig?: AppSyncClientConfig;
 };
 
-const vtlTemplateInputSchema: HelperZodSchema<typeof vtlMappingTemplate> = z
-  .object({
+/**
+ * VTL Template schema
+ */
+const vtlTemplateInputSchema: HelperZodSchema<typeof vtlMappingTemplate> =
+  z.object({
     template: z.string(),
-    context: z.object({}).passthrough(),
-  })
-  .passthrough();
+    context: z.object({}),
+  });
 
+/**
+ * AppSync VTL template helper
+ */
 export const vtlMappingTemplate: MatcherHelper<
   'vtlMappingTemplate',
   VtlTemplateInput

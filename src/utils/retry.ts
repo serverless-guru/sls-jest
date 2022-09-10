@@ -1,13 +1,7 @@
 import AsyncRetry from 'async-retry';
 import { MatcherState } from 'expect';
 import { defaultsDeep } from 'lodash';
-
-type MatcherFunctionResult = {
-  pass: boolean;
-  message: () => string;
-};
-
-type MatcherFunction = (...args: any[]) => Promise<MatcherFunctionResult>;
+import { MatcherFunction, MatcherFunctionResult } from '../matchers/internal';
 
 class InvalidResultError extends Error {}
 

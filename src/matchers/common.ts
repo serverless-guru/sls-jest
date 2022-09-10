@@ -9,14 +9,11 @@ import {
   toExistAndMatchSnapshot as dynamodbToExistAndMatchSnapshot,
   toExistAndMatchInlineSnapshot as dynamodbToExistAndMatchInlineSnapshot,
 } from './dynamodb.internal';
+import { MatcherFunction } from './internal';
 
-type MatcherFunctionResult = {
-  pass: boolean;
-  message: () => string;
-};
-
-type MatcherFunction = (...args: any[]) => Promise<MatcherFunctionResult>;
-
+/**
+ * Assert that the input element exists.
+ */
 export const toExist: MatcherFunction = async function (
   this: MatcherState,
   input: IMatcherHelperInput,
@@ -30,6 +27,9 @@ export const toExist: MatcherFunction = async function (
   }
 };
 
+/**
+ * Assert that the input element exists and matches the expected object.
+ */
 export const toExistAndMatchObject: MatcherFunction = async function (
   this: MatcherState,
   input: IMatcherHelperInput,
@@ -46,6 +46,9 @@ export const toExistAndMatchObject: MatcherFunction = async function (
   }
 };
 
+/**
+ * Assert that the input element exists and matches the snapshot.
+ */
 export const toExistAndMatchSnapshot: MatcherFunction = async function (
   this: MatcherState,
   input: IMatcherHelperInput,
@@ -62,6 +65,9 @@ export const toExistAndMatchSnapshot: MatcherFunction = async function (
   }
 };
 
+/**
+ * Assert that the input element exists and matches the inline snapshot.
+ */
 export const toExistAndMatchInlineSnapshot: MatcherFunction = async function (
   this: MatcherState,
   input: IMatcherHelperInput,
