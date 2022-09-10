@@ -1,5 +1,6 @@
 import AsyncRetry from 'async-retry';
-import { z } from 'zod';
+import { reduce } from 'lodash';
+import { z, ZodType, ZodTypeAny, ZodTypeDef } from 'zod';
 
 /**
  * General helpers
@@ -59,17 +60,31 @@ export const assertMatcherHelperInput = <T extends ItemTypes[]>(
  * Validate helper inputs
  */
 
-export const validateInput = (
+export const validateInput = <
+  T extends ZodType<any, any, Record<string, unknown>>,
+>(
   helperName: string,
-  schema: z.ZodTypeAny,
+  schema: T,
   input: any,
 ) => {
   const result = schema.safeParse(input);
-  if (result.success) {
-    return result.data;
-  }
+  if (!result.success) {
+    const errors = reduce(
+      result.error.format(),
+      (acc, value, key) => {
+        if (!value) {
+          return acc;
+        }
 
-  throw new Error(
-    `${helperName}(): ${result.error.errors.map((e) => e.message).join(', ')}`,
-  );
+        if (!Array.isArray(value)) {
+          return [...acc, ...value?._errors.map((e) => `\t${key}: ${e}`)];
+        } else {
+          return [...acc, ...value?.map((e) => `\t${key}: ${e}`)];
+        }
+      },
+      [] as string[],
+    );
+
+    throw new Error(`Invalie ${helperName}() input:\n${errors.join('\n')}`);
+  }
 };
