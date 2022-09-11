@@ -29,11 +29,17 @@ setupFilesAfterEnv: ['./setupJest.js'];
 
 ## Helper functions
 
-All matchers come with a helper function (e.g. `dynamoDbItem()`). It is recommended to use them for the following reasons:
+sls-jests comes with a set of helper functions (e.g. `dynamoDbItem()`, `vtlMappingTemplate()`). Your are required to use them in combination with the matchers that are provided. They serve several purposes:
 
 - Validation
 
-Jest technically allows any value in the `expect()` function, but all values can't be used with all matchers (e.g. you can't do `expect(123).toExist()`). sls-jest uses those helper fucntions to keep track of **what** you are intending to test and makes sure that they can be used with the matcher you are using.
+Jest technically allows any value in the `expect()` function, but all values can't be used with all matchers (e.g. `expect(123).toExist()` does not make sense). sls-jest uses those helper fucntions in order to check whether a matcher can be used with the input value you are passing. If they are not compatible, an error will be thrown. A basic validation is also done on the values that are passed in the helper funcitons. e.g. with `dynamodbItem()`, the `tableName` and `key` attributes are required.
+
+- Reuseability
+
+Some matchers can be used with several inputs. e.g. You can do `expect(dynamodbItem(...)).toExist();` or `expect(s3Object(...)).toExist();` (note: S3 is not yet implemented).
+
+sls-jest uses those helpers to keep track of **what** you are intending to test and use the appropriate logic internally.
 
 - TypeScript support
 
@@ -41,7 +47,7 @@ If you use TypeScript, you will get intellisense support for the correct input o
 
 - Readability
 
-Code becomes much easier to read and more language-natural.
+Thanks to those helpers, code becomes much easier to read and more language-natural.
 
 e.g. `expect(dynamodbItem(...)).toExist();`
 
