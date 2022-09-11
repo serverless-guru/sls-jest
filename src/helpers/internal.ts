@@ -12,32 +12,32 @@ export type HelperZodSchema<T extends (...args: any) => any> = z.ZodType<
 /**
  * Helper input type names
  */
-export type ItemTypes = 'dynamodbItem' | 'vtlMappingTemplate';
+export type ItemType = 'dynamodbItem' | 'vtlMappingTemplate';
 
 /**
  * Matcher helper input
  */
-export interface IMatcherHelperInput<Name extends ItemTypes = ItemTypes> {
+export interface IMatcherHelperInput<Name extends ItemType = ItemType> {
   _helperName: Name;
 }
 
 /**
  * Matcher input type
  */
-export type MatcherHelperInput<Name extends ItemTypes, T> = T &
+export type MatcherHelperInput<Name extends ItemType, T> = T &
   IMatcherHelperInput<Name>;
 
 /**
  * Helper function
  */
-export type MatcherHelper<Name extends ItemTypes, T> = (
+export type MatcherHelper<Name extends ItemType, T> = (
   input: T,
 ) => MatcherHelperInput<Name, T>;
 
 /**
  * Retryable matcher function
  */
-export type RetryableMatcherHelper<Name extends ItemTypes, T> = (
+export type RetryableMatcherHelper<Name extends ItemType, T> = (
   input: T & Retryable,
 ) => MatcherHelperInput<Name, T & Retryable>;
 
@@ -51,7 +51,7 @@ type Retryable = {
 /**
  * Matcher input validator
  */
-export const assertMatcherHelperInput = <T extends ItemTypes[]>(
+export const assertMatcherHelperInputType = <T extends ItemType[]>(
   input: any,
   matcherName: string,
   compatibleItems: T,
@@ -74,7 +74,7 @@ export const assertMatcherHelperInput = <T extends ItemTypes[]>(
 /**
  * Validate helper inputs
  */
-export const validateInput = <
+export const assertMatcherHelperInputValue = <
   T extends ZodType<any, any, Record<string, unknown>>,
 >(
   helperName: string,
@@ -90,10 +90,10 @@ export const validateInput = <
           return acc;
         }
 
-        if (!Array.isArray(value)) {
-          return [...acc, ...value?._errors.map((e) => `\t${key}: ${e}`)];
+        if (Array.isArray(value)) {
+          return [...acc, ...value];
         } else {
-          return [...acc, ...value?.map((e) => `\t${key}: ${e}`)];
+          return [...acc, ...value?._errors.map((e) => `\t${key}: ${e}`)];
         }
       },
       [] as string[],

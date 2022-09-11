@@ -4,7 +4,7 @@ import { z } from 'zod';
 import {
   HelperZodSchema,
   RetryableMatcherHelper,
-  validateInput,
+  assertMatcherHelperInputValue,
 } from './internal';
 
 /**
@@ -31,7 +31,7 @@ export const dynamodbItem: RetryableMatcherHelper<
   'dynamodbItem',
   DynamodbItemInput
 > = (input) => {
-  validateInput('dynamodbItem', dynamodbItemInputSchema, input);
+  assertMatcherHelperInputValue('dynamodbItem', dynamodbItemInputSchema, input);
 
   return {
     _helperName: 'dynamodbItem',

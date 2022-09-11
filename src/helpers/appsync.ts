@@ -1,6 +1,10 @@
 import { AppSyncClientConfig } from '@aws-sdk/client-appsync';
 import { AppSyncResolverEvent } from 'aws-lambda';
-import { HelperZodSchema, MatcherHelper, validateInput } from './internal';
+import {
+  HelperZodSchema,
+  MatcherHelper,
+  assertMatcherHelperInputValue,
+} from './internal';
 import { O } from 'ts-toolbelt';
 import { z } from 'zod';
 
@@ -32,7 +36,11 @@ export const vtlMappingTemplate: MatcherHelper<
   'vtlMappingTemplate',
   VtlTemplateInput
 > = (input) => {
-  validateInput('vtlMappingTemplate', vtlTemplateInputSchema, input);
+  assertMatcherHelperInputValue(
+    'vtlMappingTemplate',
+    vtlTemplateInputSchema,
+    input,
+  );
 
   return {
     _helperName: 'vtlMappingTemplate',

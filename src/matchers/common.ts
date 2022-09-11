@@ -1,6 +1,6 @@
 import { MatcherState } from 'expect';
 import {
-  assertMatcherHelperInput,
+  assertMatcherHelperInputType,
   IMatcherHelperInput,
 } from '../helpers/internal';
 import {
@@ -18,7 +18,7 @@ export const toExist: MatcherFunction = async function (
   this: MatcherState,
   input: IMatcherHelperInput,
 ) {
-  const item = assertMatcherHelperInput(input, 'toExist', ['dynamodbItem']);
+  const item = assertMatcherHelperInputType(input, 'toExist', ['dynamodbItem']);
 
   const { _helperName } = item;
   switch (_helperName) {
@@ -35,7 +35,7 @@ export const toExistAndMatchObject: MatcherFunction = async function (
   input: IMatcherHelperInput,
   expected: Record<string, unknown>,
 ) {
-  const item = assertMatcherHelperInput(input, 'toExistAndMatchObject', [
+  const item = assertMatcherHelperInputType(input, 'toExistAndMatchObject', [
     'dynamodbItem',
   ]);
 
@@ -54,7 +54,7 @@ export const toExistAndMatchSnapshot: MatcherFunction = async function (
   input: IMatcherHelperInput,
   ...rest: any
 ) {
-  const item = assertMatcherHelperInput(input, 'toExistAndMatchSnapshot', [
+  const item = assertMatcherHelperInputType(input, 'toExistAndMatchSnapshot', [
     'dynamodbItem',
   ]);
 
@@ -73,7 +73,7 @@ export const toExistAndMatchInlineSnapshot: MatcherFunction = async function (
   input: IMatcherHelperInput,
   ...rest: any
 ) {
-  const item = assertMatcherHelperInput(
+  const item = assertMatcherHelperInputType(
     input,
     'toExistAndMatchInlineSnapshot',
     ['dynamodbItem'],

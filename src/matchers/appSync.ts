@@ -16,7 +16,7 @@ import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { maybeParseJson } from './utils';
 import { canonicalize } from 'json-canonicalize';
 import { VtlTemplateInput } from '../helpers/appsync';
-import { assertMatcherHelperInput } from '../helpers/internal';
+import { assertMatcherHelperInputType } from '../helpers/internal';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -37,7 +37,7 @@ export const toEvaluateTo = async function (
   params: VtlTemplateInput,
   expected: string | object,
 ) {
-  assertMatcherHelperInput(params, 'toEvaluateTo', ['vtlMappingTemplate']);
+  assertMatcherHelperInputType(params, 'toEvaluateTo', ['vtlMappingTemplate']);
 
   const matcherName = 'toEvaluateTo';
   const options: MatcherHintOptions = {
@@ -88,7 +88,7 @@ export const toEvaluateToSnapshot = async function (
   params: VtlTemplateInput,
   ...rest: any
 ) {
-  assertMatcherHelperInput(params, 'toEvaluateToSnapshot', [
+  assertMatcherHelperInputType(params, 'toEvaluateToSnapshot', [
     'vtlMappingTemplate',
   ]);
   const client = getAppSyncClient(params.clientConfig);
@@ -109,7 +109,7 @@ export const toEvaluateToInlineSnapshot = async function (
   params: VtlTemplateInput,
   ...rest: any
 ) {
-  assertMatcherHelperInput(params, 'toEvaluateToInlineSnapshot', [
+  assertMatcherHelperInputType(params, 'toEvaluateToInlineSnapshot', [
     'vtlMappingTemplate',
   ]);
   const client = getAppSyncClient(params.clientConfig);
