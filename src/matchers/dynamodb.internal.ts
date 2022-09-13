@@ -16,8 +16,8 @@ import {
 } from 'jest-matcher-utils';
 import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { canonicalize } from 'json-canonicalize';
-import { withRetry } from '../utils/retry';
 import { DynamodbItemInput } from '../helpers';
+import { withRetry } from '../utils/retry';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -145,6 +145,7 @@ export const toExistAndMatchSnapshot = withRetry(async function (
   return toMatchSnapshot.call(
     this,
     received,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     ...rest,
   );
@@ -177,6 +178,7 @@ export const toExistAndMatchInlineSnapshot = withRetry(async function (
   return toMatchInlineSnapshot.call(
     this,
     received,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     ...rest,
   );

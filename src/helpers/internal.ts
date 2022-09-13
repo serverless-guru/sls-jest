@@ -93,7 +93,10 @@ export const assertMatcherHelperInputValue = <
         if (Array.isArray(value)) {
           return [...acc, ...value];
         } else {
-          return [...acc, ...value?._errors.map((e) => `\t${key}: ${e}`)];
+          return [
+            ...acc,
+            ...(value ? value._errors.map((e) => `\t${key}: ${e}`) : []),
+          ];
         }
       },
       [] as string[],

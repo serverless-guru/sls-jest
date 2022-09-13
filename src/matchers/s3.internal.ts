@@ -148,6 +148,7 @@ export const toExistAndMatchSnapshot = withRetry(async function (
     return toMatchSnapshot.call(
       this,
       received,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       ...rest,
     );
@@ -184,6 +185,7 @@ export const toExistAndMatchInlineSnapshot = withRetry(async function (
     return toMatchInlineSnapshot.call(
       this,
       received,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       ...rest,
     );

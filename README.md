@@ -5,7 +5,7 @@ This library offers a suite of tools that help solve, or at least mitigate, thos
 # Installing sls-jest
 
 ```bash
-npm i sls-jest
+npm i @serverless-guru/sls-jest
 ```
 
 # Setup Jest
@@ -14,7 +14,7 @@ Create a setup file:
 
 ```ts
 // setupJest.ts
-import { matchers } from 'sls-jest';
+import { matchers } from '@serverless-guru/sls-jest';
 
 expect.extend(matchers);
 ```
@@ -29,11 +29,11 @@ setupFilesAfterEnv: ['./setupJest.js'];
 
 ## Helper functions
 
-sls-jests comes with a set of helper functions (e.g. `dynamoDbItem()`, `vtlMappingTemplate()`). Your are required to use them in combination with the matchers that are provided. They serve several purposes:
+sls-jest comes with a set of helper functions (e.g. `dynamoDbItem()`, `vtlMappingTemplate()`). Your are required to use them in combination with the matchers that are provided. They serve several purposes:
 
 - Validation
 
-Jest technically allows any value in the `expect()` function, but all values can't be used with all matchers (e.g. `expect(123).toExist()` does not make sense). sls-jest uses those helper functions in order to check whether a matcher can be used with the input value you are passing. If they are not compatible, an error will be thrown. 
+Jest technically allows any value in the `expect()` function, but all values can't be used with all matchers (e.g. `expect(123).toExist()` does not make sense). sls-jest uses those helper functions in order to check whether a matcher can be used with the input value you are passing. If they are not compatible, an error will be thrown.
 
 Basic validation is also done on the values that are passed in the helper functions. e.g. with `dynamodbItem()`, the `tableName` and `key` attributes are required.
 

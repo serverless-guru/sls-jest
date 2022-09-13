@@ -1,4 +1,4 @@
-import { s3Object } from 'sls-jest';
+import { s3Object } from '@serverless-guru/sls-jest';
 
 describe('toExist', () => {
   it('should succeed when object exists in the bucket', async () => {
