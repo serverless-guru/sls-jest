@@ -33,7 +33,7 @@ export const toExistAndMatchObject: MatcherFunction = async function (
   const item = assertMatcherHelperInputType(
     'toExistAndMatchObject',
     ['dynamodbItem'],
-    'input',
+    input,
   );
 
   const { _helperName } = item;
