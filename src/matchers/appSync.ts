@@ -15,7 +15,8 @@ import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { maybeParseJson } from './utils';
 import { canonicalize } from 'json-canonicalize';
-import { VtlTemplateInput } from '../helpers';
+import { VtlTemplateInput } from '../helpers/appsync';
+import { assertMatcherHelperInputType } from '../helpers/internal';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -33,20 +34,22 @@ const getAppSyncClient = (config: AppSyncClientConfig = {}) => {
 
 export const toEvaluateTo = async function (
   this: MatcherState,
-  params: VtlTemplateInput,
+  input: VtlTemplateInput,
   expected: string | object,
 ) {
+  assertMatcherHelperInputType('toEvaluateTo', ['vtlMappingTemplate'], input);
+
   const matcherName = 'toEvaluateTo';
   const options: MatcherHintOptions = {
     isNot: this.isNot,
   };
 
-  const client = getAppSyncClient(params.clientConfig);
+  const client = getAppSyncClient(input.clientConfig);
 
   let { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
-      template: params.template,
-      context: JSON.stringify(params.context),
+      template: input.template,
+      context: JSON.stringify(input.context),
     }),
   );
 
@@ -82,15 +85,20 @@ export const toEvaluateTo = async function (
 
 export const toEvaluateToSnapshot = async function (
   this: MatcherState,
-  params: VtlTemplateInput,
+  input: VtlTemplateInput,
   ...rest: any
 ) {
-  const client = getAppSyncClient(params.clientConfig);
+  assertMatcherHelperInputType(
+    'toEvaluateToSnapshot',
+    ['vtlMappingTemplate'],
+    input,
+  );
+  const client = getAppSyncClient(input.clientConfig);
 
   const { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
-      template: params.template,
-      context: JSON.stringify(params.context),
+      template: input.template,
+      context: JSON.stringify(input.context),
     }),
   );
 
@@ -100,17 +108,22 @@ export const toEvaluateToSnapshot = async function (
 
 export const toEvaluateToInlineSnapshot = async function (
   this: MatcherState,
-  params: VtlTemplateInput,
+  input: VtlTemplateInput,
   ...rest: any
 ) {
-  const client = getAppSyncClient(params.clientConfig);
+  assertMatcherHelperInputType(
+    'toEvaluateToInlineSnapshot',
+    ['vtlMappingTemplate'],
+    input,
+  );
+  const client = getAppSyncClient(input.clientConfig);
 
   this.error = new Error();
 
   const { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
-      template: params.template,
-      context: JSON.stringify(params.context),
+      template: input.template,
+      context: JSON.stringify(input.context),
     }),
   );
 
