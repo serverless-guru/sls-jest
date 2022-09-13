@@ -13,8 +13,11 @@
     "sls-jest-deploy-stack": "lib/bin/sls-jest-deploy-stack.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest src/__tests__",
+    "typecheck": "tsc --noEmit",
     "build": "npx rimraf ./lib && tsc",
+    "lint": "eslint src --ext .ts",
+    "prepare": "husky install",
     "prepublishOnly": "npm run build"
   },
   "author": "Serverless Guru LLC",
@@ -24,13 +27,23 @@
     "@types/async-retry": "^1.4.5",
     "@types/aws-lambda": "^8.10.101",
     "@types/command-line-args": "^5.2.0",
+    "@types/jest": "^29.0.1",
     "@types/lodash": "^4.14.182",
     "@types/node": "^18.6.3",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
     "aws-lambda": "^1.0.7",
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^6.0.0",
+    "jest": "^28.1.3",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
     "semantic-release": "^19.0.5",
-    "ts-toolbelt": "^9.6.0"
+    "ts-jest": "^28.0.7",
+    "ts-toolbelt": "^9.6.0",
+    "typescript": "^4.7.4"
   },
   "dependencies": {
     "@aws-sdk/client-appsync": "^3.142.0",
