@@ -1,6 +1,6 @@
 # EventBridge Spy
 
-EventBridge spies work similarely to [Jest Function Spies](https://jestjs.io/docs/mock-function-api). They let you spy on a specific EventBridge bus to test if events have been placed into it.
+EventBridge spies work similarly to [Jest Function Spies](https://jestjs.io/docs/mock-function-api). They let you spy on a specific EventBridge bus to test if events have been placed into it.
 
 ## How it works
 
@@ -16,11 +16,11 @@ This helper creates a new spy for a given event bus. Parameters:
 
 Config:
 
-- `matcherDefaultTimeout`: The default timeout for event matchers, in milliseconds. Defaults to `10000`. This is the maximum time that a matcher will wait until it can determine that the assertion secceeds or fails. Also see the [recommendations](#recommendations) below about timeouts.
+- `matcherDefaultTimeout`: The default timeout for event matchers, in milliseconds. Defaults to `10000`. This is the maximum time a matcher will wait until it determines whether the assertion succeeds or fails. Also see the [recommendations](#recommendations) below about timeouts.
 
 **with the sqs adapter**:
 
-- `waitTimeSeconds`: number, optional: The maximum polling time of the the sqs poller (uses long polling). Defaults to `20`. Must be between `0` (use short polling) and `20`. The spie will run long polling cycles until the spie is [stopped](#spystop)
+- `waitTimeSeconds`: number, optional: The maximum polling time of the sqs poller (uses long polling). Defaults to `20`. Must be between `0` (use short polling) and `20`. The spie will run long polling cycles until the spie is [stopped](#spystop)
 - `clientConfig`: [SQSClientConfig](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-sqs/interfaces/sqsclientconfig.html), optional. Custom AWS SDK config.
 
 **with the cloudwatch adapter**:
@@ -30,7 +30,7 @@ Config:
 
 ## Usage
 
-The simplest and more efficient way to use EventBridge spies is to create it at the very begining of your tests. i.e.: in a `beforeAll()` hook at the top of your file or a `describe` block. The first time you create a spy for a given configuration combination (`adapter` and `busName`), a new CloudFormation stack will be deployed automatically with the necessary resources. Further usage of the same spy will re-use the already deployed resources, even across several files.
+The simplest and more efficient way to use EventBridge spies is to create them at the very beginning of your tests. i.e.: in a `beforeAll()` hook at the top of your file or a `describe` block. The first time you create a spy for a given configuration combination (`adapter` and `busName`), a new CloudFormation stack will be deployed automatically with the necessary resources. Further usage of the same spy will re-use the already deployed resources, even across several files.
 
 ```ts
 let spy: EventBridgeSpy;
@@ -87,7 +87,7 @@ it('should have an event matching an object', async () => {
 
 ### `toHaveEventMatchingObject(value)`
 
-Asserts that an event was put on the spied event bus, and that it matches a subset of the properties of an objec. It works similarely to jest's [toMatchObject](https://jestjs.io/docs/expect#tomatchobjectobject).
+Asserts that an event was put on the spied event bus and that it matches a subset of the properties of an object. It works similarly to jest's [toMatchObject](https://jestjs.io/docs/expect#tomatchobjectobject).
 
 ```ts
 await expect(spy).toHaveEventMatchingObject({
@@ -120,9 +120,9 @@ await expect(spy).toHaveEventMatchingObjectTimes(
 
 ### `spy.reset()`
 
-Resets the spy. All events caputerd so far will be cleared from the spy.
+Resets the spy. All events captured so far will be cleared from the spy.
 
-Use this helper between tests to cleanup the state of the spy.
+Use this helper between tests to clean up the state of the spy.
 
 ```ts
 afterEach(() => {
@@ -132,7 +132,7 @@ afterEach(() => {
 
 ### `spy.stop()`
 
-Stops the spy completely. The Spy will stop capturing events from the event bus.
+Stops the spy completely. The spy will stop capturing events from the event bus.
 
 You SOULD call this method at the end of each set of tests.
 
@@ -247,7 +247,7 @@ it('should see an orderCreated event - use case 2', async () => {
 
 **Use adequate timeouts**
 
-When matchers evaluate an assertion, they wait up to a certain amount of time until the assertion can either be resolved, in which case the matcher returns immediately, or it times out and evaluates the assertion with the data it has at that moment. Using too short timeouts can cause false negatives or positives as events that affect the result might arrive shortly after. On the other hand, using too long timeouts can artifitially slow down your test suite in some cases. Playing with different timeouts can reduce this inconvenient. Finding the right timeout may vary depending on yur architecture and use case.
+When matchers evaluate an assertion, they wait up to a certain amount of time until the assertion can either be resolved, in which case the matcher returns immediately, or it times out and evaluates the assertion with the data it has at that moment. Using too short timeouts can cause false negatives or positives as events that affect the result might arrive shortly after. On the other hand, using too-long timeouts can artificially slow down your test suite in some cases. Playing with different timeouts can reduce this inconvenience. Finding the right timeout may vary depending on your architecture and use case.
 
 Cases where a long timeout can slow down your tests:
 

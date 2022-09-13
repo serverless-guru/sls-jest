@@ -17,7 +17,7 @@ Asserts whether a DynamoDB item exists in the given table.
 ```ts
 await expect(
   dynamodbItem({
-    tableName: 'todos',
+    tableName: 'users',
     key: {
       pk: 'USER#123',
       sk: 'USER#123',
