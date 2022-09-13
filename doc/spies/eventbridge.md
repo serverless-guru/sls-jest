@@ -4,7 +4,7 @@ EventBridge spies work similarly to [Jest Function Spies](https://jestjs.io/docs
 
 ## How it works
 
-Under the hood, EventBridge spies needs to subscribe to an EventBridge bus in order to grab all the events that were put into it. It then keeps track of them and you can later assert on them. To do so, it deploys either an SQS queue or a CloudWatch log group and subscribes it to the bus you are spying on. Spies can then use them to collect all the events from the bus and make them available to [matchers](#Matchers) later.
+Under the hood, EventBridge spies need to subscribe to an EventBridge bus in order to grab all the events that were put into it. It then keeps track of them and you can later assert on them. To do so, it deploys either an SQS queue or a CloudWatch log group (depending on the [configuration](#the-eventbridgespy-helper-function)) and subscribes it to the bus you are spying on. Spies can then use them to collect all the events from the bus and make them available to [matchers](#Matchers) later.
 
 ## The `eventBridgeSpy()` helper function
 
@@ -102,7 +102,7 @@ await expect(spy).toHaveEventMatchingObject({
 
 Same as `toHaveEventMatchingObject`, but it ensures that exactly `n` matching, but different, events have been seen in total.
 
-Note: The spy will deduplicate any event that might have been received more than once (because of the at-least-once delivery policy nature of EventBridge). It does so based on the event id.
+Note: The spy will deduplicate any event that might have been received more than once (because of the at-least-once delivery policy nature of EventBridge). It does so, based on the event id.
 
 ```ts
 await expect(spy).toHaveEventMatchingObjectTimes(
