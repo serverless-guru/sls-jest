@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`toExistAndMatchSnapshot should print values when the object exists 1`] = `
+"Hello sls-jests!!
+"
+`;
+
+exports[`toExistAndMatchSnapshot should print values when the object exists, as a JSON 1`] = `
+Object {
+  "message": "Hello from sls-jest!",
+}
+`;

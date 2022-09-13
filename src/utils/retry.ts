@@ -18,6 +18,9 @@ export const withRetry = function <Fn extends MatcherFunction>(matcher: Fn) {
       },
     );
 
+    // For inline snapshots
+    this.error = new Error();
+
     let result: MatcherFunctionResult | undefined;
 
     const retryer: AsyncRetry.RetryFunction<

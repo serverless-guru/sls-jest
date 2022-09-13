@@ -157,8 +157,6 @@ export const toExistAndMatchInlineSnapshot = withRetry(async function (
 ) {
   const { tableName, key, clientConfig } = input;
 
-  this.error = new Error();
-
   const client = getDynamoDBDocumentClient(clientConfig);
 
   const { Item: received } = await client.send(
