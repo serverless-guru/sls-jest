@@ -1,4 +1,4 @@
-import { vtlMappingTemplate } from 'sls-jest';
+import { appSyncMappingTemplate } from 'sls-jest';
 
 const template = `
 #set($id=$ctx.args.id)
@@ -17,7 +17,7 @@ describe('Mapping Template', () => {
 
     // test that the template evaluates to the expected value as a string
     await expect(
-      vtlMappingTemplate({
+      appSyncMappingTemplate({
         template,
         context: {
           arguments: {
@@ -31,7 +31,7 @@ describe('Mapping Template', () => {
   it('should evaluate a template object', async () => {
     // test that the template evaluates to the expected value as an object
     await expect(
-      vtlMappingTemplate({
+      appSyncMappingTemplate({
         template,
         context: {
           arguments: {
@@ -46,7 +46,7 @@ describe('Mapping Template', () => {
     // test that the template evaluates to the expected snapshot
     // if the snapshot evaluates to an object, it is parsed before being saved
     await expect(
-      vtlMappingTemplate({
+      appSyncMappingTemplate({
         template,
         context: {
           arguments: {
@@ -61,7 +61,7 @@ describe('Mapping Template', () => {
     // test that the template evaluates to the expected inline snapshot
     // if the snapshot evaluates to an object, it is parsed before being saved
     await expect(
-      vtlMappingTemplate({
+      appSyncMappingTemplate({
         template,
         context: {
           arguments: {
@@ -79,7 +79,7 @@ describe('Mapping Template', () => {
   it('should evaluate a template snapshot as string', async () => {
     // test that the template evaluates to the expected snapshot
     await expect(
-      vtlMappingTemplate({
+      appSyncMappingTemplate({
         template: 'hello ${ctx.args.id}',
         context: {
           arguments: {
@@ -93,7 +93,7 @@ describe('Mapping Template', () => {
   it('should evaluate a template inline snapshot', async () => {
     // test that the template evaluates to the expected inline snapshot
     await expect(
-      vtlMappingTemplate({
+      appSyncMappingTemplate({
         template: 'hello ${ctx.args.id}',
         context: {
           arguments: {

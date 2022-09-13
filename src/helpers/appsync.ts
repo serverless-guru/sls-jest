@@ -9,9 +9,9 @@ import { O } from 'ts-toolbelt';
 import { z } from 'zod';
 
 /**
- * AppSync VTL template helper input
+ * AppSync mapping template helper input
  */
-export type VtlTemplateInput = {
+export type AppSyncMappingTemplateInput = {
   template: string;
   context: O.Partial<
     AppSyncResolverEvent<Record<string, unknown>, Record<string, unknown>>,
@@ -21,29 +21,30 @@ export type VtlTemplateInput = {
 };
 
 /**
- * VTL Template schema
+ * Mapping Template schema
  */
-const vtlTemplateInputSchema: HelperZodSchema<typeof vtlMappingTemplate> =
-  z.object({
-    template: z.string(),
-    context: z.object({}),
-  });
+const appSyncMappingTemplateInputSchema: HelperZodSchema<
+  typeof appSyncMappingTemplate
+> = z.object({
+  template: z.string(),
+  context: z.object({}),
+});
 
 /**
- * AppSync VTL template helper
+ * AppSync mapping template helper
  */
-export const vtlMappingTemplate: MatcherHelper<
-  'vtlMappingTemplate',
-  VtlTemplateInput
+export const appSyncMappingTemplate: MatcherHelper<
+  'appSyncMappingTemplate',
+  AppSyncMappingTemplateInput
 > = (input) => {
   assertMatcherHelperInputValue(
-    'vtlMappingTemplate',
-    vtlTemplateInputSchema,
+    'appSyncMappingTemplate',
+    appSyncMappingTemplateInputSchema,
     input,
   );
 
   return {
-    _helperName: 'vtlMappingTemplate',
+    _helperName: 'appSyncMappingTemplate',
     ...input,
   };
 };

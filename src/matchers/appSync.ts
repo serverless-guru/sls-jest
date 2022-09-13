@@ -15,7 +15,7 @@ import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { maybeParseJson } from './utils';
 import { canonicalize } from 'json-canonicalize';
-import { VtlTemplateInput } from '../helpers/appsync';
+import { AppSyncMappingTemplateInput } from '../helpers/appsync';
 import { assertMatcherHelperInputType } from '../helpers/internal';
 
 const EXPECTED_LABEL = 'Expected';
@@ -34,10 +34,14 @@ const getAppSyncClient = (config: AppSyncClientConfig = {}) => {
 
 export const toEvaluateTo = async function (
   this: MatcherState,
-  input: VtlTemplateInput,
+  input: AppSyncMappingTemplateInput,
   expected: string | object,
 ) {
-  assertMatcherHelperInputType('toEvaluateTo', ['vtlMappingTemplate'], input);
+  assertMatcherHelperInputType(
+    'toEvaluateTo',
+    ['appSyncMappingTemplate'],
+    input,
+  );
 
   const matcherName = 'toEvaluateTo';
   const options: MatcherHintOptions = {
@@ -85,12 +89,12 @@ export const toEvaluateTo = async function (
 
 export const toEvaluateToSnapshot = async function (
   this: MatcherState,
-  input: VtlTemplateInput,
+  input: AppSyncMappingTemplateInput,
   ...rest: any
 ) {
   assertMatcherHelperInputType(
     'toEvaluateToSnapshot',
-    ['vtlMappingTemplate'],
+    ['appSyncMappingTemplate'],
     input,
   );
   const client = getAppSyncClient(input.clientConfig);
@@ -108,12 +112,12 @@ export const toEvaluateToSnapshot = async function (
 
 export const toEvaluateToInlineSnapshot = async function (
   this: MatcherState,
-  input: VtlTemplateInput,
+  input: AppSyncMappingTemplateInput,
   ...rest: any
 ) {
   assertMatcherHelperInputType(
     'toEvaluateToInlineSnapshot',
-    ['vtlMappingTemplate'],
+    ['appSyncMappingTemplate'],
     input,
   );
   const client = getAppSyncClient(input.clientConfig);

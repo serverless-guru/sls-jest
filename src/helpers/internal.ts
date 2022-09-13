@@ -1,6 +1,6 @@
 import AsyncRetry from 'async-retry';
 import { reduce } from 'lodash';
-import { z, ZodType, ZodTypeAny, ZodTypeDef } from 'zod';
+import { z, ZodType } from 'zod';
 
 /**
  * Helper input schema utility type
@@ -12,7 +12,7 @@ export type HelperZodSchema<T extends (...args: any) => any> = z.ZodType<
 /**
  * Helper input type names
  */
-export type ItemType = 'dynamodbItem' | 'vtlMappingTemplate';
+export type ItemType = 'dynamodbItem' | 'appSyncMappingTemplate';
 
 /**
  * Matcher helper input
