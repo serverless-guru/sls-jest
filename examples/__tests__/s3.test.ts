@@ -1,7 +1,5 @@
 import { s3Object } from 'sls-jest';
 
-jest.setTimeout(120000);
-
 describe('toExist', () => {
   it('should succeed when object exists in the bucket', async () => {
     await expect(
@@ -22,7 +20,7 @@ describe('toExist', () => {
       ).toExist();
     } catch (e) {
       expect(e).toMatchInlineSnapshot(
-        `[Error: Expected "sls-jest-bucket" bucket to have object with key "test1.txt"]`,
+        `[Error: Expected "sls-jest-bucket" bucket to have an object with key "test1.txt"]`,
       );
     }
   });
@@ -48,7 +46,7 @@ describe('.not.toExist', () => {
       ).not.toExist();
     } catch (e) {
       expect(e).toMatchInlineSnapshot(
-        `[Error: Expected "sls-jest-bucket" bucket to not have object with key "test.txt"]`,
+        `[Error: Expected "sls-jest-bucket" bucket not to have an object with key "test.txt"]`,
       );
     }
   });
@@ -103,12 +101,12 @@ describe('toExistAndMatchObject', () => {
       });
     } catch (e) {
       expect(e).toMatchInlineSnapshot(
-        `[Error: Expected "sls-jest-bucket" bucket to have object with key test2.json]`,
+        `[Error: Expected "sls-jest-bucket" bucket to have an object with key "test2.json"]`,
       );
     }
   });
 
-  it('should fail when the object does not evaluate to an object', async () => {
+  it("should fail when the object' content is not a valid JSON", async () => {
     try {
       await expect(
         s3Object({
@@ -120,7 +118,7 @@ describe('toExistAndMatchObject', () => {
       });
     } catch (e) {
       expect(e).toMatchInlineSnapshot(
-        `[Error: "test.txt" form bucket "sls-jest-bucket" is not a valid JSON object.]`,
+        `[Error: "test.txt" from bucket "sls-jest-bucket" is not a valid JSON object.]`,
       );
     }
   });
@@ -199,7 +197,7 @@ describe('toExistAndMatchSnapshot', () => {
       ).toExistAndMatchSnapshot();
     } catch (e) {
       expect(e).toMatchInlineSnapshot(
-        `[Error: Expected "sls-jest-bucket" bucket to have object with key test2.txt]`,
+        `[Error: Expected "sls-jest-bucket" bucket to have an object with key "test2.txt"]`,
       );
     }
   });
@@ -241,7 +239,7 @@ describe('toExistAndMatchInlineSnapshot', () => {
       ).toExistAndMatchInlineSnapshot();
     } catch (e) {
       expect(e).toMatchInlineSnapshot(
-        `[Error: Expected "sls-jest-bucket" bucket to have object with key test2.txt]`,
+        `[Error: Expected "sls-jest-bucket" bucket to have an object with key "test2.txt"]`,
       );
     }
   });

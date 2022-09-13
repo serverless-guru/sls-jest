@@ -55,10 +55,10 @@ export const toExist = withRetry(async function (
   return {
     message: () =>
       pass
-        ? `Expected "${bucketName}" bucket to not have object with key ${stringify(
+        ? `Expected "${bucketName}" bucket not to have an object with key ${stringify(
             key,
           )}`
-        : `Expected "${bucketName}" bucket to have object with key ${stringify(
+        : `Expected "${bucketName}" bucket to have an object with key ${stringify(
             key,
           )}`,
     pass: pass,
@@ -113,13 +113,13 @@ export const toExistAndMatchObject = withRetry(async function (
     if (e instanceof SyntaxError) {
       return {
         message: () =>
-          `"${key}" form bucket "${bucketName}" is not a valid JSON object.`,
+          `"${key}" from bucket "${bucketName}" is not a valid JSON object.`,
         pass: false,
       };
     } else if (e instanceof NoSuchKey) {
       return {
         message: () =>
-          `Expected "${bucketName}" bucket to have object with key ${key}`,
+          `Expected "${bucketName}" bucket to have an object with key "${key}"`,
         pass: false,
       };
     }
@@ -155,7 +155,7 @@ export const toExistAndMatchSnapshot = withRetry(async function (
     if (e instanceof NoSuchKey) {
       return {
         message: () =>
-          `Expected "${bucketName}" bucket to have object with key ${key}`,
+          `Expected "${bucketName}" bucket to have an object with key "${key}"`,
         pass: false,
       };
     }
@@ -191,7 +191,7 @@ export const toExistAndMatchInlineSnapshot = withRetry(async function (
     if (e instanceof NoSuchKey) {
       return {
         message: () =>
-          `Expected "${bucketName}" bucket to have object with key ${key}`,
+          `Expected "${bucketName}" bucket to have an object with key "${key}"`,
         pass: false,
       };
     }
