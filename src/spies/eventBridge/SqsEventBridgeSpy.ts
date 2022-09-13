@@ -11,7 +11,7 @@ import crypto from 'crypto';
 
 export type SqsEventSpyConfig = EventBridgeSpyConfig & {
   queueUrl: string;
-  waitTimeSeconds: number;
+  waitTimeSeconds?: number;
   clientConfig?: SQSClientConfig;
 };
 
@@ -29,7 +29,7 @@ export class SQSEventBridgeSpy extends EventBridgeSpy {
   constructor(config: SqsEventSpyConfig) {
     const {
       queueUrl,
-      waitTimeSeconds = 2000,
+      waitTimeSeconds = 20,
       clientConfig = {},
       ...defaultConfig
     } = config;

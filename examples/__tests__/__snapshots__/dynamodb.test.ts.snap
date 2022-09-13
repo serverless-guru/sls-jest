@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`toExistAndMatchSnapshot should print values when item exists 1`] = `
+Object {
+  "id": "123",
+  "title": "Buy milk",
+}
+`;
