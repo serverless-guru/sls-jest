@@ -1,7 +1,8 @@
 {
-  "name": "sls-jest",
+  "name": "@serverless-guru/sls-jest",
   "version": "0.0.0-dev",
   "description": "A collection of matchers and spies for testing AWS serverless applications",
+  "repository": "https://github.com/serverless-guru/sls-jest",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -16,7 +17,8 @@
     "typecheck": "tsc --noEmit",
     "build": "npx rimraf ./lib && tsc",
     "lint": "eslint src --ext .ts",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prepublishOnly": "npm run build"
   },
   "author": "Serverless Guru LLC",
   "license": "ISC",
@@ -38,7 +40,7 @@
     "jest": "^28.1.3",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "semantic-release": "^19.0.3",
+    "semantic-release": "^19.0.5",
     "ts-jest": "^28.0.7",
     "ts-toolbelt": "^9.6.0",
     "typescript": "^4.7.4"

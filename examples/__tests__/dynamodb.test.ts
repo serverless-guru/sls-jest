@@ -1,4 +1,4 @@
-import { dynamodbItem } from 'sls-jest';
+import { dynamodbItem } from '@serverless-guru/sls-jest';
 
 jest.setTimeout(120000);
 
