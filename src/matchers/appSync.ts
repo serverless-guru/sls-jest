@@ -34,22 +34,22 @@ const getAppSyncClient = (config: AppSyncClientConfig = {}) => {
 
 export const toEvaluateTo = async function (
   this: MatcherState,
-  params: VtlTemplateInput,
+  input: VtlTemplateInput,
   expected: string | object,
 ) {
-  assertMatcherHelperInputType(params, 'toEvaluateTo', ['vtlMappingTemplate']);
+  assertMatcherHelperInputType('toEvaluateTo', ['vtlMappingTemplate'], input);
 
   const matcherName = 'toEvaluateTo';
   const options: MatcherHintOptions = {
     isNot: this.isNot,
   };
 
-  const client = getAppSyncClient(params.clientConfig);
+  const client = getAppSyncClient(input.clientConfig);
 
   let { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
-      template: params.template,
-      context: JSON.stringify(params.context),
+      template: input.template,
+      context: JSON.stringify(input.context),
     }),
   );
 
@@ -85,18 +85,20 @@ export const toEvaluateTo = async function (
 
 export const toEvaluateToSnapshot = async function (
   this: MatcherState,
-  params: VtlTemplateInput,
+  input: VtlTemplateInput,
   ...rest: any
 ) {
-  assertMatcherHelperInputType(params, 'toEvaluateToSnapshot', [
-    'vtlMappingTemplate',
-  ]);
-  const client = getAppSyncClient(params.clientConfig);
+  assertMatcherHelperInputType(
+    'toEvaluateToSnapshot',
+    ['vtlMappingTemplate'],
+    input,
+  );
+  const client = getAppSyncClient(input.clientConfig);
 
   const { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
-      template: params.template,
-      context: JSON.stringify(params.context),
+      template: input.template,
+      context: JSON.stringify(input.context),
     }),
   );
 
@@ -106,20 +108,22 @@ export const toEvaluateToSnapshot = async function (
 
 export const toEvaluateToInlineSnapshot = async function (
   this: MatcherState,
-  params: VtlTemplateInput,
+  input: VtlTemplateInput,
   ...rest: any
 ) {
-  assertMatcherHelperInputType(params, 'toEvaluateToInlineSnapshot', [
-    'vtlMappingTemplate',
-  ]);
-  const client = getAppSyncClient(params.clientConfig);
+  assertMatcherHelperInputType(
+    'toEvaluateToInlineSnapshot',
+    ['vtlMappingTemplate'],
+    input,
+  );
+  const client = getAppSyncClient(input.clientConfig);
 
   this.error = new Error();
 
   const { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
-      template: params.template,
-      context: JSON.stringify(params.context),
+      template: input.template,
+      context: JSON.stringify(input.context),
     }),
   );
 

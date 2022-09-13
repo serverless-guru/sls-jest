@@ -52,9 +52,9 @@ type Retryable = {
  * Matcher input validator
  */
 export const assertMatcherHelperInputType = <T extends ItemType[]>(
-  input: any,
   matcherName: string,
   compatibleItems: T,
+  input: any,
 ): IMatcherHelperInput<T[number]> => {
   if (typeof input !== 'object' || !input._helperName) {
     throw new Error(

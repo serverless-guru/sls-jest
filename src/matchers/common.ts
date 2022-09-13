@@ -3,12 +3,7 @@ import {
   assertMatcherHelperInputType,
   IMatcherHelperInput,
 } from '../helpers/internal';
-import {
-  toExist as dynamodbToExist,
-  toExistAndMatchObject as dynamodbToExistAndMatchObject,
-  toExistAndMatchSnapshot as dynamodbToExistAndMatchSnapshot,
-  toExistAndMatchInlineSnapshot as dynamodbToExistAndMatchInlineSnapshot,
-} from './dynamodb.internal';
+import * as dynamodb from './dynamodb.internal';
 import { MatcherFunction } from './internal';
 
 /**
@@ -18,12 +13,12 @@ export const toExist: MatcherFunction = async function (
   this: MatcherState,
   input: IMatcherHelperInput,
 ) {
-  const item = assertMatcherHelperInputType(input, 'toExist', ['dynamodbItem']);
+  const item = assertMatcherHelperInputType('toExist', ['dynamodbItem'], input);
 
   const { _helperName } = item;
   switch (_helperName) {
     case 'dynamodbItem':
-      return dynamodbToExist.call(this, item);
+      return dynamodb.toExist.call(this, item);
   }
 };
 
@@ -35,14 +30,16 @@ export const toExistAndMatchObject: MatcherFunction = async function (
   input: IMatcherHelperInput,
   expected: Record<string, unknown>,
 ) {
-  const item = assertMatcherHelperInputType(input, 'toExistAndMatchObject', [
-    'dynamodbItem',
-  ]);
+  const item = assertMatcherHelperInputType(
+    'toExistAndMatchObject',
+    ['dynamodbItem'],
+    'input',
+  );
 
   const { _helperName } = item;
   switch (_helperName) {
     case 'dynamodbItem':
-      return dynamodbToExistAndMatchObject.call(this, item, expected);
+      return dynamodb.toExistAndMatchObject.call(this, item, expected);
   }
 };
 
@@ -54,14 +51,16 @@ export const toExistAndMatchSnapshot: MatcherFunction = async function (
   input: IMatcherHelperInput,
   ...rest: any
 ) {
-  const item = assertMatcherHelperInputType(input, 'toExistAndMatchSnapshot', [
-    'dynamodbItem',
-  ]);
+  const item = assertMatcherHelperInputType(
+    'toExistAndMatchSnapshot',
+    ['dynamodbItem'],
+    input,
+  );
 
   const { _helperName } = item;
   switch (_helperName) {
     case 'dynamodbItem':
-      return dynamodbToExistAndMatchSnapshot.call(this, item, ...rest);
+      return dynamodb.toExistAndMatchSnapshot.call(this, item, ...rest);
   }
 };
 
@@ -74,14 +73,14 @@ export const toExistAndMatchInlineSnapshot: MatcherFunction = async function (
   ...rest: any
 ) {
   const item = assertMatcherHelperInputType(
-    input,
     'toExistAndMatchInlineSnapshot',
     ['dynamodbItem'],
+    input,
   );
 
   const { _helperName } = item;
   switch (_helperName) {
     case 'dynamodbItem':
-      return dynamodbToExistAndMatchInlineSnapshot.call(this, item, ...rest);
+      return dynamodb.toExistAndMatchInlineSnapshot.call(this, item, ...rest);
   }
 };
