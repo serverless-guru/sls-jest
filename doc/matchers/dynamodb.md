@@ -6,7 +6,7 @@ Use the `dynamodbItem()` helper function to specify which dynamoDB Item you are 
 
 - `tableName`: The table name where the item should be found.
 - `key`: They key of the item you are looking for
-- `retryPolicy`: A [node-retry](https://github.com/tim-kos/node-retry) options config. sls-jest will retry using the given retry policy until the test passes or all the retries are exhausted. This is useful in an asynchronous context.
+- `retryPolicy`: An optional [node-retry](https://github.com/tim-kos/node-retry) options config. sls-jest will retry using the given retry policy until the test passes or all the retries are exhausted. This is useful in an asynchronous context.
 
 ## Matchers
 
@@ -28,7 +28,7 @@ await expect(
 
 ### `toExistAndMatchObject(value)`
 
-Asserts that an item exists in the given table, and matches a subset of the properties of an objec. It works similarely to jest's [toMatchObject](https://jestjs.io/docs/expect#tomatchobjectobject).
+Asserts that an item exists in the given table, and matches a subset of the properties of an object. It works similarely to jest's [toMatchObject](https://jestjs.io/docs/expect#tomatchobjectobject).
 
 ```ts
 await expect(

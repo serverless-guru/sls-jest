@@ -56,6 +56,7 @@ e.g. `expect(dynamodbItem(...)).toExist();`
 ## General matchers
 
 - [DynamoDB](doc/matchers/dynamodb.md)
+- [S3](doc/matchers/s3.md)
 - [AppSync](doc/matchers/appsync.md)
 
 ## Spies
