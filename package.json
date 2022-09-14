@@ -50,6 +50,7 @@
     "@aws-sdk/client-cloudformation": "^3.162.0",
     "@aws-sdk/client-cloudwatch-logs": "^3.137.0",
     "@aws-sdk/client-dynamodb": "^3.137.0",
+    "@aws-sdk/client-s3": "^3.169.0",
     "@aws-sdk/client-sqs": "^3.142.0",
     "@aws-sdk/lib-dynamodb": "^3.145.0",
     "@jest/expect-utils": "^28.1.3",

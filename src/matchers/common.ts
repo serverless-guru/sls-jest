@@ -4,6 +4,7 @@ import {
   IMatcherHelperInput,
 } from '../helpers/internal';
 import * as dynamodb from './dynamodb.internal';
+import * as s3 from './s3.internal';
 import { MatcherFunction } from './internal';
 
 /**
@@ -13,12 +14,18 @@ export const toExist: MatcherFunction = async function (
   this: MatcherState,
   input: IMatcherHelperInput,
 ) {
-  const item = assertMatcherHelperInputType('toExist', ['dynamodbItem'], input);
+  const item = assertMatcherHelperInputType(
+    'toExist',
+    ['dynamodbItem', 's3Object'],
+    input,
+  );
 
   const { _helperName } = item;
   switch (_helperName) {
     case 'dynamodbItem':
       return dynamodb.toExist.call(this, item);
+    case 's3Object':
+      return s3.toExist.call(this, item);
   }
 };
 
@@ -32,7 +39,7 @@ export const toExistAndMatchObject: MatcherFunction = async function (
 ) {
   const item = assertMatcherHelperInputType(
     'toExistAndMatchObject',
-    ['dynamodbItem'],
+    ['dynamodbItem', 's3Object'],
     input,
   );
 
@@ -40,6 +47,8 @@ export const toExistAndMatchObject: MatcherFunction = async function (
   switch (_helperName) {
     case 'dynamodbItem':
       return dynamodb.toExistAndMatchObject.call(this, item, expected);
+    case 's3Object':
+      return s3.toExistAndMatchObject.call(this, item, expected);
   }
 };
 
@@ -53,7 +62,7 @@ export const toExistAndMatchSnapshot: MatcherFunction = async function (
 ) {
   const item = assertMatcherHelperInputType(
     'toExistAndMatchSnapshot',
-    ['dynamodbItem'],
+    ['dynamodbItem', 's3Object'],
     input,
   );
 
@@ -61,6 +70,8 @@ export const toExistAndMatchSnapshot: MatcherFunction = async function (
   switch (_helperName) {
     case 'dynamodbItem':
       return dynamodb.toExistAndMatchSnapshot.call(this, item, ...rest);
+    case 's3Object':
+      return s3.toExistAndMatchSnapshot.call(this, item, ...rest);
   }
 };
 
@@ -74,7 +85,7 @@ export const toExistAndMatchInlineSnapshot: MatcherFunction = async function (
 ) {
   const item = assertMatcherHelperInputType(
     'toExistAndMatchInlineSnapshot',
-    ['dynamodbItem'],
+    ['dynamodbItem', 's3Object'],
     input,
   );
 
@@ -82,5 +93,7 @@ export const toExistAndMatchInlineSnapshot: MatcherFunction = async function (
   switch (_helperName) {
     case 'dynamodbItem':
       return dynamodb.toExistAndMatchInlineSnapshot.call(this, item, ...rest);
+    case 's3Object':
+      return s3.toExistAndMatchInlineSnapshot.call(this, item, ...rest);
   }
 };
