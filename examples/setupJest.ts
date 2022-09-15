@@ -1,3 +1,3 @@
-import { matchers } from '@serverless-guru/sls-jest';
+import { matchers } from 'sls-jest';
 
 expect.extend(matchers);
