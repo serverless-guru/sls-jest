@@ -5,7 +5,7 @@ This library offers a suite of tools that help solve, or at least mitigate, thos
 # Installing sls-jest
 
 ```bash
-npm i @serverless-guru/sls-jest
+npm i sls-jest
 ```
 
 # Setup Jest
@@ -14,7 +14,7 @@ Create a setup file:
 
 ```ts
 // setupJest.ts
-import { matchers } from '@serverless-guru/sls-jest';
+import { matchers } from 'sls-jest';
 
 expect.extend(matchers);
 ```

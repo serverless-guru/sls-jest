@@ -1,5 +1,5 @@
 {
-  "name": "@serverless-guru/sls-jest",
+  "name": "sls-jest",
   "version": "0.0.0-dev",
   "description": "A collection of matchers and spies for testing AWS serverless applications",
   "repository": "https://github.com/serverless-guru/sls-jest",
@@ -46,7 +46,8 @@
     "typescript": "^4.7.4"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "scope": "serverless-guru"
   },
   "dependencies": {
     "@aws-sdk/client-appsync": "^3.142.0",

@@ -1,4 +1,4 @@
-import { appSyncMappingTemplate } from '@serverless-guru/sls-jest';
+import { appSyncMappingTemplate } from 'sls-jest';
 
 const template = `
 #set($id=$ctx.args.id)
