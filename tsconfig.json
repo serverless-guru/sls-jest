@@ -2,7 +2,8 @@
   "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "lib"
+    "outDir": "lib",
+    "baseUrl": "./src"
   },
   "include": ["src"],
   "exclude": ["node_modules"]
