@@ -13,7 +13,7 @@
     "sls-jest-deploy-stack": "lib/bin/sls-jest-deploy-stack.js"
   },
   "scripts": {
-    "test": "jest src/__tests__",
+    "test": "npx jest",
     "typecheck": "tsc --noEmit",
     "build": "npx rimraf ./lib && tsc",
     "lint": "eslint src --ext .ts",
@@ -29,7 +29,7 @@
     "@types/command-line-args": "^5.2.0",
     "@types/jest": "^29.0.1",
     "@types/lodash": "^4.14.182",
-    "@types/node": "^18.6.3",
+    "@types/node": "^18.7.18",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
     "aws-lambda": "^1.0.7",
@@ -42,6 +42,7 @@
     "rimraf": "^3.0.2",
     "semantic-release": "^19.0.5",
     "ts-jest": "^28.0.7",
+    "ts-node": "^10.9.1",
     "ts-toolbelt": "^9.6.0",
     "typescript": "^4.7.4"
   },
