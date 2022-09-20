@@ -2,7 +2,7 @@ name: Naming Conventions
 
 on:
   pull_request:
-    types: [opened, synchronize, edited, reopened]
+    types: [opened, edited]
 
 jobs:
   naming:
