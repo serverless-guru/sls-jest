@@ -91,7 +91,8 @@ export const deployStack = (params: {
   ];
 
   const { error, status, stderr } = spawnSync('npx', args, {
-    cwd: process.cwd(),
+    // Force to use the local version of CDK
+    cwd: fs.realpathSync(`${__dirname}/../../..`),
   });
 
   if (status !== 0 || error) {
