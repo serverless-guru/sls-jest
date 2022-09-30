@@ -19,10 +19,10 @@ import { matchers } from 'sls-jest';
 expect.extend(matchers);
 ```
 
-Then use it in your [jest config file](https://jestjs.io/docs/configuration) (`jest.config.js`) under `setupFilesAfterEnv`:
+Then use it in your [jest config file](https://jestjs.io/docs/configuration) (`jest.config.ts`) under `setupFilesAfterEnv`:
 
 ```ts
-setupFilesAfterEnv: ['./setupJest.js'];
+setupFilesAfterEnv: ['./setupJest.ts'];
 ```
 
 # Usage
