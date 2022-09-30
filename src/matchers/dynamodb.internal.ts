@@ -5,7 +5,7 @@ import {
   GetCommandOutput,
 } from '@aws-sdk/lib-dynamodb';
 import { equals, iterableEquality, subsetEquality } from '@jest/expect-utils';
-import { MatcherState } from 'expect';
+import { MatcherContext } from 'expect';
 import {
   matcherHint,
   MatcherHintOptions,
@@ -14,7 +14,7 @@ import {
   printReceived,
   stringify,
 } from 'jest-matcher-utils';
-import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
+import { Context, toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { canonicalize } from 'json-canonicalize';
 import { DynamodbItemInput } from '../helpers';
 import { withRetry } from '../utils/retry';
@@ -36,7 +36,7 @@ const getDynamoDBDocumentClient = (config: DynamoDBClientConfig = {}) => {
 };
 
 export const toExist = withRetry(async function (
-  this: MatcherState,
+  this: MatcherContext,
   params: DynamodbItemInput,
 ) {
   const { tableName, key, clientConfig } = params;
@@ -66,7 +66,7 @@ export const toExist = withRetry(async function (
 });
 
 export const toExistAndMatchObject = withRetry(async function (
-  this: MatcherState,
+  this: MatcherContext,
   input: DynamodbItemInput,
   expected: GetCommandOutput['Item'],
 ) {
@@ -119,7 +119,7 @@ export const toExistAndMatchObject = withRetry(async function (
 });
 
 export const toExistAndMatchSnapshot = withRetry(async function (
-  this: MatcherState,
+  this: Context,
   input: DynamodbItemInput,
   ...rest: any
 ) {
@@ -142,17 +142,11 @@ export const toExistAndMatchSnapshot = withRetry(async function (
     };
   }
 
-  return toMatchSnapshot.call(
-    this,
-    received,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    ...rest,
-  );
+  return toMatchSnapshot.call(this, received, ...rest);
 });
 
 export const toExistAndMatchInlineSnapshot = withRetry(async function (
-  this: MatcherState,
+  this: Context,
   input: DynamodbItemInput,
   ...rest: any
 ) {
@@ -175,11 +169,5 @@ export const toExistAndMatchInlineSnapshot = withRetry(async function (
     };
   }
 
-  return toMatchInlineSnapshot.call(
-    this,
-    received,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    ...rest,
-  );
+  return toMatchInlineSnapshot.call(this, received, ...rest);
 });

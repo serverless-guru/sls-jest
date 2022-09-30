@@ -1,5 +1,5 @@
 import { equals, iterableEquality, subsetEquality } from '@jest/expect-utils';
-import { MatcherState } from 'expect';
+import { MatcherContext } from 'expect';
 import {
   matcherHint,
   MatcherHintOptions,
@@ -8,7 +8,7 @@ import {
   printReceived,
   stringify,
 } from 'jest-matcher-utils';
-import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
+import { Context, toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { canonicalize } from 'json-canonicalize';
 import { withRetry } from '../utils/retry';
 import { S3ObjectInput } from '../helpers';
@@ -31,7 +31,7 @@ const getS3Client = (config: S3ClientConfig = {}) => {
 };
 
 export const toExist = withRetry(async function (
-  this: MatcherState,
+  this: MatcherContext,
   params: S3ObjectInput,
 ) {
   const { bucketName, key, clientConfig } = params;
@@ -66,7 +66,7 @@ export const toExist = withRetry(async function (
 });
 
 export const toExistAndMatchObject = withRetry(async function (
-  this: MatcherState,
+  this: MatcherContext,
   input: S3ObjectInput,
   expected: Record<string, unknown>,
 ) {
@@ -129,7 +129,7 @@ export const toExistAndMatchObject = withRetry(async function (
 });
 
 export const toExistAndMatchSnapshot = withRetry(async function (
-  this: MatcherState,
+  this: Context,
   input: S3ObjectInput,
   ...rest: any
 ) {
@@ -145,13 +145,7 @@ export const toExistAndMatchSnapshot = withRetry(async function (
 
     const received = maybeParseJson(await streamToString(body as Readable));
 
-    return toMatchSnapshot.call(
-      this,
-      received,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      ...rest,
-    );
+    return toMatchSnapshot.call(this, received, ...rest);
   } catch (e) {
     if (e instanceof NoSuchKey) {
       return {
@@ -166,7 +160,7 @@ export const toExistAndMatchSnapshot = withRetry(async function (
 });
 
 export const toExistAndMatchInlineSnapshot = withRetry(async function (
-  this: MatcherState,
+  this: Context,
   input: S3ObjectInput,
   ...rest: any
 ) {
@@ -182,13 +176,7 @@ export const toExistAndMatchInlineSnapshot = withRetry(async function (
 
     const received = maybeParseJson(await streamToString(body as Readable));
 
-    return toMatchInlineSnapshot.call(
-      this,
-      received,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      ...rest,
-    );
+    return toMatchInlineSnapshot.call(this, received, ...rest);
   } catch (e) {
     if (e instanceof NoSuchKey) {
       return {

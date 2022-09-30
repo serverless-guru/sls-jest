@@ -19,10 +19,10 @@ import { matchers } from 'sls-jest';
 expect.extend(matchers);
 ```
 
-Then use it in your [jest config file](https://jestjs.io/docs/configuration) (`jest.config.js`) under `setupFilesAfterEnv`:
+Then use it in your [jest config file](https://jestjs.io/docs/configuration) (`jest.config.ts`) under `setupFilesAfterEnv`:
 
 ```ts
-setupFilesAfterEnv: ['./setupJest.js'];
+setupFilesAfterEnv: ['./setupJest.ts'];
 ```
 
 # Usage
@@ -39,7 +39,7 @@ Basic validation is also done on the values that are passed in the helper functi
 
 - Reuseability
 
-Some matchers can be used with several inputs. e.g. You can do `expect(dynamodbItem(...)).toExist();` or `expect(s3Object(...)).toExist();` (note: S3 is not yet implemented).
+Some matchers can be used with several inputs. e.g. You can do `expect(dynamodbItem(...)).toExist();` or `expect(s3Object(...)).toExist();`.
 
 sls-jest uses those helpers to keep track of **what** you are intending to test and use the appropriate logic internally.
 

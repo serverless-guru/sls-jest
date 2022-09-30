@@ -5,18 +5,19 @@ import {
   printExpected,
   printReceived,
 } from 'jest-matcher-utils';
-import { MatcherState } from 'expect';
+import { MatcherContext } from 'expect';
 import {
   AppSyncClient,
   AppSyncClientConfig,
   EvaluateMappingTemplateCommand,
 } from '@aws-sdk/client-appsync';
-import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
+import { Context, toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { maybeParseJson } from './utils';
 import { canonicalize } from 'json-canonicalize';
 import { AppSyncMappingTemplateInput } from '../helpers/appsync';
 import { assertMatcherHelperInputType } from '../helpers/internal';
+import { MatcherFunction } from './internal';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -32,8 +33,8 @@ const getAppSyncClient = (config: AppSyncClientConfig = {}) => {
   return appSyncClients[key];
 };
 
-export const toEvaluateTo = async function (
-  this: MatcherState,
+export const toEvaluateTo: MatcherFunction = async function (
+  this: MatcherContext,
   input: AppSyncMappingTemplateInput,
   expected: string | object,
 ) {
@@ -85,8 +86,8 @@ export const toEvaluateTo = async function (
   return { actual: received, expected, message, name: matcherName, pass };
 };
 
-export const toEvaluateToSnapshot = async function (
-  this: MatcherState,
+export const toEvaluateToSnapshot: MatcherFunction = async function (
+  this: Context,
   input: AppSyncMappingTemplateInput,
   ...rest: any
 ) {
@@ -104,13 +105,11 @@ export const toEvaluateToSnapshot = async function (
     }),
   );
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   return toMatchSnapshot.call(this, maybeParseJson(received), ...rest);
 };
 
-export const toEvaluateToInlineSnapshot = async function (
-  this: MatcherState,
+export const toEvaluateToInlineSnapshot: MatcherFunction = async function (
+  this: Context,
   input: AppSyncMappingTemplateInput,
   ...rest: any
 ) {
@@ -121,6 +120,8 @@ export const toEvaluateToInlineSnapshot = async function (
   );
   const client = getAppSyncClient(input.clientConfig);
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   this.error = new Error();
 
   const { evaluationResult: received } = await client.send(
@@ -130,7 +131,5 @@ export const toEvaluateToInlineSnapshot = async function (
     }),
   );
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   return toMatchInlineSnapshot.call(this, maybeParseJson(received), ...rest);
 };

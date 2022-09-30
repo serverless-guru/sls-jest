@@ -3,6 +3,7 @@ import { matcherHint, printExpected, printReceived } from 'jest-matcher-utils';
 import { MatcherState } from 'expect';
 import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { EventBridgeSpy } from '../spies/eventBridge/EventBridgeSpy';
+import { MatcherFunction } from './internal';
 
 export type EventBridgeMatcherOptions = {
   timeout?: number;
@@ -14,7 +15,7 @@ const assertEventBridgeSpy = (input: any) => {
   }
 };
 
-export const toHaveEventMatchingObject = async function (
+export const toHaveEventMatchingObject: MatcherFunction = async function (
   this: MatcherState,
   spy: EventBridgeSpy,
   expected: Partial<EventBridgeEvent<string, unknown>>,
@@ -55,7 +56,7 @@ export const toHaveEventMatchingObject = async function (
   return { message, pass };
 };
 
-export const toHaveEventMatchingObjectTimes = async function (
+export const toHaveEventMatchingObjectTimes: MatcherFunction = async function (
   this: MatcherState,
   spy: EventBridgeSpy,
   expected: Partial<EventBridgeEvent<string, unknown>>,

@@ -11,7 +11,7 @@ Under the hood, EventBridge spies need to subscribe to an EventBridge bus in ord
 This helper creates a new spy for a given event bus. Parameters:
 
 - `adapter`: `sqs` or `cw`. Specified how you would like the spy to subscribe to the bus. See [SQS vs CloudWatch](#SQS-vs-CloudWatch). Defaults to `sqs`.
-- `busName`: The bus name you are spying on.
+- `eventBusName`: The bus name you are spying on.
 - `config`: configuration for the Spy adapter (see below)
 
 Config:
@@ -30,7 +30,7 @@ Config:
 
 ## Usage
 
-The simplest and more efficient way to use EventBridge spies is to create them at the very beginning of your tests. i.e.: in a `beforeAll()` hook at the top of your file or a `describe` block. The first time you create a spy for a given configuration combination (`adapter` and `busName`), a new CloudFormation stack will be deployed automatically with the necessary resources. Further usage of the same spy will re-use the already deployed resources, even across several files.
+The simplest and more efficient way to use EventBridge spies is to create them at the very beginning of your tests. i.e.: in a `beforeAll()` hook at the top of your file or a `describe` block. The first time you create a spy for a given configuration combination (`adapter` and `eventBusName`), a new CloudFormation stack will be deployed automatically with the necessary resources. Further usage of the same spy will re-use the already deployed resources, even across several files.
 
 ```ts
 let spy: EventBridgeSpy;
@@ -38,8 +38,7 @@ let spy: EventBridgeSpy;
 beforeAll(async () => {
   // create a spy. This will also deploy the required infrastructure, if need be.
   spy = await eventBridgeSpy({
-    adapter: 'sqs',
-    busName: 'my-bus',
+    eventBusName: 'my-bus',
   });
 });
 
