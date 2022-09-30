@@ -5,7 +5,7 @@ import {
   printExpected,
   printReceived,
 } from 'jest-matcher-utils';
-import { MatcherState } from 'expect';
+import { MatcherContext } from 'expect';
 import {
   AppSyncClient,
   AppSyncClientConfig,
@@ -17,6 +17,7 @@ import { maybeParseJson } from './utils';
 import { canonicalize } from 'json-canonicalize';
 import { AppSyncMappingTemplateInput } from '../helpers/appsync';
 import { assertMatcherHelperInputType } from '../helpers/internal';
+import { MatcherFunction } from './internal';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -32,8 +33,8 @@ const getAppSyncClient = (config: AppSyncClientConfig = {}) => {
   return appSyncClients[key];
 };
 
-export const toEvaluateTo = async function (
-  this: MatcherState,
+export const toEvaluateTo: MatcherFunction = async function (
+  this: MatcherContext,
   input: AppSyncMappingTemplateInput,
   expected: string | object,
 ) {
@@ -85,8 +86,8 @@ export const toEvaluateTo = async function (
   return { actual: received, expected, message, name: matcherName, pass };
 };
 
-export const toEvaluateToSnapshot = async function (
-  this: MatcherState,
+export const toEvaluateToSnapshot: MatcherFunction = async function (
+  this: MatcherContext,
   input: AppSyncMappingTemplateInput,
   ...rest: any
 ) {
@@ -109,8 +110,8 @@ export const toEvaluateToSnapshot = async function (
   return toMatchSnapshot.call(this, maybeParseJson(received), ...rest);
 };
 
-export const toEvaluateToInlineSnapshot = async function (
-  this: MatcherState,
+export const toEvaluateToInlineSnapshot: MatcherFunction = async function (
+  this: MatcherContext,
   input: AppSyncMappingTemplateInput,
   ...rest: any
 ) {
