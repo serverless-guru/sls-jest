@@ -90,10 +90,7 @@ export const deployStack = (params: {
     `config=${config}`,
   ];
 
-  const { error, status, stderr } = spawnSync('npx', args, {
-    // Force to use the local version of CDK
-    cwd: fs.realpathSync(`${__dirname}/../../..`),
-  });
+  const { error, status, stderr } = spawnSync('npx', args);
 
   if (status !== 0 || error) {
     if (error) {
