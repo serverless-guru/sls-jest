@@ -15,14 +15,14 @@ describe('appSyncMappingTemplate', () => {
         },
       }),
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "_helperName": "appSyncMappingTemplate",
-        "context": Object {
-          "arguments": Object {
+        "context": {
+          "arguments": {
             "foo": "bar",
           },
         },
-        "template": "#set($foo = \\"bar\\")",
+        "template": "#set($foo = "bar")",
       }
     `);
   });

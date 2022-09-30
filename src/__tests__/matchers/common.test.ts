@@ -24,9 +24,9 @@ describe('toExist', () => {
       ),
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
-      Object {
+      {
         "_helperName": "dynamodbItem",
-        "key": Object {
+        "key": {
           "id": "id",
         },
         "tableName": "table",
@@ -51,7 +51,7 @@ describe('toExist', () => {
       ),
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
-      Object {
+      {
         "_helperName": "s3Object",
         "bucketName": "muy-bucket",
         "key": "path/to/file.txt",
@@ -99,9 +99,9 @@ describe('toExistAndMatchObject', () => {
       ),
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
-      Object {
+      {
         "_helperName": "dynamodbItem",
-        "key": Object {
+        "key": {
           "id": "id",
         },
         "tableName": "table",
@@ -126,7 +126,7 @@ describe('toExistAndMatchObject', () => {
       ),
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
-      Object {
+      {
         "_helperName": "s3Object",
         "bucketName": "muy-bucket",
         "key": "path/to/file.txt",
@@ -176,9 +176,9 @@ describe('toExistAndMatchInlineSnapshot', () => {
       ),
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
-      Object {
+      {
         "_helperName": "dynamodbItem",
-        "key": Object {
+        "key": {
           "id": "id",
         },
         "tableName": "table",
@@ -205,7 +205,7 @@ describe('toExistAndMatchInlineSnapshot', () => {
       ),
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
-      Object {
+      {
         "_helperName": "s3Object",
         "bucketName": "muy-bucket",
         "key": "path/to/file.txt",
@@ -255,9 +255,9 @@ describe('toExistAndMatchSnapshot', () => {
       ),
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
-      Object {
+      {
         "_helperName": "dynamodbItem",
-        "key": Object {
+        "key": {
           "id": "id",
         },
         "tableName": "table",
@@ -282,7 +282,7 @@ describe('toExistAndMatchSnapshot', () => {
       ),
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
-      Object {
+      {
         "_helperName": "s3Object",
         "bucketName": "muy-bucket",
         "key": "path/to/file.txt",
