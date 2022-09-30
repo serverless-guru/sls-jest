@@ -3,6 +3,8 @@ name: Naming Conventions
 on:
   pull_request:
     types: [opened, edited]
+    branches:
+      - develop
 
 jobs:
   naming:
