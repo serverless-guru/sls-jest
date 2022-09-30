@@ -4,7 +4,7 @@
   "description": "",
   "main": "jest.config.js",
   "scripts": {
-    "test": "jest"
+    "test": "npx jest --runInBand"
   },
   "author": "",
   "license": "ISC",

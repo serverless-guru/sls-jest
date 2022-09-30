@@ -11,9 +11,9 @@ describe('dynamodbItem', () => {
         },
       }),
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "_helperName": "dynamodbItem",
-        "key": Object {
+        "key": {
           "pk": "USER#123",
           "sk": "USER#123",
         },
