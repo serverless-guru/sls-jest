@@ -48,9 +48,6 @@ export class EventBridgeSpy {
         }
         resolve(this.events);
       }, config?.timeout ?? this.matcherTimeout);
-      if (!this.subscription.closed) {
-        this.subscription.unsubscribe();
-      }
       this.subscription = this.subject.subscribe({
         next: (events) => {
           if (matcher(events)) {
