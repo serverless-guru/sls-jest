@@ -1,6 +1,6 @@
 import { EventBridgeEvent } from 'aws-lambda';
 import { uniqBy } from 'lodash';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { destroyStack } from '../../infrastructure';
 import { EventBridgeMatcherOptions } from '../../matchers';
 
@@ -19,11 +19,13 @@ export type EventBridgeSpyConfig = {
 export class EventBridgeSpy {
   events: EventBridgeEvent<string, unknown>[] = [];
   subject: BehaviorSubject<EventBridgeEvent<string, unknown>[]>;
+  subscription: Subscription;
   matcherTimeout: number;
 
   constructor(private config: EventBridgeSpyConfig = {}) {
     this.subject = new BehaviorSubject(this.events);
     this.matcherTimeout = config.matcherDefaultTimeout ?? 10000;
+    this.subscription = new Subscription();
   }
 
   async startPolling() {
@@ -41,13 +43,20 @@ export class EventBridgeSpy {
   ): Promise<EventBridgeEvent<string, unknown>[]> {
     return new Promise<EventBridgeEvent<string, unknown>[]>((resolve) => {
       const timer = setTimeout(() => {
-        sub.unsubscribe();
+        if (!this.subscription.closed) {
+          this.subscription.unsubscribe();
+        }
         resolve(this.events);
       }, config?.timeout ?? this.matcherTimeout);
-      const sub = this.subject.subscribe({
+      if (!this.subscription.closed) {
+        this.subscription.unsubscribe();
+      }
+      this.subscription = this.subject.subscribe({
         next: (events) => {
           if (matcher(events)) {
-            sub.unsubscribe();
+            if (!this.subscription.closed) {
+              this.subscription.unsubscribe();
+            }
             clearTimeout(timer);
             resolve(events);
           }
