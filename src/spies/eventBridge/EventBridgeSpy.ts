@@ -1,6 +1,6 @@
 import { EventBridgeEvent } from 'aws-lambda';
 import { uniqBy } from 'lodash';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, filter, take, takeUntil, timer } from 'rxjs';
 import { destroyStack } from '../../infrastructure';
 import { EventBridgeMatcherOptions } from '../../matchers';
 
@@ -19,13 +19,11 @@ export type EventBridgeSpyConfig = {
 export class EventBridgeSpy {
   events: EventBridgeEvent<string, unknown>[] = [];
   subject: BehaviorSubject<EventBridgeEvent<string, unknown>[]>;
-  subscription: Subscription;
   matcherTimeout: number;
 
   constructor(private config: EventBridgeSpyConfig = {}) {
     this.subject = new BehaviorSubject(this.events);
     this.matcherTimeout = config.matcherDefaultTimeout ?? 10000;
-    this.subscription = new Subscription();
   }
 
   async startPolling() {
@@ -42,27 +40,18 @@ export class EventBridgeSpy {
     config?: EventBridgeMatcherOptions,
   ): Promise<EventBridgeEvent<string, unknown>[]> {
     return new Promise<EventBridgeEvent<string, unknown>[]>((resolve) => {
-      const timer = setTimeout(() => {
-        if (!this.subscription.closed) {
-          this.subscription.unsubscribe();
-        }
-        resolve(this.events);
-      }, config?.timeout ?? this.matcherTimeout);
-      this.subscription = this.subject.subscribe({
-        next: (events) => {
-          if (matcher(events)) {
-            if (!this.subscription.closed) {
-              this.subscription.unsubscribe();
-            }
-            clearTimeout(timer);
+      this.subject
+        .pipe(takeUntil(timer(config?.timeout ?? this.matcherTimeout)))
+        .pipe(filter((events) => matcher(events) === true))
+        .pipe(take(1))
+        .subscribe({
+          next: (events) => {
             resolve(events);
-          }
-        },
-        complete: () => {
-          clearTimeout(timer);
-          resolve(this.events);
-        },
-      });
+          },
+          complete: () => {
+            resolve(this.events);
+          },
+        });
     });
   }
 
