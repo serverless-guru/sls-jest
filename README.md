@@ -71,13 +71,13 @@ In order to keep track of the different stacks across different users/branches/e
 export SLS_JEST_TAG my-branch
 ```
 
-### AWS credentials config
+### AWS credentials
 
 Under the hood, `sls-jest` uses the AWS SDK for javascript. Thus, credentials are taken in order of preference as described on [this page](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html).
 
 - Locally on your machine
 
-When running jest on your local machine, the recommended way is to use your shared credentials file. By default, the `default` profile is used. You can use another profile by passing it as the `AWS_PROFILE` env variable.
+When running jest on your local machine, the simplest way is to use your shared credentials file. By default, the `default` profile is used. You can use another profile by passing it as the `AWS_PROFILE` env variable.
 
 ```bash
 AWS_PROFILE=playground npx jest
@@ -89,7 +89,7 @@ Side note: We recommend [leapp](https://www.leapp.cloud/) to manage your local c
 
 - CI/CD
 
-When running tests in a CI/CD environment, the recommended way is to use OIDC. The assumed role should have sufficient permissions to access all the resources your tests use (or [create](#spies))
+When running tests in a CI/CD environment, the recommended way is to use OIDC. The assumed role must have sufficient permissions to access all the resources your test suite uses (or [creates](#spies))
 
 Here are some guides:
 
