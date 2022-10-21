@@ -1,0 +1,16 @@
+name: Naming Conventions
+
+on:
+  pull_request:
+    types: [opened, edited]
+    branches:
+      - develop
+
+jobs:
+  naming:
+    name: Naming Conventions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: deepakputhraya/action-pr-title@master
+        with:
+          regex: '(feat|fix|ci|docs|test|refactor|build|chore|script)\(.+\): .+'

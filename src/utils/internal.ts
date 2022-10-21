@@ -1,6 +1,7 @@
 import { canonicalize } from 'json-canonicalize';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, DynamoDBClientConfig } from '@aws-sdk/client-dynamodb';
+
 const dynamoDbDocumentClients: Record<string, DynamoDBDocumentClient> = {};
 
 export const getDynamoDBDocumentClient = (

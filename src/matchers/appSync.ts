@@ -5,18 +5,19 @@ import {
   printExpected,
   printReceived,
 } from 'jest-matcher-utils';
-import { MatcherState } from 'expect';
+import { MatcherContext } from 'expect';
 import {
   AppSyncClient,
   AppSyncClientConfig,
   EvaluateMappingTemplateCommand,
 } from '@aws-sdk/client-appsync';
-import { toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
+import { Context, toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
 import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
-import { AppSyncResolverEvent } from 'aws-lambda';
-import { O } from 'ts-toolbelt';
 import { maybeParseJson } from './utils';
 import { canonicalize } from 'json-canonicalize';
+import { AppSyncMappingTemplateInput } from '../helpers/appsync';
+import { assertMatcherHelperInputType } from '../helpers/internal';
+import { MatcherFunction } from './internal';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -32,38 +33,33 @@ const getAppSyncClient = (config: AppSyncClientConfig = {}) => {
   return appSyncClients[key];
 };
 
-export type VtlTemplateInput = {
-  template: string;
-  context: O.Partial<
-    AppSyncResolverEvent<Record<string, unknown>, Record<string, unknown>>,
-    'deep'
-  >;
-  clientConfig?: AppSyncClientConfig;
-};
-
-export const toEvaluateTo = async function (
-  this: MatcherState,
-  params: VtlTemplateInput,
+export const toEvaluateTo: MatcherFunction = async function (
+  this: MatcherContext,
+  input: AppSyncMappingTemplateInput,
   expected: string | object,
 ) {
+  assertMatcherHelperInputType(
+    'toEvaluateTo',
+    ['appSyncMappingTemplate'],
+    input,
+  );
+
   const matcherName = 'toEvaluateTo';
   const options: MatcherHintOptions = {
     isNot: this.isNot,
   };
 
-  const client = getAppSyncClient(params.clientConfig);
+  const client = getAppSyncClient(input.clientConfig);
 
   let { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
-      template: params.template,
-      context: JSON.stringify(params.context),
+      template: input.template,
+      context: JSON.stringify(input.context),
     }),
   );
 
   if (typeof expected === 'object') {
-    try {
-      received = maybeParseJson(received);
-    } catch (error) {}
+    received = maybeParseJson(received);
   }
 
   const pass = equals(received, expected, [iterableEquality, subsetEquality]);
@@ -90,40 +86,50 @@ export const toEvaluateTo = async function (
   return { actual: received, expected, message, name: matcherName, pass };
 };
 
-export const toEvaluateToSnapshot = async function (
-  this: MatcherState,
-  params: VtlTemplateInput,
+export const toEvaluateToSnapshot: MatcherFunction = async function (
+  this: Context,
+  input: AppSyncMappingTemplateInput,
   ...rest: any
 ) {
-  const client = getAppSyncClient(params.clientConfig);
+  assertMatcherHelperInputType(
+    'toEvaluateToSnapshot',
+    ['appSyncMappingTemplate'],
+    input,
+  );
+  const client = getAppSyncClient(input.clientConfig);
 
   const { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
-      template: params.template,
-      context: JSON.stringify(params.context),
+      template: input.template,
+      context: JSON.stringify(input.context),
     }),
   );
 
-  // @ts-ignore
   return toMatchSnapshot.call(this, maybeParseJson(received), ...rest);
 };
 
-export const toEvaluateToInlineSnapshot = async function (
-  this: MatcherState,
-  params: VtlTemplateInput,
+export const toEvaluateToInlineSnapshot: MatcherFunction = async function (
+  this: Context,
+  input: AppSyncMappingTemplateInput,
   ...rest: any
 ) {
-  const client = getAppSyncClient(params.clientConfig);
+  assertMatcherHelperInputType(
+    'toEvaluateToInlineSnapshot',
+    ['appSyncMappingTemplate'],
+    input,
+  );
+  const client = getAppSyncClient(input.clientConfig);
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   this.error = new Error();
 
   const { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
-      template: params.template,
-      context: JSON.stringify(params.context),
+      template: input.template,
+      context: JSON.stringify(input.context),
     }),
   );
 
-  // @ts-ignore
   return toMatchInlineSnapshot.call(this, maybeParseJson(received), ...rest);
 };

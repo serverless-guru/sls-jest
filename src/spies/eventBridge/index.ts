@@ -1,34 +1,54 @@
+import { getEventBridgeSpyStack } from '../../infrastructure';
 import {
   CloudWatchEventSpyConfig,
   CloudWatchLogsEventBridgeSpy,
 } from './CloudWatchLogsEventSpy';
 import { EventBridgeSpy } from './EventBridgeSpy';
 import { SQSEventBridgeSpy, SqsEventSpyConfig } from './SqsEventBridgeSpy';
-export type { EventBridgeSpy } from './EventBridgeSpy';
 
-export type EventBridgeSpyParams =
+export type { EventBridgeSpy } from './EventBridgeSpy';
+export type EventBridgeSpyParams = {
+  eventBusName: string;
+} & (
   | {
-      type: 'cloudWatchLogs';
-      config: CloudWatchEventSpyConfig;
+      adapter: 'cw';
+      config: Omit<CloudWatchEventSpyConfig, 'logGroupName'>;
     }
   | {
-      type: 'sqs';
-      config: SqsEventSpyConfig;
-    };
+      adapter?: 'sqs';
+      config: Omit<SqsEventSpyConfig, 'queueUrl'>;
+    }
+);
 
-export const eventBridgeSpy = (
-  params: EventBridgeSpyParams,
-): EventBridgeSpy => {
-  const { type, config } = params;
+export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {
+  const { eventBusName, adapter, config } = params;
 
   let spy: EventBridgeSpy;
 
-  if (type === 'cloudWatchLogs') {
-    spy = new CloudWatchLogsEventBridgeSpy(config);
-  } else if (type === 'sqs') {
-    spy = new SQSEventBridgeSpy(config);
+  const { stackName, logGroupName, queueUrl } = getEventBridgeSpyStack({
+    busName: eventBusName,
+    adapter,
+  });
+
+  if (adapter === 'cw') {
+    if (!logGroupName) {
+      throw new Error('"logGroupName" parameter is required');
+    }
+    spy = new CloudWatchLogsEventBridgeSpy({
+      ...config,
+      logGroupName,
+      stackName,
+    });
   } else {
-    throw new Error(`Unknown eventBridgeSpy type: ${type}`);
+    // defaults to sqs
+    if (!queueUrl) {
+      throw new Error('"queueUrl" parameter is required');
+    }
+    spy = new SQSEventBridgeSpy({
+      ...config,
+      queueUrl,
+      stackName,
+    });
   }
 
   spy.startPolling();

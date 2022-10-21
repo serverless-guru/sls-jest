@@ -1,15 +1,15 @@
-export * from './matchers/helpers';
-export * from './spies/eventBridge';
+import { EventBridgeEvent } from 'aws-lambda';
+export * from './helpers';
+export * as matchers from './matchers';
+export * from './spies';
 export * from './utils/dynamodb';
 
-import { EventBridgeEvent } from 'aws-lambda';
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
     interface Matchers<R> {
       toExist(): R;
-      toExistAndMatchObject(params: DocumentClient.AttributeMap): R;
+      toExistAndMatchObject(params: Record<string, unknown>): R;
       toExistAndMatchSnapshot(propertiesOrHint?: string, hint?: string): R;
       toExistAndMatchInlineSnapshot(
         propertiesOrHint?: string,

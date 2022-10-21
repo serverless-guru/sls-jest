@@ -10,7 +10,7 @@ import { EventBridgeSpy, EventBridgeSpyConfig } from './EventBridgeSpy';
 export type CloudWatchEventSpyConfig = EventBridgeSpyConfig & {
   logGroupName: string;
   interval?: number;
-  clientConfig: CloudWatchLogsClientConfig;
+  clientConfig?: CloudWatchLogsClientConfig;
 };
 
 /**

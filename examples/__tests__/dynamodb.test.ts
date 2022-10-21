@@ -1,5 +1,7 @@
 import { dynamodbItem, truncateTable, feedTables } from 'sls-jest';
 
+jest.setTimeout(120000);
+
 describe('toExist', () => {
   beforeAll(async () => {
     await truncateTable('todos', ['id']);
@@ -49,6 +51,9 @@ describe('toExist', () => {
           key: {
             id: '456',
           },
+          retryPolicy: {
+            retries: 3,
+          },
         }),
       ).toExist();
     } catch (e) {
@@ -97,6 +102,9 @@ describe('.not.toExist', () => {
           key: {
             id: '123',
           },
+          retryPolicy: {
+            retries: 0,
+          },
         }),
       ).not.toExist();
     } catch (e) {
@@ -129,6 +137,9 @@ describe('toExistAndMatchObject', () => {
           tableName: 'todos',
           key: {
             id: '123',
+          },
+          retryPolicy: {
+            retries: 0,
           },
         }),
       ).toExistAndMatchObject({
@@ -202,6 +213,9 @@ describe('.not.toExistAndMatchObject', () => {
           key: {
             id: '123',
           },
+          retryPolicy: {
+            retries: 0,
+          },
         }),
       ).not.toExistAndMatchObject({
         id: '123',
@@ -266,6 +280,9 @@ describe('toExistAndMatchSnapshot', () => {
           key: {
             id: '456',
           },
+          retryPolicy: {
+            retries: 0,
+          },
         }),
       ).toExistAndMatchSnapshot();
     } catch (e) {
@@ -320,6 +337,9 @@ describe('toExistAndMatchInlineSnapshot', () => {
           key: {
             id: '123',
           },
+          retryPolicy: {
+            retries: 0,
+          },
         }),
       ).toExistAndMatchInlineSnapshot(`
         Object {
@@ -339,6 +359,9 @@ describe('toExistAndMatchInlineSnapshot', () => {
           tableName: 'todos',
           key: {
             id: '456',
+          },
+          retryPolicy: {
+            retries: 0,
           },
         }),
       ).toExistAndMatchInlineSnapshot();

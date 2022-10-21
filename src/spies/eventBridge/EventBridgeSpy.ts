@@ -1,6 +1,7 @@
 import { EventBridgeEvent } from 'aws-lambda';
 import { uniqBy } from 'lodash';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, filter, take, takeUntil, timer } from 'rxjs';
+import { destroyStack } from '../../infrastructure';
 import { EventBridgeMatcherOptions } from '../../matchers';
 
 type EventMatcher = (
@@ -8,6 +9,7 @@ type EventMatcher = (
 ) => boolean | null;
 
 export type EventBridgeSpyConfig = {
+  stackName?: string;
   matcherDefaultTimeout?: number;
 };
 
@@ -19,7 +21,7 @@ export class EventBridgeSpy {
   subject: BehaviorSubject<EventBridgeEvent<string, unknown>[]>;
   matcherTimeout: number;
 
-  constructor(config: EventBridgeSpyConfig = {}) {
+  constructor(private config: EventBridgeSpyConfig = {}) {
     this.subject = new BehaviorSubject(this.events);
     this.matcherTimeout = config.matcherDefaultTimeout ?? 10000;
   }
@@ -38,23 +40,18 @@ export class EventBridgeSpy {
     config?: EventBridgeMatcherOptions,
   ): Promise<EventBridgeEvent<string, unknown>[]> {
     return new Promise<EventBridgeEvent<string, unknown>[]>((resolve) => {
-      const timer = setTimeout(() => {
-        sub.unsubscribe();
-        resolve(this.events);
-      }, config?.timeout ?? this.matcherTimeout);
-      const sub = this.subject.subscribe({
-        next: (events) => {
-          if (matcher(events)) {
-            sub.unsubscribe();
-            clearTimeout(timer);
+      this.subject
+        .pipe(takeUntil(timer(config?.timeout ?? this.matcherTimeout)))
+        .pipe(filter((events) => matcher(events) === true))
+        .pipe(take(1))
+        .subscribe({
+          next: (events) => {
             resolve(events);
-          }
-        },
-        complete: () => {
-          clearTimeout(timer);
-          resolve(this.events);
-        },
-      });
+          },
+          complete: () => {
+            resolve(this.events);
+          },
+        });
     });
   }
 
@@ -71,5 +68,17 @@ export class EventBridgeSpy {
 
   protected async stopPolling() {
     throw new Error('Not implemented. Implement this in a child class.');
+  }
+
+  /**
+   * Destroy the stack where test resources are deployed.
+   */
+  async destroyStack() {
+    if (!this.config.stackName) {
+      throw new Error('Stack name not provided');
+    }
+    await destroyStack({
+      stackName: this.config.stackName,
+    });
   }
 }

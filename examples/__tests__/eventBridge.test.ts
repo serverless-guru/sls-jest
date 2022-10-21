@@ -13,24 +13,23 @@ describe.each([
   [
     'SQS',
     {
-      type: 'sqs',
+      adapter: 'sqs',
+      eventBusName: 'default',
       config: {
         clientConfig: { region: 'us-east-1' },
         waitTimeSeconds: 2000,
-        matcherDefaultTimeout: 10_000,
-        queueUrl:
-          'https://sqs.us-east-1.amazonaws.com/379730309663/spy-queue.fifo',
+        matcherDefaultTimeout: 20_000,
       },
     } as EventBridgeSpyParams,
   ],
   [
     'CloudWatchLogs',
     {
-      type: 'cloudWatchLogs',
+      adapter: 'cw',
+      eventBusName: 'default',
       config: {
         clientConfig: { region: 'us-east-1' },
-        matcherDefaultTimeout: 15_000,
-        logGroupName: '/aws/events/event-bridge-spy',
+        matcherDefaultTimeout: 20_000,
       },
     } as EventBridgeSpyParams,
   ],
@@ -38,7 +37,7 @@ describe.each([
   let spy: EventBridgeSpy;
 
   beforeAll(async () => {
-    spy = eventBridgeSpy(config);
+    spy = await eventBridgeSpy(config);
   });
 
   afterEach(() => {
@@ -55,7 +54,7 @@ describe.each([
       createdAt: new Date().toISOString(),
     };
 
-    // AWS SDK error wrapper for TimeoutError: socket hang up
+    // Put an event into event bridge
     await client.send(
       new PutEventsCommand({
         Entries: [
@@ -69,6 +68,7 @@ describe.each([
       }),
     );
 
+    // Assert that it was seen by the spy
     await expect(spy).toHaveEventMatchingObject({
       'detail-type': 'orderCreated',
       detail: {
@@ -83,6 +83,7 @@ describe.each([
       createdAt: new Date().toISOString(),
     };
 
+    // Put an event into event bridge
     await client.send(
       new PutEventsCommand({
         Entries: [
@@ -96,7 +97,8 @@ describe.each([
       }),
     );
 
-    // matches an event exactly once
+    // Assert that it was seen by the spy
+    // The event should be seen exactly once
     await expect(spy).toHaveEventMatchingObjectTimes(
       {
         'detail-type': 'orderCreated',
@@ -113,6 +115,7 @@ describe.each([
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     };
+    // Assert that no events were seen by the spy
     await expect(spy).not.toHaveEventMatchingObject({
       'detail-type': 'orderCreated',
       detail: {

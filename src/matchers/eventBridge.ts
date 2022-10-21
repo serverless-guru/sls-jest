@@ -3,17 +3,26 @@ import { matcherHint, printExpected, printReceived } from 'jest-matcher-utils';
 import { MatcherState } from 'expect';
 import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { EventBridgeSpy } from '../spies/eventBridge/EventBridgeSpy';
+import { MatcherFunction } from './internal';
 
 export type EventBridgeMatcherOptions = {
   timeout?: number;
 };
 
-export const toHaveEventMatchingObject = async function (
+const assertEventBridgeSpy = (input: any) => {
+  if (!(input instanceof EventBridgeSpy)) {
+    throw new Error(`Expected spy to be an instance of EventBridgeSpy`);
+  }
+};
+
+export const toHaveEventMatchingObject: MatcherFunction = async function (
   this: MatcherState,
   spy: EventBridgeSpy,
   expected: Partial<EventBridgeEvent<string, unknown>>,
   options?: EventBridgeMatcherOptions,
 ) {
+  assertEventBridgeSpy(spy);
+
   const events = await spy.awaitEvents((events) => {
     return events.some((event) =>
       equals(event, expected, [iterableEquality, subsetEquality]),
@@ -47,13 +56,15 @@ export const toHaveEventMatchingObject = async function (
   return { message, pass };
 };
 
-export const toHaveEventMatchingObjectTimes = async function (
+export const toHaveEventMatchingObjectTimes: MatcherFunction = async function (
   this: MatcherState,
   spy: EventBridgeSpy,
   expected: Partial<EventBridgeEvent<string, unknown>>,
   expectedTimes: number,
   options?: EventBridgeMatcherOptions,
 ) {
+  assertEventBridgeSpy(spy);
+
   const events = await spy.awaitEvents((events) => {
     const found = events.filter((event) =>
       equals(event, expected, [iterableEquality, subsetEquality]),
