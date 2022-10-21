@@ -24,6 +24,10 @@ describe('toExist', () => {
     });
   });
 
+  afterAll(async () => {
+    await truncateTable('todos', ['id']);
+  });
+
   it('should succeed when item exists in the database', async () => {
     await expect(
       dynamodbItem({
