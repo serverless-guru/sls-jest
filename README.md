@@ -83,6 +83,12 @@ npx sls-jest destroy -t my-branch
 
 - [EventBridge](doc/spies/eventbridge.md)
 
+## Utilities
+
+`sls-jest` also comes with some handy utilities to operate common tasks.
+
+- [DynamoDB](doc/utils/dynamodb.md)
+
 # AWS credentials
 
 Under the hood, `sls-jest` uses the AWS SDK for javascript. Thus, credentials are taken in order of preference as described on [this page](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html).
