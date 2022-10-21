@@ -2,6 +2,7 @@ import { EventBridgeEvent } from 'aws-lambda';
 export * from './helpers';
 export * as matchers from './matchers';
 export * from './spies';
+export * from './utils/dynamodb';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

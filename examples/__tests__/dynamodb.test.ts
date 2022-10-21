@@ -1,6 +1,31 @@
-import { dynamodbItem } from 'sls-jest';
+import {
+  dynamodbItem,
+  truncateTable,
+  feedTable,
+  DynamoDBItemCollection,
+} from 'sls-jest';
 
 jest.setTimeout(120000);
+
+const feedTodos = async (items: DynamoDBItemCollection) => {
+  await feedTable('todos', items);
+};
+
+beforeAll(async () => {
+  await truncateTable('todos', ['id']);
+  await feedTodos({
+    todos: [
+      {
+        id: '123',
+        title: 'Buy milk',
+      },
+    ],
+  });
+});
+
+afterAll(async () => {
+  await truncateTable('todos', ['id']);
+});
 
 describe('toExist', () => {
   it('should succeed when item exists in the database', async () => {

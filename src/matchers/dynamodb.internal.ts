@@ -1,9 +1,3 @@
-import { DynamoDBClient, DynamoDBClientConfig } from '@aws-sdk/client-dynamodb';
-import {
-  DynamoDBDocumentClient,
-  GetCommand,
-  GetCommandOutput,
-} from '@aws-sdk/lib-dynamodb';
 import { equals, iterableEquality, subsetEquality } from '@jest/expect-utils';
 import { MatcherContext } from 'expect';
 import {
@@ -15,25 +9,13 @@ import {
   stringify,
 } from 'jest-matcher-utils';
 import { Context, toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
-import { canonicalize } from 'json-canonicalize';
+import { DynamoDBItem } from '../utils/dynamodb';
+import { getDynamoDBDocumentClient } from '../utils/internal';
 import { DynamodbItemInput } from '../helpers';
 import { withRetry } from '../utils/retry';
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
-
-const dynamoDbDocumentClients: Record<string, DynamoDBDocumentClient> = {};
-
-const getDynamoDBDocumentClient = (config: DynamoDBClientConfig = {}) => {
-  const key = canonicalize(config);
-  if (!dynamoDbDocumentClients[key]) {
-    dynamoDbDocumentClients[key] = DynamoDBDocumentClient.from(
-      new DynamoDBClient(config),
-    );
-  }
-
-  return dynamoDbDocumentClients[key];
-};
 
 export const toExist = withRetry(async function (
   this: MatcherContext,
@@ -43,12 +25,10 @@ export const toExist = withRetry(async function (
 
   const client = getDynamoDBDocumentClient(clientConfig);
 
-  const { Item: received } = await client.send(
-    new GetCommand({
-      TableName: tableName,
-      Key: key,
-    }),
-  );
+  const { Item: received } = await client.get({
+    TableName: tableName,
+    Key: key,
+  });
 
   const pass = !!received;
 
@@ -68,7 +48,7 @@ export const toExist = withRetry(async function (
 export const toExistAndMatchObject = withRetry(async function (
   this: MatcherContext,
   input: DynamodbItemInput,
-  expected: GetCommandOutput['Item'],
+  expected: DynamoDBItem,
 ) {
   const matcherName = 'toExistAndMatchObject';
   const options: MatcherHintOptions = {
@@ -79,12 +59,10 @@ export const toExistAndMatchObject = withRetry(async function (
 
   const client = getDynamoDBDocumentClient(clientConfig);
 
-  const { Item: received } = await client.send(
-    new GetCommand({
-      TableName: tableName,
-      Key: key,
-    }),
-  );
+  const { Item: received } = await client.get({
+    TableName: tableName,
+    Key: key,
+  });
 
   if (!received) {
     return {
@@ -127,12 +105,10 @@ export const toExistAndMatchSnapshot = withRetry(async function (
 
   const client = getDynamoDBDocumentClient(clientConfig);
 
-  const { Item: received } = await client.send(
-    new GetCommand({
-      TableName: tableName,
-      Key: key,
-    }),
-  );
+  const { Item: received } = await client.get({
+    TableName: tableName,
+    Key: key,
+  });
 
   if (!received) {
     return {
@@ -154,12 +130,10 @@ export const toExistAndMatchInlineSnapshot = withRetry(async function (
 
   const client = getDynamoDBDocumentClient(clientConfig);
 
-  const { Item: received } = await client.send(
-    new GetCommand({
-      TableName: tableName,
-      Key: key,
-    }),
-  );
+  const { Item: received } = await client.get({
+    TableName: tableName,
+    Key: key,
+  });
 
   if (!received) {
     return {
