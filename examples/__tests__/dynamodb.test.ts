@@ -1,11 +1,20 @@
-import { dynamodbItem, truncateTable, feedTables } from 'sls-jest';
+import {
+  dynamodbItem,
+  truncateTable,
+  feedTable,
+  DynamoDBItemsCollection,
+} from 'sls-jest';
 
 jest.setTimeout(120000);
+
+const feedTodos = async (items: DynamoDBItemsCollection) => {
+  await feedTable('todos', items);
+};
 
 describe('toExist', () => {
   beforeAll(async () => {
     await truncateTable('todos', ['id']);
-    await feedTables({
+    await feedTodos({
       todos: [
         {
           id: '123',
