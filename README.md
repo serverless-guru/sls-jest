@@ -82,3 +82,9 @@ npx sls-jest destroy -t my-branch
 ### Spies Reference
 
 - [EventBridge](doc/spies/eventbridge.md)
+
+## Utilities
+
+`sls-jest` also comes with some handy utilities to operate common tasks.
+
+- [DynamoDB](doc/utils/dynamodb.md)

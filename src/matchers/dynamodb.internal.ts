@@ -9,8 +9,8 @@ import {
   stringify,
 } from 'jest-matcher-utils';
 import { Context, toMatchInlineSnapshot, toMatchSnapshot } from 'jest-snapshot';
-import { DynampDBItem } from 'utils/dynamodb';
-import { getDynamoDBDocumentClient } from 'utils/internal';
+import { DynamoDBItem } from '../utils/dynamodb';
+import { getDynamoDBDocumentClient } from '../utils/internal';
 import { DynamodbItemInput } from '../helpers';
 import { withRetry } from '../utils/retry';
 
@@ -48,7 +48,7 @@ export const toExist = withRetry(async function (
 export const toExistAndMatchObject = withRetry(async function (
   this: MatcherContext,
   input: DynamodbItemInput,
-  expected: DynampDBItem,
+  expected: DynamoDBItem,
 ) {
   const matcherName = 'toExistAndMatchObject';
   const options: MatcherHintOptions = {

@@ -3,23 +3,23 @@ import { AttributeValue, DescribeTableCommand } from '@aws-sdk/client-dynamodb';
 import { chunk, flatten, map, pick } from 'lodash';
 import { getDynamoDBDocumentClient } from './internal';
 
-export type DynampDBItem = Record<string, NativeAttributeValue>;
+export type DynamoDBItem = Record<string, NativeAttributeValue>;
 
-export type DynamoDBItemsCollection =
-  | DynampDBItem[]
+export type DynamoDBItemCollection =
+  | DynamoDBItem[]
   | {
-      [key: string]: DynampDBItem | DynampDBItem[];
+      [itemName: string]: DynamoDBItem | DynamoDBItem[];
     };
 
 export const feedTable = async (
   tableName: string,
-  items: DynamoDBItemsCollection,
+  items: DynamoDBItemCollection,
 ) => {
   const client = getDynamoDBDocumentClient();
 
-  const dynamoDbItems: DynampDBItem[] = Array.isArray(items)
+  const dynamoDbItems: DynamoDBItem[] = Array.isArray(items)
     ? items
-    : flatten<DynampDBItem>(Object.values(items));
+    : flatten<DynamoDBItem>(Object.values(items));
 
   // put items in batches of 25
   const chuncks = chunk(dynamoDbItems, 25);
@@ -36,9 +36,9 @@ export const feedTable = async (
   }
 };
 
-export const feedTables = async (
-  items: Record<string, DynamoDBItemsCollection>,
-) => {
+export const feedTables = async (items: {
+  [tableName: string]: DynamoDBItemCollection;
+}) => {
   for (const [tableName, tableItems] of Object.entries(items)) {
     await feedTable(tableName, tableItems);
   }

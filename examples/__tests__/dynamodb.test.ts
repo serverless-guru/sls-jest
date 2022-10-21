@@ -2,12 +2,12 @@ import {
   dynamodbItem,
   truncateTable,
   feedTable,
-  DynamoDBItemsCollection,
+  DynamoDBItemCollection,
 } from 'sls-jest';
 
 jest.setTimeout(120000);
 
-const feedTodos = async (items: DynamoDBItemsCollection) => {
+const feedTodos = async (items: DynamoDBItemCollection) => {
   await feedTable('todos', items);
 };
 
