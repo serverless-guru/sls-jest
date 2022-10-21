@@ -95,9 +95,9 @@ const item: DynamoDBItem = {
 
 - `DynamoDBItemCollection`
 
-Represents a collection of DynamoDBTtems. It can be:
+Represents a collection of `DynamoDBItem`. It can be:
 
-- an array of `DynamoDBItem`
+- An array of `DynamoDBItem` (`DynamoDBItem[]`)
 
 example:
 
@@ -117,7 +117,7 @@ const users: DynamoDBItemCollection = [
   },
 ];
 
-await feedTable('data' users);
+await feedTable('data', users);
 ```
 
 - A dictionary of `DynamoDBItem` or `DynamoDBItem[]`
@@ -148,7 +148,7 @@ const data: DynamoDBItemCollection = {
   ],
 };
 
-await feedTable('data' data);
+await feedTable('data', data);
 
 // get orders for the user
 const orders = await getOrders(data.user.id);

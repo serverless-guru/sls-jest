@@ -2,6 +2,7 @@ import { NativeAttributeValue } from '@aws-sdk/util-dynamodb';
 import { AttributeValue, DescribeTableCommand } from '@aws-sdk/client-dynamodb';
 import { chunk, flatten, groupBy, map, pick, reduce } from 'lodash';
 import { getDynamoDBDocumentClient } from './internal';
+import { BatchWriteCommandInput } from '@aws-sdk/lib-dynamodb';
 
 export type DynamoDBItem = Record<string, NativeAttributeValue>;
 
@@ -60,10 +61,10 @@ export const feedTables = async (items: {
 
   const client = getDynamoDBDocumentClient();
 
-  // batcgh items in batches of 25
+  // batch items in batches of 25
   const chuncks = chunk(flatItems, 25);
   for (const chunk of chuncks) {
-    // group back items by table
+    // group back items by tableName
     const byTable = groupBy(chunk, 'tableName');
     await client.batchWrite({
       RequestItems: reduce(
@@ -78,7 +79,7 @@ export const feedTables = async (items: {
             })),
           };
         },
-        {},
+        {} as BatchWriteCommandInput['RequestItems'],
       ),
     });
   }
@@ -123,7 +124,14 @@ export const truncateTable = async (tableName: string, keys?: string[]) => {
     const result = await client.scan({
       TableName: tableName,
       ExclusiveStartKey: lastEvaluatedKey,
-      AttributesToGet: key,
+      ExpressionAttributeNames: key.reduce(
+        (keys, k) => ({
+          ...keys,
+          [`#${k}`]: k,
+        }),
+        {} as Record<string, string>,
+      ),
+      ProjectionExpression: key.map((k) => `#${k}`).join(', '),
     });
     lastEvaluatedKey = result.LastEvaluatedKey;
 
