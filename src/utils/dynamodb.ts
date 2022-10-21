@@ -1,6 +1,6 @@
 import { NativeAttributeValue } from '@aws-sdk/util-dynamodb';
 import { AttributeValue, DescribeTableCommand } from '@aws-sdk/client-dynamodb';
-import { chunk, flatten, map, pick } from 'lodash';
+import { chunk, flatten, groupBy, map, pick, reduce } from 'lodash';
 import { getDynamoDBDocumentClient } from './internal';
 
 export type DynamoDBItem = Record<string, NativeAttributeValue>;
@@ -39,8 +39,48 @@ export const feedTable = async (
 export const feedTables = async (items: {
   [tableName: string]: DynamoDBItemCollection;
 }) => {
-  for (const [tableName, tableItems] of Object.entries(items)) {
-    await feedTable(tableName, tableItems);
+  // flatten all items into a single array
+  const flatItems = reduce(
+    items,
+    (acc, tableItems, tableName) => {
+      const dynamoDbItems: DynamoDBItem[] = Array.isArray(tableItems)
+        ? tableItems
+        : flatten<DynamoDBItem>(Object.values(tableItems));
+
+      return [
+        ...acc,
+        ...map(dynamoDbItems, (item) => ({
+          tableName,
+          item,
+        })),
+      ];
+    },
+    [] as { tableName: string; item: DynamoDBItem }[],
+  );
+
+  const client = getDynamoDBDocumentClient();
+
+  // batcgh items in batches of 25
+  const chuncks = chunk(flatItems, 25);
+  for (const chunk of chuncks) {
+    // group back items by table
+    const byTable = groupBy(chunk, 'tableName');
+    await client.batchWrite({
+      RequestItems: reduce(
+        byTable,
+        (acc, items, tableName) => {
+          return {
+            ...acc,
+            [tableName]: map(items, ({ item }) => ({
+              PutRequest: {
+                Item: item,
+              },
+            })),
+          };
+        },
+        {},
+      ),
+    });
   }
 };
 
