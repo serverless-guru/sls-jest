@@ -2,7 +2,7 @@
 
 ## Functions
 
-- `async feedTable(tableName: string, items: DynamoDBItemCollection)`
+### `async feedTable(tableName: string, items: DynamoDBItemCollection)`
 
 Inserts items into the given table.
 
@@ -27,7 +27,7 @@ await feedTable('users', [
 
 Note: Under the hood, items are inserted [in batches](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html) of 25 items. It is recommended to group all your items together into one `feedTable` call as much as possible for performance.
 
-- `async feedTables(items: { [tableName: string]: DynamoDBItemCollection })`
+### `async feedTables(items: { [tableName: string]: DynamoDBItemCollection })`
 
 Feeds several tables with the given data.
 
@@ -62,7 +62,7 @@ await feedTables({
 
 Note: Under the hood, items are inserted [in batches](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html) of 25 items. It is recommended to group all your items together into one `feedTables` call as much as possible for performance.
 
-`async truncateTable(tableName: string, keys?: string[])`
+### `async truncateTable(tableName: string, keys?: string[])`
 
 Deletes all the items from a table. It is useful for cleaning up data between tests.
 
