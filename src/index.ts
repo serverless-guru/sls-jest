@@ -6,10 +6,10 @@ export * as matchers from './matchers';
 export * from './spies';
 export * from './utils/dynamodb';
 
-// Note: we cannot use the internal IMatcherHelperInput tyep here
+// Note: we cannot use the internal IMatcherHelperInput type here
 // because it does not work for some reason.
 type MatcherHelper<Name extends ItemType> = {
-  _helperName: Name;
+  _slsJestHelperName: Name;
 };
 
 declare global {

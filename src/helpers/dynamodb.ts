@@ -34,7 +34,7 @@ export const dynamodbItem: RetryableMatcherHelper<
   assertMatcherHelperInputValue('dynamodbItem', dynamodbItemInputSchema, input);
 
   return {
-    _helperName: 'dynamodbItem',
+    _slsJestHelperName: 'dynamodbItem',
     ...input,
   };
 };

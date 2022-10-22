@@ -18,7 +18,7 @@ export type ItemType = 'dynamodbItem' | 'appSyncMappingTemplate' | 's3Object';
  * Matcher helper input
  */
 export interface IMatcherHelperInput<Name extends ItemType = ItemType> {
-  _helperName: Name;
+  _slsJestHelperName: Name;
 }
 
 /**
@@ -56,15 +56,15 @@ export const assertMatcherHelperInputType = <T extends ItemType[]>(
   compatibleItems: T,
   input: any,
 ): IMatcherHelperInput<T[number]> => {
-  if (typeof input !== 'object' || !input._helperName) {
+  if (typeof input !== 'object' || !input._slsJestHelperName) {
     throw new Error(
       `Invalid matcher helper input. Please use one of the provided helpers.`,
     );
   }
 
-  if (!compatibleItems.includes(input._helperName)) {
+  if (!compatibleItems.includes(input._slsJestHelperName)) {
     throw new Error(
-      `${input._helperName}() is not compatible with the ${matcherName}() matcher`,
+      `${input._slsJestHelperName}() is not compatible with the ${matcherName}() matcher`,
     );
   }
 

@@ -25,7 +25,7 @@ describe('toExist', () => {
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
       {
-        "_helperName": "dynamodbItem",
+        "_slsJestHelperName": "dynamodbItem",
         "key": {
           "id": "id",
         },
@@ -52,7 +52,7 @@ describe('toExist', () => {
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
       {
-        "_helperName": "s3Object",
+        "_slsJestHelperName": "s3Object",
         "bucketName": "muy-bucket",
         "key": "path/to/file.txt",
       }
@@ -100,7 +100,7 @@ describe('toExistAndMatchObject', () => {
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
       {
-        "_helperName": "dynamodbItem",
+        "_slsJestHelperName": "dynamodbItem",
         "key": {
           "id": "id",
         },
@@ -127,7 +127,7 @@ describe('toExistAndMatchObject', () => {
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
       {
-        "_helperName": "s3Object",
+        "_slsJestHelperName": "s3Object",
         "bucketName": "muy-bucket",
         "key": "path/to/file.txt",
       }
@@ -177,7 +177,7 @@ describe('toExistAndMatchInlineSnapshot', () => {
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
       {
-        "_helperName": "dynamodbItem",
+        "_slsJestHelperName": "dynamodbItem",
         "key": {
           "id": "id",
         },
@@ -206,7 +206,7 @@ describe('toExistAndMatchInlineSnapshot', () => {
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
       {
-        "_helperName": "s3Object",
+        "_slsJestHelperName": "s3Object",
         "bucketName": "muy-bucket",
         "key": "path/to/file.txt",
       }
@@ -256,7 +256,7 @@ describe('toExistAndMatchSnapshot', () => {
     ).resolves.toBeTruthy();
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
       {
-        "_helperName": "dynamodbItem",
+        "_slsJestHelperName": "dynamodbItem",
         "key": {
           "id": "id",
         },
@@ -284,7 +284,7 @@ describe('toExistAndMatchSnapshot', () => {
 
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
       {
-        "_helperName": "s3Object",
+        "_slsJestHelperName": "s3Object",
         "bucketName": "muy-bucket",
         "key": "path/to/file.txt",
       }
