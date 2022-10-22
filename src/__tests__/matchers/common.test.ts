@@ -281,6 +281,7 @@ describe('toExistAndMatchSnapshot', () => {
         }),
       ),
     ).resolves.toBeTruthy();
+
     expect(spy.mock.calls[0][0]).toMatchInlineSnapshot(`
       {
         "_helperName": "s3Object",

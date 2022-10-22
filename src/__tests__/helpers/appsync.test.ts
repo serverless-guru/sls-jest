@@ -13,7 +13,7 @@ describe('appSyncMappingTemplate', () => {
             foo: 'bar',
           },
         },
-      }),
+      }) as object,
     ).toMatchInlineSnapshot(`
       {
         "_helperName": "appSyncMappingTemplate",
