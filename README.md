@@ -43,9 +43,9 @@ Some matchers can be used with several inputs. e.g. You can do `expect(dynamodbI
 
 sls-jest uses those helpers to keep track of **what** you are intending to test and use the appropriate logic internally.
 
-- TypeScript support
+- First-class TypeScript support
 
-If you use TypeScript, you will get intellisense support for the correct input of the matchers.
+You will get intellisense support for valid `expect` and matchers input values, and only matchers that are compatible with the specified helepr will be allowed.
 
 - Readability
 
