@@ -14,7 +14,7 @@ Use the `dynamodbItem()` helper function to specify which dynamoDB Item you are 
 
 Asserts whether a DynamoDB item exists in the given table.
 
-```ts
+```typescript
 await expect(
   dynamodbItem({
     tableName: 'users',
@@ -30,7 +30,7 @@ await expect(
 
 Asserts that an item exists in the given table, and matches a subset of the properties of an object. It works similarely to jest's [toMatchObject](https://jestjs.io/docs/expect#tomatchobjectobject).
 
-```ts
+```typescript
 await expect(
   dynamodbItem({
     tableName: 'todos',
@@ -47,7 +47,7 @@ await expect(
 
 Asserts that an item exists in the given table, and that it matches the most recent snapshot. It works similarely to jest's [toMatchSnapshot](https://jestjs.io/docs/expect#tomatchsnapshotpropertymatchers-hint).
 
-```ts
+```typescript
 await expect(
   dynamodbItem({
     tableName: 'todos',
@@ -62,7 +62,7 @@ await expect(
 
 Asserts that an item exists in the given table, and that it matches the most recent inline snapshot. It works similarely to jest's [toMatchInlineSnapshot](https://jestjs.io/docs/expect#tomatchinlinesnapshotpropertymatchers-inlinesnapshot).
 
-```ts
+```typescript
 await expect(
   dynamodbItem({
     tableName: 'todos',

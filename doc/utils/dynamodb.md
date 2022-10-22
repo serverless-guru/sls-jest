@@ -2,13 +2,13 @@
 
 ## Functions
 
-### `async feedTable(tableName: string, items: DynamoDBItemCollection)`
+### `feedTable(tableName: string, items: DynamoDBItemCollection)`
 
 Inserts items into the given table.
 
 example:
 
-```ts
+```typescript
 await feedTable('users', [
   {
     pk: 'USER#123',
@@ -27,13 +27,13 @@ await feedTable('users', [
 
 Note: Under the hood, items are inserted [in batches](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html) of 25 items. It is recommended to group all your items together into one `feedTable` call as much as possible for performance.
 
-### `async feedTables(items: { [tableName: string]: DynamoDBItemCollection })`
+### `feedTables(items: { [tableName: string]: DynamoDBItemCollection })`
 
 Feeds several tables with the given data.
 
 `items` is an object of which the keys represent table names, and the values a `DynamoDBItemCollection`.
 
-```ts
+```typescript
 await feedTables({
   // insert into the users table
   users: [
@@ -62,7 +62,7 @@ await feedTables({
 
 Note: Under the hood, items are inserted [in batches](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html) of 25 items. It is recommended to group all your items together into one `feedTables` call as much as possible for performance.
 
-### `async truncateTable(tableName: string, keys?: string[])`
+### `truncateTable(tableName: string, keys?: string[])`
 
 Deletes all the items from a table. It is useful for cleaning up data between tests.
 
@@ -70,7 +70,7 @@ Deletes all the items from a table. It is useful for cleaning up data between te
 
 example:
 
-```ts
+```typescript
 await truncateTable('users');
 ```
 
@@ -78,13 +78,13 @@ await truncateTable('users');
 
 For TypeScript users, some types are also exported for your convenience.
 
-- `DynamoDBItem`
+### `DynamoDBItem`
 
 Represents a single DynaoDB item, represented as a plain JS object.
 
 example:
 
-```ts
+```typescript
 const item: DynamoDBItem = {
   pk: 'USER#123',
   sk: 'USER#123',
@@ -93,7 +93,7 @@ const item: DynamoDBItem = {
 };
 ```
 
-- `DynamoDBItemCollection`
+### `DynamoDBItemCollection`
 
 Represents a collection of `DynamoDBItem`. It can be:
 
@@ -101,7 +101,7 @@ Represents a collection of `DynamoDBItem`. It can be:
 
 example:
 
-```ts
+```typescript
 const users: DynamoDBItemCollection = [
   {
     pk: 'USER#123',
@@ -126,7 +126,7 @@ The key has no meaning and no impact on how the data that is actually stored in 
 
 example:
 
-```ts
+```typescript
 const data: DynamoDBItemCollection = {
   user: {
     pk: 'USER#123',

@@ -32,7 +32,7 @@ Config:
 
 The simplest and more efficient way to use EventBridge spies is to create them at the very beginning of your tests. i.e.: in a `beforeAll()` hook at the top of your file or a `describe` block. The first time you create a spy for a given configuration combination (`adapter` and `eventBusName`), a new CloudFormation stack will be deployed automatically with the necessary resources. Further usage of the same spy will re-use the already deployed resources, even across several files.
 
-```ts
+```typescript
 let spy: EventBridgeSpy;
 
 beforeAll(async () => {
@@ -90,7 +90,7 @@ Resets the spy. All events captured so far will be cleared from the spy.
 
 Use this helper between tests to clean up the state of the spy.
 
-```ts
+```typescript
 afterEach(() => {
   spy.reset();
 });
@@ -102,7 +102,7 @@ Stops the spy completely. The spy will stop capturing events from the event bus.
 
 You SOULD call this method at the end of each set of tests.
 
-```ts
+```typescript
 afterAll(async () => {
   await spy.stop();
 });
@@ -114,7 +114,7 @@ Destroys the stack used by this spy.
 
 Note: The destruction of the stack happens asynchronously.
 
-```ts
+```typescript
 afterAll(async () => {
   await spy.destroyStack();
 });
@@ -155,7 +155,7 @@ In practice, because of the asynchronous nature of EventBridge, there it is hard
 By using random ids and matching them in your test, you are avoiding false positive and false negative results.
 For example, here is a good example of a bad test:
 
-```ts
+```typescript
 it('should see an orderCreated event - use case 1', async () => {
   // test case 1
   await createOrder(...);
@@ -177,7 +177,7 @@ Matching only against the `detail-type` is not specific enough. The second test 
 
 better:
 
-```ts
+```typescript
 it('should see an orderCreated event - use case 1', async () => {
   // test case 1
   const randomId = crypto.randomUUID();
@@ -225,7 +225,7 @@ In any case, as soon as the assertion can be resolved, the matcher will return i
 
 Timeouts can be specified at the spy level, in the config (`matcherDefaultTimeout`), or case by case. Example:
 
-```ts
+```typescript
 await expect(spy).not.toHaveEventMatchingObject(
   {
     'detail-type': 'orderCreated',

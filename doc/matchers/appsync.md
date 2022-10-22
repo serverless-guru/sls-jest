@@ -15,7 +15,7 @@ Asserts that a mapping template evaluates to a given string or object for a give
 
 If you pass an object as `value`, the matcher will try to parse the generated template into a javascript object before comparing the values.
 
-```ts
+```typescript
 // matching as a string
 await expect(
   appSyncMappingTemplate({
@@ -33,7 +33,7 @@ await expect(
 `);
 ```
 
-```ts
+```typescript
 // matching as an object also works as long as the mapping template evaluates to a valid JSON
 // otherwise, an error will be thrown
 await expect(
@@ -54,7 +54,7 @@ await expect(
 
 Asserts that the evaluated template matches the most recent snapshot. It works similarely to jest's [toMatchSnapshot](https://jestjs.io/docs/expect#tomatchsnapshotpropertymatchers-hint).
 
-```ts
+```typescript
 await expect(
   appSyncMappingTemplate({
     template: fs.readFileSync('tempalte.vtl', { encoding: 'utf8' }),
@@ -71,7 +71,7 @@ await expect(
 
 Asserts that the evaluated template matches the most recent snapshot. It works similarely to jest's [toMatchInlineSnapshot](https://jestjs.io/docs/expect#tomatchinlinesnapshotpropertymatchers-inlinesnapshot).
 
-```ts
+```typescript
 await expect(
   appSyncMappingTemplate({
     template: fs.readFileSync('tempalte.vtl', { encoding: 'utf8' }),

@@ -10,7 +10,7 @@ npm i sls-jest
 
 Create a setup file:
 
-```ts
+```typescript
 // setupJest.ts
 import { matchers } from 'sls-jest';
 
@@ -19,6 +19,6 @@ expect.extend(matchers);
 
 Then use it in your [jest config file](https://jestjs.io/docs/configuration) (`jest.config.ts`) under `setupFilesAfterEnv`:
 
-```ts
+```typescript
 setupFilesAfterEnv: ['./setupJest.ts'];
 ```
