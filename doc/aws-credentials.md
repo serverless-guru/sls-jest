@@ -2,7 +2,7 @@
 
 Under the hood, `sls-jest` uses the AWS SDK for javascript. Thus, credentials are taken in order of preference as described on [this page](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html).
 
-- Locally on your machine
+## Locally on your machine
 
 When running jest on your local machine, the simplest way is to use your shared credentials file. By default, the `default` profile is used. You can use another profile by passing it as the `AWS_PROFILE` env variable.
 
@@ -14,7 +14,7 @@ You can also use something like [direnv](https://github.com/direnv/direnv) to au
 
 Side note: We recommend [leapp](https://www.leapp.cloud/) to manage your local credentials.
 
-- CI/CD
+## CI/CD
 
 When running tests in a CI/CD environment, the recommended way is to use OIDC. The assumed role must have sufficient permissions to access all the resources your test suite uses (or [creates](#spies))
 

@@ -28,4 +28,4 @@ e.g. `expect(dynamodbItem(...)).toExist();`
 
 ## Spies
 
-Spies work similarly to [Jest Function Spies](https://jestjs.io/docs/mock-function-api). They let you spy on a some serverless resources such as an [EventBridge](spies/eventbridge.md).
+Spies work similarly to [Jest Function Spies](https://jestjs.io/docs/mock-function-api). They let you spy on a some serverless resources such as an [EventBridge](spies/eventbridge.md) bus.
