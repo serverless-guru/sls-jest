@@ -9,7 +9,7 @@
 - [DynamoDB](matchers/dynamodb.md)
 - [S3](matchers/s3.md)
 - [AppSync](matchers/appsync.md)
-- [EventBridge](matchers/eventBridge.md)
+- [EventBridge](matchers/eventbridge.md)
 
 ## Spies
 
