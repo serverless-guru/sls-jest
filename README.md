@@ -45,7 +45,7 @@ sls-jest uses those helpers to keep track of **what** you are intending to test 
 
 - First-class TypeScript support
 
-You will get intellisense support for valid `expect` and matchers input values, and only matchers that are compatible with the specified helepr will be allowed.
+You will get intellisense support for valid `expect` and matchers input values, and only matchers that are compatible with the specified helper will be allowed.
 
 - Readability
 
