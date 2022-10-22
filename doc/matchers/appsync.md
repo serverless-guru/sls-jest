@@ -1,4 +1,4 @@
-# AppSync Mapping templates
+# AppSync
 
 A collection of matchers to test mapping templates.
 

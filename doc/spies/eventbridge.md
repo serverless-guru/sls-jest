@@ -1,4 +1,4 @@
-# EventBridge Spy
+# EventBridge
 
 EventBridge spies work similarly to [Jest Function Spies](https://jestjs.io/docs/mock-function-api). They let you spy on a specific EventBridge bus to test if events have been placed into it.
 

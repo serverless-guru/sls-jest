@@ -1,4 +1,4 @@
-# DynamoDB items
+# DynamoDB
 
 A collection of matchers that you can use to assert on DynamoDB items.
 

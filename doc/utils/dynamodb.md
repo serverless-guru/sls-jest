@@ -1,4 +1,4 @@
-# DynamoB utils
+# DynamoB
 
 ## Functions
 
