@@ -4,13 +4,13 @@ EventBridge spies work similarly to [Jest Function Spies](https://jestjs.io/docs
 
 ## How it works
 
-Under the hood, EventBridge spies need to subscribe to an EventBridge bus in order to grab all the events that were put into it. It then keeps track of them and you can later assert on them. To do so, it deploys either an SQS queue or a CloudWatch log group (depending on the [configuration](#the-eventbridgespy-helper-function)) and subscribes it to the bus you are spying on. Spies can then use them to collect all the events from the bus and make them available to [matchers](#Matchers) later.
+Under the hood, EventBridge spies need to subscribe to an EventBridge bus in order to grab all the events that were put into it. It then keeps track of them and you can later assert on them. To do so, it deploys either an SQS queue or a CloudWatch log group (depending on the [configuration](#the-eventbridgespy-helper-function)) and subscribes it to the bus you are spying on. Spies can then use them to collect all the events from the bus and make them available to [matchers](#matchers) later.
 
 ## The `eventBridgeSpy()` helper function
 
 This helper creates a new spy for a given event bus. Parameters:
 
-- `adapter`: `sqs` or `cw`. Specified how you would like the spy to subscribe to the bus. See [SQS vs CloudWatch](#SQS-vs-CloudWatch). Defaults to `sqs`.
+- `adapter`: `sqs` or `cw`. Specified how you would like the spy to subscribe to the bus. See [SQS vs CloudWatch](#sqs-vs-cloudWatch). Defaults to `sqs`.
 - `eventBusName`: The bus name you are spying on.
 - `config`: configuration for the Spy adapter (see below)
 
