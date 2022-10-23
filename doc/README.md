@@ -1,6 +1,6 @@
 # Getting started
 
-## Installing sls-jest
+## Install sls-jest
 
 ```bash
 npm i sls-jest
@@ -20,5 +20,8 @@ expect.extend(matchers);
 Then use it in your [jest config file](https://jestjs.io/docs/configuration) (`jest.config.ts`) under `setupFilesAfterEnv`:
 
 ```typescript
-setupFilesAfterEnv: ['./setupJest.ts'];
+export default {
+  // ..
+  setupFilesAfterEnv: ['./setupJest.ts'];
+}
 ```

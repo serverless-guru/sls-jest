@@ -6,11 +6,9 @@ Use the `dynamodbItem()` helper function to specify which dynamoDB Item you are 
 
 - `tableName`: The table name where the item should be found.
 - `key`: They key of the item you are looking for
-- `retryPolicy`: An optional [node-retry](https://github.com/tim-kos/node-retry) options config. sls-jest will retry using the given retry policy until the test passes or all the retries are exhausted. This is useful in an asynchronous context.
+- `retryPolicy`: An optional [node-retry](https://github.com/tim-kos/node-retry) options config. `sls-jest` will retry using the given retry policy until the test passes or all the retries are exhausted. This is useful in an asynchronous context.
 
-## Matchers
-
-### `toExist()`
+## `toExist()`
 
 Asserts whether a DynamoDB item exists in the given table.
 
@@ -26,7 +24,7 @@ await expect(
 ).toExist();
 ```
 
-### `toExistAndMatchObject(value)`
+## `toExistAndMatchObject(value)`
 
 Asserts that an item exists in the given table, and matches a subset of the properties of an object. It works similarely to jest's [toMatchObject](https://jestjs.io/docs/expect#tomatchobjectobject).
 
@@ -43,7 +41,7 @@ await expect(
 });
 ```
 
-### `toExistAndMatchSnapshot(propertiesOrHint?, hint?)`
+## `toExistAndMatchSnapshot(propertiesOrHint?, hint?)`
 
 Asserts that an item exists in the given table, and that it matches the most recent snapshot. It works similarely to jest's [toMatchSnapshot](https://jestjs.io/docs/expect#tomatchsnapshotpropertymatchers-hint).
 
@@ -58,7 +56,7 @@ await expect(
 ).toExistAndMatchSnapshot();
 ```
 
-### `toExistAndMatchInlineSnapshot(propertiesOrHint?, hint?)`
+## `toExistAndMatchInlineSnapshot(propertiesOrHint?, hint?)`
 
 Asserts that an item exists in the given table, and that it matches the most recent inline snapshot. It works similarely to jest's [toMatchInlineSnapshot](https://jestjs.io/docs/expect#tomatchinlinesnapshotpropertymatchers-inlinesnapshot).
 
