@@ -1,5 +1,9 @@
 import { appSyncMappingTemplate } from 'sls-jest';
 
+type Template = {
+  id: string;
+};
+
 const template = `
 #set($id=$ctx.args.id)
 {
@@ -39,7 +43,7 @@ describe('Mapping Template', () => {
           },
         },
       }),
-    ).toEvaluateTo({ id: '123' });
+    ).toEvaluateTo<Template>({ id: '123' });
   });
 
   it('should evaluate a template snapshot as object', async () => {
