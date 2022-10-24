@@ -26,7 +26,11 @@ await expect(
   }),
 ).toEvaluateTo(`
 {
-  "id": "123"
+  "version" : "2017-02-28",
+  "operation" : "GetItem",
+  "key" : {
+      "pk" : {"S":"123"}
+  }
 }
 `);
 ```
@@ -44,7 +48,11 @@ await expect(
     },
   }),
 ).toEvaluateTo({
-  id: '123',
+  version: '2017-02-28',
+  operation: 'GetItem',
+  key: {
+    pk: { S: '123' },
+  },
 });
 ```
 
@@ -80,8 +88,12 @@ await expect(
     },
   }),
 ).toEvaluateToInlineSnapshot(`
-  Object {
-    "id": "789",
+  {
+    "version" : "2017-02-28",
+    "operation" : "GetItem",
+    "key" : {
+        "pk" : {"S":"123"}
+    }
   }
 `);
 ```

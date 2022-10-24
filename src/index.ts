@@ -17,9 +17,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
     interface EvaluateMatchers {
-      toEvaluateTo<E extends object | string>(
-        template: E extends object ? O.Partial<E, 'deep'> : E,
-      ): Promise<void>;
+      toEvaluateTo<E extends object | string>(template: E): Promise<void>;
       toEvaluateToSnapshot(
         propertiesOrHint?: string,
         hint?: string,

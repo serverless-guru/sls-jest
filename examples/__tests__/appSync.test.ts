@@ -1,13 +1,21 @@
 import { appSyncMappingTemplate } from 'sls-jest';
 
 type Template = {
-  id: string;
+  version: string;
+  operation: string;
+  key: {
+    pk: { S: string };
+  };
 };
 
 const template = `
 #set($id=$ctx.args.id)
 {
-  "id": "$id"
+  "version" : "2017-02-28",
+  "operation" : "GetItem",
+  "key" : {
+      "pk" : $util.dynamodb.toDynamoDBJson($id)
+  }
 }
 `;
 
@@ -15,7 +23,11 @@ describe('Mapping Template', () => {
   it('should evaluate a template string', async () => {
     const expected = `
 {
-  "id": "123"
+  "version" : "2017-02-28",
+  "operation" : "GetItem",
+  "key" : {
+      "pk" : {"S":"123"}
+  }
 }
 `;
 
@@ -43,7 +55,13 @@ describe('Mapping Template', () => {
           },
         },
       }),
-    ).toEvaluateTo<Template>({ id: '123' });
+    ).toEvaluateTo<Template>({
+      version: '2017-02-28',
+      operation: 'GetItem',
+      key: {
+        pk: { S: '123' },
+      },
+    });
   });
 
   it('should evaluate a template snapshot as object', async () => {
@@ -75,7 +93,13 @@ describe('Mapping Template', () => {
       }),
     ).toEvaluateToInlineSnapshot(`
       Object {
-        "id": "789",
+        "key": Object {
+          "pk": Object {
+            "S": "789",
+          },
+        },
+        "operation": "GetItem",
+        "version": "2017-02-28",
       }
     `);
   });
