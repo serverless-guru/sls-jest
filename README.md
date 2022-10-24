@@ -1,6 +1,6 @@
 ## sls-jest
 
-[![Continuous Integration](https://github.com/serverless-guru/sls-jest/actions/workflows/ci.yml/badge.svg)](https://github.com/serverless-guru/sls-jest/actions/workflows/ci.yml) [![pages-build-deployment](https://github.com/serverless-guru/sls-jest/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/serverless-guru/sls-jest/actions/workflows/pages/pages-build-deployment) [![Release](https://github.com/serverless-guru/sls-jest/actions/workflows/release.yml/badge.svg)](https://github.com/serverless-guru/sls-jest/actions/workflows/release.yml)
+[![Continuous Integration](https://github.com/serverless-guru/sls-jest/actions/workflows/ci.yml/badge.svg)](https://github.com/serverless-guru/sls-jest/actions/workflows/ci.yml) [![Release](https://github.com/serverless-guru/sls-jest/actions/workflows/release.yml/badge.svg)](https://github.com/serverless-guru/sls-jest/actions/workflows/release.yml)
 
 Testing serverless applications is hard. Ideally, you want to test against the real infrastrucutre and avoid mocks. e.g. a real DynamoDB table, real Lambda functions. However, the asynchronous nature of serverless makes it difficult to write tests that work and are deterministic.
 
