@@ -11,7 +11,7 @@ export const getEventBridgeSpyStack = (params: {
     throw new Error('"busName" parameter is required');
   }
 
-  const stackSuffix = `eb-spy-${params.busName}-${params.adapter}`;
+  const stackSuffix = `eb-spy-${busName}-${adapter}`;
 
   const stackDetails = getStackDetails({
     stackSuffix,
