@@ -6,10 +6,10 @@ describe('s3Object', () => {
       s3Object({
         bucketName: 'my-bucket',
         key: 'path/to/object.txt',
-      }),
+      }) as object,
     ).toMatchInlineSnapshot(`
       {
-        "_helperName": "s3Object",
+        "_slsJestHelperName": "s3Object",
         "bucketName": "my-bucket",
         "key": "path/to/object.txt",
       }

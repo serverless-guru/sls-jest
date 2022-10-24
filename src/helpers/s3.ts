@@ -32,7 +32,7 @@ export const s3Object: RetryableMatcherHelper<'s3Object', S3ObjectInput> = (
   assertMatcherHelperInputValue('s3Object', s3ObjectInputSchema, input);
 
   return {
-    _helperName: 's3Object',
+    _slsJestHelperName: 's3Object',
     ...input,
   };
 };

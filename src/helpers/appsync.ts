@@ -44,7 +44,7 @@ export const appSyncMappingTemplate: MatcherHelper<
   );
 
   return {
-    _helperName: 'appSyncMappingTemplate',
+    _slsJestHelperName: 'appSyncMappingTemplate',
     ...input,
   };
 };

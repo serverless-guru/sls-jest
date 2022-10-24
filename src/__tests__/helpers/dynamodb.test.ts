@@ -9,10 +9,10 @@ describe('dynamodbItem', () => {
           pk: 'USER#123',
           sk: 'USER#123',
         },
-      }),
+      }) as object,
     ).toMatchInlineSnapshot(`
       {
-        "_helperName": "dynamodbItem",
+        "_slsJestHelperName": "dynamodbItem",
         "key": {
           "pk": "USER#123",
           "sk": "USER#123",
