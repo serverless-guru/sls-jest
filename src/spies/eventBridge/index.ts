@@ -12,11 +12,11 @@ export type EventBridgeSpyParams = {
 } & (
   | {
       adapter: 'cw';
-      config: Omit<CloudWatchEventSpyConfig, 'logGroupName'>;
+      config?: Omit<CloudWatchEventSpyConfig, 'logGroupName'>;
     }
   | {
       adapter?: 'sqs';
-      config: Omit<SqsEventSpyConfig, 'queueUrl'>;
+      config?: Omit<SqsEventSpyConfig, 'queueUrl'>;
     }
 );
 

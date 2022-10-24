@@ -20,8 +20,8 @@ export const toExist: MatcherFunction = async function (
     input,
   );
 
-  const { _helperName } = item;
-  switch (_helperName) {
+  const { _slsJestHelperName } = item;
+  switch (_slsJestHelperName) {
     case 'dynamodbItem':
       return dynamodb.toExist.call(this, item);
     case 's3Object':
@@ -43,8 +43,8 @@ export const toExistAndMatchObject: MatcherFunction = async function (
     input,
   );
 
-  const { _helperName } = item;
-  switch (_helperName) {
+  const { _slsJestHelperName } = item;
+  switch (_slsJestHelperName) {
     case 'dynamodbItem':
       return dynamodb.toExistAndMatchObject.call(this, item, expected);
     case 's3Object':
@@ -66,8 +66,8 @@ export const toExistAndMatchSnapshot: MatcherFunction = async function (
     input,
   );
 
-  const { _helperName } = item;
-  switch (_helperName) {
+  const { _slsJestHelperName } = item;
+  switch (_slsJestHelperName) {
     case 'dynamodbItem':
       return dynamodb.toExistAndMatchSnapshot.call(this, item, ...rest);
     case 's3Object':
@@ -89,8 +89,8 @@ export const toExistAndMatchInlineSnapshot: MatcherFunction = async function (
     input,
   );
 
-  const { _helperName } = item;
-  switch (_helperName) {
+  const { _slsJestHelperName } = item;
+  switch (_slsJestHelperName) {
     case 'dynamodbItem':
       return dynamodb.toExistAndMatchInlineSnapshot.call(this, item, ...rest);
     case 's3Object':

@@ -13,10 +13,10 @@ describe('appSyncMappingTemplate', () => {
             foo: 'bar',
           },
         },
-      }),
+      }) as object,
     ).toMatchInlineSnapshot(`
       {
-        "_helperName": "appSyncMappingTemplate",
+        "_slsJestHelperName": "appSyncMappingTemplate",
         "context": {
           "arguments": {
             "foo": "bar",
