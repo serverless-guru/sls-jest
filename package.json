@@ -3,6 +3,7 @@
   "version": "0.0.0-dev",
   "description": "A collection of matchers and spies for testing AWS serverless applications",
   "repository": "https://github.com/serverless-guru/sls-jest",
+  "homepage": "https://serverlessguru.gitbook.io/sls-jest/",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
