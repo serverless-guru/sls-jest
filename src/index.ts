@@ -1,5 +1,5 @@
 import { EventBridgeEvent } from 'aws-lambda';
-import { ItemType } from 'helpers/internal';
+import { ItemType } from './helpers/internal';
 import { O } from 'ts-toolbelt';
 import { EventBridgeSpy } from './spies';
 export * from './helpers';

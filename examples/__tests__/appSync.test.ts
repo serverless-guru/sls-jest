@@ -1,6 +1,6 @@
 import { appSyncMappingTemplate } from 'sls-jest';
 
-type Template = {
+type DynamoDBGetItem = {
   version: string;
   operation: string;
   key: {
@@ -55,7 +55,7 @@ describe('Mapping Template', () => {
           },
         },
       }),
-    ).toEvaluateTo<Template>({
+    ).toEvaluateTo<DynamoDBGetItem>({
       version: '2017-02-28',
       operation: 'GetItem',
       key: {

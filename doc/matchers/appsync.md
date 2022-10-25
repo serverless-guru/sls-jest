@@ -7,7 +7,7 @@ Use the `appSyncMappingTemplate` helper function with mapping template matchers.
 - `template`: A string representing the mapping template
 - `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference.html#accessing-the-context) to be injected into the template
 
-### `toEvaluateTo<string | E>(expected: string | Partial<E, 'deep'>)`
+### `toEvaluateTo<E>(expected: E)`
 
 Asserts that a mapping template evaluates to a given string or object for a given context.
 
@@ -47,7 +47,7 @@ await expect(
       },
     },
   }),
-).toEvaluateTo<DynamoDBQuery>({
+).toEvaluateTo<DynamoDBGetItem>({
   version: '2017-02-28',
   operation: 'GetItem',
   key: {
