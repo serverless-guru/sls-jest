@@ -2,7 +2,7 @@
 
 Use those matchers in combinations with [EventBridge spies](../spies/eventbridge.md).
 
-### `toHaveEventMatchingObject<TDetailType, TDetail>(expected: Partial<EventBridgeEvent<TDetailType, TDetail>, 'deep'>)`
+### `toHaveEventMatchingObject<TDetailType, TDetail>(expected: DeepPartial<EventBridgeEvent<TDetailType, TDetail>>)`
 
 Asserts that an event was put on the spied event bus and that it matches a subset of the properties of an object. It works similarly to jest's [toMatchObject](https://jestjs.io/docs/expect#tomatchobjectobject).
 
@@ -15,7 +15,7 @@ await expect(spy).toHaveEventMatchingObject<'orderCreated', Order>({
 });
 ```
 
-### `toHaveEventMatchingObjectTimes<TDetailType, TDetail>(expected: Partial<EventBridgeEvent<TDetailType, TDetail>, 'deep'>, times: number)`
+### `toHaveEventMatchingObjectTimes<TDetailType, TDetail>(expected: DeepPartial<EventBridgeEvent<TDetailType, TDetail>>, times: number)`
 
 Same as `toHaveEventMatchingObject`, but it ensures that exactly `n` matching, but different, events have been seen in total.
 

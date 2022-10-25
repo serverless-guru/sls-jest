@@ -24,7 +24,7 @@ await expect(
 ).toExist();
 ```
 
-### `toExistAndMatchObject<E>(expected: Partial<E, 'deep'>)`
+### `toExistAndMatchObject<E>(expected: DeepPartial<E>)`
 
 Asserts that an item exists in the given table, and matches a subset of the properties of an object. It works similarely to jest's [toMatchObject](https://jestjs.io/docs/expect#tomatchobjectobject).
 
