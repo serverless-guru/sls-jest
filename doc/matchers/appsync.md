@@ -7,7 +7,7 @@ Use the `appSyncMappingTemplate` helper function with mapping template matchers.
 - `template`: A string representing the mapping template
 - `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference.html#accessing-the-context) to be injected into the template
 
-## `toEvaluateTo(value)`
+### `toEvaluateTo<string | E>(expected: string | Partial<E, 'deep'>)`
 
 Asserts that a mapping template evaluates to a given string or object for a given context.
 
@@ -47,7 +47,7 @@ await expect(
       },
     },
   }),
-).toEvaluateTo({
+).toEvaluateTo<DynamoDBQuery>({
   version: '2017-02-28',
   operation: 'GetItem',
   key: {
@@ -56,7 +56,7 @@ await expect(
 });
 ```
 
-## `toEvaluateToSnapshot()`
+### `toEvaluateToSnapshot(propertiesOrHint?: string, hint?: string)`
 
 Asserts that the evaluated template matches the most recent snapshot. It works similarely to jest's [toMatchSnapshot](https://jestjs.io/docs/expect#tomatchsnapshotpropertymatchers-hint).
 
@@ -73,7 +73,7 @@ await expect(
 ).toEvaluateToSnapshot();
 ```
 
-## `toEvaluateToInlineSnapshot()`
+### `toEvaluateToInlineSnapshot(propertiesOrHint?: string, hint?: string)`
 
 Asserts that the evaluated template matches the most recent snapshot. It works similarely to jest's [toMatchInlineSnapshot](https://jestjs.io/docs/expect#tomatchinlinesnapshotpropertymatchers-inlinesnapshot).
 
