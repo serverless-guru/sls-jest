@@ -2,7 +2,7 @@
 
 ## Helper functions
 
-`sls-jest` comes with a set of helper functions which represent AWS resources (e.g. `dynamoDbItem()`, `vtlMappingTemplate()`). They are used in combination with matchers in order to perform assertions. They serve several purposes:
+`sls-jest` comes with a set of helper functions which represent AWS resources (e.g. `dynamoDbItem()`, `s3Object()`). They are used in combination with matchers in order to perform assertions. They serve several purposes:
 
 - **Validation**
 
