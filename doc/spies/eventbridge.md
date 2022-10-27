@@ -10,22 +10,22 @@ Under the hood, EventBridge spies need to subscribe to an EventBridge bus in ord
 
 This helper creates a new spy for a given event bus. Parameters:
 
-- `adapter`: `sqs` or `cw`. Specified how you would like the spy to subscribe to the bus. See [SQS vs CloudWatch](#sqs-vs-cloudWatch). Defaults to `sqs`.
+- `adapter`: `sqs` or `cw`. Specified how you would like the spy to subscribe to the bus. See [SQS vs CloudWatch](#sqs-vs-cloudwatch). Defaults to `sqs`.
 - `eventBusName`: The bus name you are spying on.
 - `config`: configuration for the Spy adapter (see below)
 
 Config:
 
-- `matcherDefaultTimeout`: The default timeout for event matchers, in milliseconds. Defaults to `10000`. This is the maximum time a matcher will wait until it determines whether the assertion succeeds or fails. Also see the [recommendations](#recommendations) below about timeouts.
+- `matcherDefaultTimeout`: The default timeout for event matchers, in milliseconds. Defaults to `10_000`. This is the maximum time a matcher will wait until it determines whether the assertion succeeds or fails. Also see the [recommendations](#recommendations) below about timeouts.
 
 **with the sqs adapter**:
 
-- `waitTimeSeconds`: number, optional: The maximum polling time of the sqs poller (uses long polling). Defaults to `20`. Must be between `0` (use short polling) and `20`. The spie will run long polling cycles until the spie is [stopped](#spystop)
+- `waitTimeSeconds`: number, optional: The maximum polling time of the sqs poller (uses long polling). Defaults to `20`. Must be between `0` (use short polling) and `20`. The spie will run long polling cycles until the spie is [stopped](#spy.stop)
 - `clientConfig`: [SQSClientConfig](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-sqs/interfaces/sqsclientconfig.html), optional. Custom AWS SDK config.
 
 **with the cloudwatch adapter**:
 
-- `interval`: number, optional: The interval at which the spy will pull logs from the log group.
+- `interval`: number, optional: The interval at which the spy will pull logs from the log group. Defaults: `2000`
 - `clientConfig`: [CloudWatchLogsClientConfig](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-cloudwatch-logs/interfaces/cloudwatchlogsclientconfig.html), optional. Custom AWS SDK config.
 
 ## Usage
@@ -100,7 +100,7 @@ afterEach(() => {
 
 Stops the spy completely. The spy will stop capturing events from the event bus.
 
-You SOULD call this method at the end of each set of tests.
+You SHOULD call this method at the end of each set of tests.
 
 ```typescript
 afterAll(async () => {
@@ -120,7 +120,7 @@ afterAll(async () => {
 });
 ```
 
-💡 You usually will want to RETAIN the stack. i.e. for further tests, or for re-running the same test later without having to re-deploy the stack. Consider using the [npx sls-jest destroy](../../README.md#cleaning-up) CLI command when you are done testing, instead (e.g. after you merge your branch).
+💡 You usually will want to RETAIN the stack. i.e. for further tests, or for re-running the same test later without having to re-deploy the stack. Consider using the [npx sls-jest destroy](setup.md#cleaning-up) CLI command when you are done testing, instead (e.g. after you merge your branch).
 
 ## SQS vs CloudWatch
 
@@ -180,32 +180,28 @@ better:
 ```typescript
 it('should see an orderCreated event - use case 1', async () => {
   // test case 1
-  const randomId = crypto.randomUUID();
-  await createOrder({
-    id: randomId,
+  const order = await createOrder({,
     //...
   });
   await expect(spy).toHaveEventMatchingObject({
     'detail-type': 'orderCreated',
     details: {
-      // assert on this specific random id
-      id: randomId,
+      // assert on a specific random id
+      id: order.id,
     },
   });
 });
 
 it('should see an orderCreated event - use case 2', async () => {
   // test case 2
-  const randomId = crypto.randomUUID();
-  await createOrder({
-    id: randomId,
+  const order = await createOrder({
     //...
   });
   await expect(spy).toHaveEventMatchingObject({
     'detail-type': 'orderCreated',
     details: {
-      // assert on this specific random id
-      id: randomId,
+      // assert on a specific random id
+      id: order.id,
     },
   });
 });
