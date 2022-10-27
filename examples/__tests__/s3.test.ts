@@ -1,5 +1,10 @@
 import { s3Object } from 'sls-jest';
 
+type S3Object = {
+  id: string;
+  message: string;
+};
+
 describe('toExist', () => {
   it('should succeed when object exists in the bucket', async () => {
     await expect(
@@ -59,7 +64,7 @@ describe('toExistAndMatchObject', () => {
         bucketName: 'sls-jest-bucket',
         key: 'test.json',
       }),
-    ).toExistAndMatchObject({
+    ).toExistAndMatchObject<S3Object>({
       message: 'Hello from sls-jest!',
     });
   });
@@ -96,7 +101,7 @@ describe('toExistAndMatchObject', () => {
           bucketName: 'sls-jest-bucket',
           key: 'test2.json',
         }),
-      ).toExistAndMatchObject({
+      ).toExistAndMatchObject<S3Object>({
         message: 'Hello from sls-jest!',
       });
     } catch (e) {
@@ -113,7 +118,7 @@ describe('toExistAndMatchObject', () => {
           bucketName: 'sls-jest-bucket',
           key: 'test.txt',
         }),
-      ).toExistAndMatchObject({
+      ).toExistAndMatchObject<S3Object>({
         message: 'Hello from sls-jest!',
       });
     } catch (e) {
