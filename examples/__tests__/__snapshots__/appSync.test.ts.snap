@@ -2,7 +2,13 @@
 
 exports[`Mapping Template should evaluate a template snapshot as object 1`] = `
 Object {
-  "id": "456",
+  "key": Object {
+    "pk": Object {
+      "S": "456",
+    },
+  },
+  "operation": "GetItem",
+  "version": "2017-02-28",
 }
 `;
 

@@ -2,11 +2,11 @@
 
 ## Helper functions
 
-`sls-jest` comes with a set of helper functions which represent AWS resources (e.g. `dynamoDbItem()`, `vtlMappingTemplate()`). They are used in combination with matchers in order to perform assertions. They serve several purposes:
+`sls-jest` comes with a set of helper functions which represent AWS resources (e.g. `dynamoDbItem()`, `s3Object()`). They are used in combination with matchers in order to perform assertions. They serve several purposes:
 
 - **Validation**
 
-Jest technically allows any value in the `expect()` function, but all values can't be used with all `atchers (e`.g. `expect(123).toExist()` does not make sense). 'sls-jest uses those helper functions in order to check whether a matcher can be used with the input value you are passing. If they are not compatible, an error will be thrown.
+Jest technically allows any value in the `expect()` function, but all values can't be used with all `matchers` (e.g. `expect(123).toExist()` does not make sense). `sls-jest` uses those helper functions in order to check whether a matcher can be used with the input value you are passing. If they are not compatible, an error will be thrown.
 
 Basic validation is also done on the values that are passed in the helper functions. e.g. with `dynamodbItem()`, the `tableName` and `key` attributes are required.
 
@@ -22,7 +22,7 @@ You will get intellisense support for valid `expect` and matchers input values, 
 
 - **Readability**
 
-Thanks to those helpers, code becomes much easier to read and more language-natural.
+Thanks to those helpers, code becomes much easier to read and more natural-language.
 
 e.g. `expect(dynamodbItem(...)).toExist();`
 

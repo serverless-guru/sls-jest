@@ -5,6 +5,15 @@ import {
 } from '@aws-sdk/client-eventbridge';
 import crypto from 'crypto';
 
+type Order = {
+  id: string;
+  date: string;
+  items: {
+    itemId: string;
+    quantity: number;
+  }[];
+};
+
 jest.setTimeout(30000);
 
 const client = new EventBridgeClient({});
@@ -69,7 +78,7 @@ describe.each([
     );
 
     // Assert that it was seen by the spy
-    await expect(spy).toHaveEventMatchingObject({
+    await expect(spy).toHaveEventMatchingObject<'orderCreated', Order>({
       'detail-type': 'orderCreated',
       detail: {
         id: order.id,
@@ -99,7 +108,7 @@ describe.each([
 
     // Assert that it was seen by the spy
     // The event should be seen exactly once
-    await expect(spy).toHaveEventMatchingObjectTimes(
+    await expect(spy).toHaveEventMatchingObjectTimes<'orderCreated', Order>(
       {
         'detail-type': 'orderCreated',
         detail: {
@@ -116,7 +125,7 @@ describe.each([
       createdAt: new Date().toISOString(),
     };
     // Assert that no events were seen by the spy
-    await expect(spy).not.toHaveEventMatchingObject({
+    await expect(spy).not.toHaveEventMatchingObject<'orderCreated', Order>({
       'detail-type': 'orderCreated',
       detail: {
         id: order.id,

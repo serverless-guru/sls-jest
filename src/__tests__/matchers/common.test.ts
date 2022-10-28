@@ -1,12 +1,12 @@
-import * as dynamodb from 'matchers/dynamodb.internal';
-import * as s3 from 'matchers/s3.internal';
+import * as dynamodb from '../../matchers/dynamodb.internal';
+import * as s3 from '../../matchers/s3.internal';
 import { appSyncMappingTemplate, dynamodbItem, s3Object } from '../../helpers';
 import {
   toExist,
   toExistAndMatchObject,
   toExistAndMatchInlineSnapshot,
   toExistAndMatchSnapshot,
-} from 'matchers';
+} from '../../matchers';
 
 describe('toExist', () => {
   it('should accept dynamodbItem inputs', () => {

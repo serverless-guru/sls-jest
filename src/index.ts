@@ -1,5 +1,6 @@
 import { EventBridgeEvent } from 'aws-lambda';
-import { ItemType } from 'helpers/internal';
+import { ItemType } from './helpers/internal';
+import { O } from 'ts-toolbelt';
 import { EventBridgeSpy } from './spies';
 export * from './helpers';
 export * as matchers from './matchers';
@@ -16,7 +17,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
     interface EvaluateMatchers {
-      toEvaluateTo(template: string | object): Promise<void>;
+      toEvaluateTo<E extends object | string>(template: E): Promise<void>;
       toEvaluateToSnapshot(
         propertiesOrHint?: string,
         hint?: string,
@@ -29,7 +30,9 @@ declare global {
 
     interface ExistanceMatchers {
       toExist(): Promise<void>;
-      toExistAndMatchObject(params: Record<string, unknown>): Promise<void>;
+      toExistAndMatchObject<E extends object>(
+        params: O.Partial<E, 'deep'>,
+      ): Promise<void>;
       toExistAndMatchSnapshot(
         propertiesOrHint?: string,
         hint?: string,
@@ -41,11 +44,11 @@ declare global {
     }
 
     interface EventBridgeMatchers {
-      toHaveEventMatchingObject(
-        expected: Partial<EventBridgeEvent<string, unknown>>,
+      toHaveEventMatchingObject<TDetailType extends string, TDetail>(
+        expected: O.Partial<EventBridgeEvent<TDetailType, TDetail>, 'deep'>,
       ): Promise<void>;
-      toHaveEventMatchingObjectTimes(
-        expected: Partial<EventBridgeEvent<string, unknown>>,
+      toHaveEventMatchingObjectTimes<TDetailType extends string, TDetail>(
+        expected: O.Partial<EventBridgeEvent<TDetailType, TDetail>, 'deep'>,
         times: number,
       ): Promise<void>;
     }
