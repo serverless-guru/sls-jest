@@ -6,6 +6,7 @@ export * from './helpers';
 export * as matchers from './matchers';
 export * from './spies';
 export * from './utils/dynamodb';
+export * from './utils/cognito';
 
 // Note: we cannot use the internal IMatcherHelperInput type here
 // because it does not work for some reason.
