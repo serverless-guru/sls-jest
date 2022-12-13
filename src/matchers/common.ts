@@ -16,14 +16,16 @@ export const toExist: MatcherFunction = async function (
 ) {
   const item = assertMatcherHelperInputType(
     'toExist',
-    ['dynamodbItem', 's3Object'],
+    ['dynamodbItem', 'dynamodbQueryItems', 's3Object'],
     input,
   );
 
   const { _slsJestHelperName } = item;
   switch (_slsJestHelperName) {
     case 'dynamodbItem':
-      return dynamodb.toExist.call(this, item);
+      return dynamodb.itemToExist.call(this, item);
+    case 'dynamodbQueryItems':
+      return dynamodb.queryItemsToExist.call(this, item);
     case 's3Object':
       return s3.toExist.call(this, item);
   }
@@ -39,14 +41,20 @@ export const toExistAndMatchObject: MatcherFunction = async function (
 ) {
   const item = assertMatcherHelperInputType(
     'toExistAndMatchObject',
-    ['dynamodbItem', 's3Object'],
+    ['dynamodbItem', 'dynamodbQueryItems', 's3Object'],
     input,
   );
 
   const { _slsJestHelperName } = item;
   switch (_slsJestHelperName) {
     case 'dynamodbItem':
-      return dynamodb.toExistAndMatchObject.call(this, item, expected);
+      return dynamodb.itemToExistAndMatchObject.call(this, item, expected);
+    case 'dynamodbQueryItems':
+      return dynamodb.queryItemsToExistAndMatchObject.call(
+        this,
+        item,
+        expected,
+      );
     case 's3Object':
       return s3.toExistAndMatchObject.call(this, item, expected);
   }
@@ -62,14 +70,20 @@ export const toExistAndMatchSnapshot: MatcherFunction = async function (
 ) {
   const item = assertMatcherHelperInputType(
     'toExistAndMatchSnapshot',
-    ['dynamodbItem', 's3Object'],
+    ['dynamodbItem', 'dynamodbQueryItems', 's3Object'],
     input,
   );
 
   const { _slsJestHelperName } = item;
   switch (_slsJestHelperName) {
     case 'dynamodbItem':
-      return dynamodb.toExistAndMatchSnapshot.call(this, item, ...rest);
+      return dynamodb.itemToExistAndMatchSnapshot.call(this, item, ...rest);
+    case 'dynamodbQueryItems':
+      return dynamodb.queryItemsToExistAndMatchSnapshot.call(
+        this,
+        item,
+        ...rest,
+      );
     case 's3Object':
       return s3.toExistAndMatchSnapshot.call(this, item, ...rest);
   }
@@ -85,15 +99,46 @@ export const toExistAndMatchInlineSnapshot: MatcherFunction = async function (
 ) {
   const item = assertMatcherHelperInputType(
     'toExistAndMatchInlineSnapshot',
-    ['dynamodbItem', 's3Object'],
+    ['dynamodbItem', 'dynamodbQueryItems', 's3Object'],
     input,
   );
 
   const { _slsJestHelperName } = item;
   switch (_slsJestHelperName) {
     case 'dynamodbItem':
-      return dynamodb.toExistAndMatchInlineSnapshot.call(this, item, ...rest);
+      return dynamodb.itemToExistAndMatchInlineSnapshot.call(
+        this,
+        item,
+        ...rest,
+      );
+    case 'dynamodbQueryItems':
+      return dynamodb.queryItemsToExistAndMatchInlineSnapshot.call(
+        this,
+        item,
+        ...rest,
+      );
     case 's3Object':
       return s3.toExistAndMatchInlineSnapshot.call(this, item, ...rest);
+  }
+};
+
+/**
+ * Assert that the input elements exists and have a given length.
+ */
+export const toExistAndHaveLength: MatcherFunction = async function (
+  this: MatcherState,
+  input: IMatcherHelperInput,
+  length: number,
+) {
+  const item = assertMatcherHelperInputType(
+    'toExistAndHaveLength',
+    ['dynamodbQueryItems'],
+    input,
+  );
+
+  const { _slsJestHelperName } = item;
+  switch (_slsJestHelperName) {
+    case 'dynamodbQueryItems':
+      return dynamodb.queryItemsToExistAndHaveLength.call(this, item, length);
   }
 };

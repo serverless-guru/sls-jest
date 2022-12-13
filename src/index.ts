@@ -19,11 +19,11 @@ declare global {
     interface EvaluateMatchers {
       toEvaluateTo<E extends object | string>(template: E): Promise<void>;
       toEvaluateToSnapshot(
-        propertiesOrHint?: string,
+        propertiesOrHint?: string | object,
         hint?: string,
       ): Promise<void>;
       toEvaluateToInlineSnapshot(
-        propertiesOrHint?: string,
+        propertiesOrHint?: string | object,
         hint?: string,
       ): Promise<void>;
     }
@@ -34,13 +34,17 @@ declare global {
         params: O.Partial<E, 'deep'>,
       ): Promise<void>;
       toExistAndMatchSnapshot(
-        propertiesOrHint?: string,
+        propertiesOrHint?: string | object,
         hint?: string,
       ): Promise<void>;
       toExistAndMatchInlineSnapshot(
-        propertiesOrHint?: string,
+        propertiesOrHint?: string | object,
         hint?: string,
       ): Promise<void>;
+    }
+
+    interface ArrayLikeMatchers {
+      toExistAndHaveLength(length: number): Promise<void>;
     }
 
     interface EventBridgeMatchers {
@@ -75,6 +79,11 @@ declare global {
       <T extends MatcherHelper<'dynamodbItem'>>(
         actual: T,
       ): AndNot<ExistanceMatchers>;
+
+      // DynamoDB query items matchers overload
+      <T extends MatcherHelper<'dynamodbQueryItems'>>(actual: T): AndNot<
+        ExistanceMatchers & ArrayLikeMatchers
+      >;
 
       // S3 Object matchers overload
       <T extends MatcherHelper<'s3Object'>>(

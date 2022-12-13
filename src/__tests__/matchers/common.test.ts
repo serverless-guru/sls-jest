@@ -10,7 +10,7 @@ import {
 
 describe('toExist', () => {
   it('should accept dynamodbItem inputs', () => {
-    const spy = jest.spyOn(dynamodb, 'toExist').mockResolvedValue({
+    const spy = jest.spyOn(dynamodb, 'itemToExist').mockResolvedValue({
       pass: true,
       message: () => 'message',
     });
@@ -84,7 +84,7 @@ describe('toExist', () => {
 describe('toExistAndMatchObject', () => {
   it('should accept dynamodbItem inputs', () => {
     const spy = jest
-      .spyOn(dynamodb, 'toExistAndMatchObject')
+      .spyOn(dynamodb, 'itemToExistAndMatchObject')
       .mockResolvedValue({
         pass: true,
         message: () => 'message',
@@ -161,7 +161,7 @@ describe('toExistAndMatchObject', () => {
 describe('toExistAndMatchInlineSnapshot', () => {
   it('should accept dynamodbItem inputs', () => {
     const spy = jest
-      .spyOn(dynamodb, 'toExistAndMatchInlineSnapshot')
+      .spyOn(dynamodb, 'itemToExistAndMatchInlineSnapshot')
       .mockResolvedValue({
         pass: true,
         message: () => 'message',
@@ -240,7 +240,7 @@ describe('toExistAndMatchInlineSnapshot', () => {
 describe('toExistAndMatchSnapshot', () => {
   it('should accept dynamodbItem inputs', () => {
     const spy = jest
-      .spyOn(dynamodb, 'toExistAndMatchSnapshot')
+      .spyOn(dynamodb, 'itemToExistAndMatchSnapshot')
       .mockResolvedValue({
         pass: true,
         message: () => 'message',

@@ -38,3 +38,53 @@ export const dynamodbItem: RetryableMatcherHelper<
     ...input,
   };
 };
+
+/**
+ * DynamoDB Query items helper input
+ */
+export type DynamodbQueryItemsInput = {
+  tableName: string;
+  indexName?: string;
+  pk: string;
+  sk?: {
+    beginsWith?: string;
+    between?: [string, string];
+  };
+  clientConfig?: DynamoDBClientConfig;
+};
+
+/**
+ * DynamoDB Item schema
+ */
+const dynamodbQueryItemsInputSchema: HelperZodSchema<
+  typeof dynamodbQueryItems
+> = z.object({
+  tableName: z.string(),
+  indexName: z.string().optional(),
+  pk: z.string(),
+  sk: z
+    .object({
+      beginsWith: z.string().optional(),
+      between: z.tuple([z.string(), z.string()]).optional(),
+    })
+    .optional(),
+});
+
+/**
+ * DynamoDB Query items helper
+ */
+export const dynamodbQueryItems: RetryableMatcherHelper<
+  'dynamodbQueryItems',
+  DynamodbQueryItemsInput
+> = (input) => {
+  assertMatcherHelperInputValue(
+    'dynamodbQueryItems',
+    dynamodbQueryItemsInputSchema,
+    input,
+  );
+
+  return {
+    _slsJestHelperName: 'dynamodbQueryItems',
+    ...input,
+  };
+};
