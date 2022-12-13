@@ -1,5 +1,3 @@
-# Use with the CDK
-
 ---
 description: >-
   This section shows how you can use `sls-jest` with the CDK.
