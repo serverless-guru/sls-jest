@@ -1,14 +1,14 @@
 ---
-description: ->
+description: >-
   How to use sls-jest with Github Actions
 ---
 
 # Deploy feauture ephemeral stacks
 
-You can use Github Actions to run your tests against an ephemeral stack each time you push code to a branch.
+You can use Github Actions to run your tests against an ephemeral stack each time you open a new Pul Request and push new code to it.
 
 ```yaml
-name: Deploy branch to AWS
+name: Deploy and run tests
 
 on:
   pull_request:
@@ -57,7 +57,7 @@ jobs:
 
 # Teardown the ephemeral stack on merge
 
-When you are happy with your PR, you can teardown your stack and cleanup sls-jest artifacts after you merge it.
+When you are happy with your PR, you can teardown your stack and cleanup `sls-jest` artifacts after you merge it.
 
 ```yaml
 name: Teardown stack
