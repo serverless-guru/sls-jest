@@ -19,3 +19,7 @@
 ## Utilities
 
 - [DynamoDB](utils/dynamodb.md)
+
+## Cookbooks
+
+- [CDK](cookbooks/cdk.md)
