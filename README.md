@@ -2,7 +2,7 @@
 
 [![Continuous Integration](https://github.com/serverless-guru/sls-jest/actions/workflows/ci.yml/badge.svg)](https://github.com/serverless-guru/sls-jest/actions/workflows/ci.yml) [![Release](https://github.com/serverless-guru/sls-jest/actions/workflows/release.yml/badge.svg)](https://github.com/serverless-guru/sls-jest/actions/workflows/release.yml)
 
-<div style="text-align: center">
+<div align="center">
   <img src="sls-jest.png" width="250" alt="sls-jest logo">
   
   A jest extension to test serverless applications.
