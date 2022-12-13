@@ -7,7 +7,7 @@ description: >-
 
 When writing tests, you often need to access your deployed resources. It can be the name of a DynamoDB table, an API Gateway endpoint url, the ARN of a Step Function state machine, etc.
 
-When those values are predictable, it is usually not an issue, but this this is not always the case. e.g. ARNs are not alays predictable, or if you let CloudFormation name your resources with a random name.
+When those values are predictable, it is usually not an issue, but this is not always the case. e.g. ARNs are not always predictable, or if you let CloudFormation name your resources with a random name.
 
 The CDK has an `--outputs-file` parameter which prints the stack outputs in a file. You can use that to export the values that you need, and access them from `jest`.
 
