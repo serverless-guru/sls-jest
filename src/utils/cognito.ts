@@ -1,10 +1,10 @@
 import {
-  AdminConfirmSignUpCommand,
+  AdminCreateUserCommand,
+  AdminInitiateAuthCommand,
+  AdminSetUserPasswordCommand,
   AttributeType,
   AuthenticationResultType,
   CognitoIdentityProviderClientConfig,
-  InitiateAuthCommand,
-  SignUpCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { getCognitoClient } from './internal';
 
@@ -13,30 +13,35 @@ import { getCognitoClient } from './internal';
  */
 export const cognitoSignIn = async (params: {
   clientId: string;
+  userPoolId: string;
   username: string;
   password: string;
   config?: CognitoIdentityProviderClientConfig;
 }): Promise<AuthenticationResultType> => {
-  const { clientId, username, password, config } = params;
+  const { clientId, userPoolId, username, password, config } = params;
   const client = getCognitoClient(config);
+
   const { AuthenticationResult } = await client.send(
-    new InitiateAuthCommand({
-      AuthFlow: 'USER_PASSWORD_AUTH',
+    new AdminInitiateAuthCommand({
+      AuthFlow: 'ADMIN_NO_SRP_AUTH',
       ClientId: clientId,
+      UserPoolId: userPoolId,
       AuthParameters: {
         USERNAME: username,
         PASSWORD: password,
       },
     }),
   );
+
   if (!AuthenticationResult) {
     throw new Error('AuthenticationResult is undefined');
   }
+
   return AuthenticationResult;
 };
 
 /**
- * Create a new user in cognito, auto confirm it and return its credentials.
+ * Create a new user in cognito, auto confirm it and return credentials.
  */
 export const cognitoSignUp = async (params: {
   clientId: string;
@@ -51,23 +56,26 @@ export const cognitoSignUp = async (params: {
   const client = getCognitoClient(config);
 
   await client.send(
-    new SignUpCommand({
-      ClientId: clientId,
+    new AdminCreateUserCommand({
+      UserPoolId: userPoolId,
       Username: username,
-      Password: password,
+      DesiredDeliveryMediums: [],
       UserAttributes: attributes,
     }),
   );
 
   await client.send(
-    new AdminConfirmSignUpCommand({
-      Username: username,
+    new AdminSetUserPasswordCommand({
       UserPoolId: userPoolId,
+      Username: username,
+      Password: password,
+      Permanent: true,
     }),
   );
 
   return cognitoSignIn({
     clientId,
+    userPoolId,
     password,
     username,
     config,
