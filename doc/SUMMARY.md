@@ -22,4 +22,4 @@
 
 ## Cookbooks
 
-- [CDK](cookbooks/cdk.md)
+- [With the CDK](cookbooks/cdk.md)

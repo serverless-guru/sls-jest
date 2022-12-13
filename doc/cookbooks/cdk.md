@@ -1,20 +1,20 @@
 # Use with the CDK
 
-This sections shows how you can use `sls-jest` with the CDK.
+This section shows how you can use `sls-jest` with the CDK.
 
 ## Extracting resource references
 
-When writing tests, you need to access your resources. It can be the name of a DynamoDB table, an API Gateway endpoint url, the ARN of a Step Function state machine, etc.
+When writing tests, you often need to access your deployed resources. It can be the name of a DynamoDB table, an API Gateway endpoint url, the ARN of a Step Function state machine, etc.
 
 When those values are predictable, it is usually not an issue, but this this is not always the case. e.g. ARNs are not alays predictable, or if you let CloudFormation name your resources with a random name.
 
-The CDK has an `--outputs-file` parameter which prints the stack outputs in a file. You can use that to export the values that you needm and access them from `jest`.
+The CDK has an `--outputs-file` parameter which prints the stack outputs in a file. You can use that to export the values that you need, and access them from `jest`.
 
 Example:
 
 If you want to access a DynamoDB table name, you can do:
 
-```ts
+```typescript
 // myStack.ts
 const myTable = new Table(this, 'MyTable', {
   partitionKey: { name: 'pk', type: AttributeType.STRING },
@@ -46,9 +46,9 @@ Which genereates a file looking like this:
 
 You can now access your resource from `jest`.
 
-```ts
+```typescript
 import { truncateTable } from 'sls-jest';
-import resources from '.sls-jest/resources.json';
+import resources from './.sls-jest/resources.json';
 
 const myTable = resources.myStack.MyTableName;
 
