@@ -2,7 +2,7 @@
 
 ---
 description: >-
-This section shows how you can use `sls-jest` with the CDK.
+  This section shows how you can use `sls-jest` with the CDK.
 ---
 
 ## Extracting resource references
