@@ -23,4 +23,4 @@
 ## Cookbooks
 
 - [Github Actions](cookbooks/github-actions.md)
-- [With the CDK](cookbooks/cdk.md)
+- [CDK](cookbooks/cdk.md)
