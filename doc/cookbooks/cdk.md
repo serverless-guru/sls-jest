@@ -1,6 +1,11 @@
 # Use with the CDK
 
+---
+
+description: >-
 This section shows how you can use `sls-jest` with the CDK.
+
+---
 
 ## Extracting resource references
 
@@ -30,7 +35,7 @@ new CfnOutput(this, 'MyTableName', {
 Deploy:
 
 ```bash
-npx cdk deploy --all --outputs-file .sls-jest/resources.json
+cdk deploy --all --outputs-file .sls-jest/resources.json
 ```
 
 Which genereates a file looking like this:
