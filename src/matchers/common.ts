@@ -3,9 +3,10 @@ import {
   assertMatcherHelperInputType,
   IMatcherHelperInput,
 } from '../helpers/internal';
+import * as cognito from './cognito.internal';
 import * as dynamodb from './dynamodb.internal';
-import * as s3 from './s3.internal';
 import { MatcherFunction } from './internal';
+import * as s3 from './s3.internal';
 
 /**
  * Assert that the input element exists.
@@ -16,7 +17,7 @@ export const toExist: MatcherFunction = async function (
 ) {
   const item = assertMatcherHelperInputType(
     'toExist',
-    ['dynamodbItem', 's3Object'],
+    ['dynamodbItem', 's3Object', 'cognitoUser'],
     input,
   );
 
@@ -26,6 +27,8 @@ export const toExist: MatcherFunction = async function (
       return dynamodb.toExist.call(this, item);
     case 's3Object':
       return s3.toExist.call(this, item);
+    case 'cognitoUser':
+      return cognito.toExist.call(this, item);
   }
 };
 
@@ -39,7 +42,7 @@ export const toExistAndMatchObject: MatcherFunction = async function (
 ) {
   const item = assertMatcherHelperInputType(
     'toExistAndMatchObject',
-    ['dynamodbItem', 's3Object'],
+    ['dynamodbItem', 's3Object', 'cognitoUser'],
     input,
   );
 
@@ -49,6 +52,8 @@ export const toExistAndMatchObject: MatcherFunction = async function (
       return dynamodb.toExistAndMatchObject.call(this, item, expected);
     case 's3Object':
       return s3.toExistAndMatchObject.call(this, item, expected);
+    case 'cognitoUser':
+      return cognito.toExistAndMatchObject.call(this, item, expected);
   }
 };
 
@@ -62,7 +67,7 @@ export const toExistAndMatchSnapshot: MatcherFunction = async function (
 ) {
   const item = assertMatcherHelperInputType(
     'toExistAndMatchSnapshot',
-    ['dynamodbItem', 's3Object'],
+    ['dynamodbItem', 's3Object', 'cognitoUser'],
     input,
   );
 
@@ -72,6 +77,8 @@ export const toExistAndMatchSnapshot: MatcherFunction = async function (
       return dynamodb.toExistAndMatchSnapshot.call(this, item, ...rest);
     case 's3Object':
       return s3.toExistAndMatchSnapshot.call(this, item, ...rest);
+    case 'cognitoUser':
+      return cognito.toExistAndMatchSnapshot.call(this, item, ...rest);
   }
 };
 
@@ -85,7 +92,7 @@ export const toExistAndMatchInlineSnapshot: MatcherFunction = async function (
 ) {
   const item = assertMatcherHelperInputType(
     'toExistAndMatchInlineSnapshot',
-    ['dynamodbItem', 's3Object'],
+    ['dynamodbItem', 's3Object', 'cognitoUser'],
     input,
   );
 
@@ -95,5 +102,7 @@ export const toExistAndMatchInlineSnapshot: MatcherFunction = async function (
       return dynamodb.toExistAndMatchInlineSnapshot.call(this, item, ...rest);
     case 's3Object':
       return s3.toExistAndMatchInlineSnapshot.call(this, item, ...rest);
+    case 'cognitoUser':
+      return cognito.toExistAndMatchInlineSnapshot.call(this, item, ...rest);
   }
 };

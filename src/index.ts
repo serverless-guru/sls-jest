@@ -6,6 +6,7 @@ export * from './helpers';
 export * as matchers from './matchers';
 export * from './spies';
 export * from './utils/dynamodb';
+export * from './utils/cognito';
 
 // Note: we cannot use the internal IMatcherHelperInput type here
 // because it does not work for some reason.
@@ -78,6 +79,11 @@ declare global {
 
       // S3 Object matchers overload
       <T extends MatcherHelper<'s3Object'>>(
+        actual: T,
+      ): AndNot<ExistanceMatchers>;
+
+      // Cognito User matchers overload
+      <T extends MatcherHelper<'cognitoUser'>>(
         actual: T,
       ): AndNot<ExistanceMatchers>;
 

@@ -54,6 +54,7 @@
     "@aws-sdk/client-appsync": "^3.142.0",
     "@aws-sdk/client-cloudformation": "^3.162.0",
     "@aws-sdk/client-cloudwatch-logs": "^3.137.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.202.0",
     "@aws-sdk/client-dynamodb": "^3.137.0",
     "@aws-sdk/client-s3": "^3.169.0",
     "@aws-sdk/client-sqs": "^3.142.0",
