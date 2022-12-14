@@ -82,6 +82,11 @@ declare global {
         actual: T,
       ): AndNot<ExistanceMatchers>;
 
+      // Cognito User matchers overload
+      <T extends MatcherHelper<'cognitoUser'>>(
+        actual: T,
+      ): AndNot<ExistanceMatchers>;
+
       // EventBridgeSpy matchers overload
       <T extends EventBridgeSpy>(spy: T): AndNot<EventBridgeMatchers>;
     }
