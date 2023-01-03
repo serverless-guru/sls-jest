@@ -16,7 +16,7 @@ This helper creates a new spy for a given event bus. Parameters:
 
 Config:
 
-- `matcherDefaultTimeout`: The default timeout for event matchers, in milliseconds. Defaults to `10000`. This is the maximum time a matcher will wait until it determines whether the assertion succeeds or fails. Also see the [recommendations](#recommendations) below about timeouts.
+- `matcherDefaultTimeout`: The default timeout for event matchers, in milliseconds. Defaults to `10_000`. This is the maximum time a matcher will wait until it determines whether the assertion succeeds or fails. Also see the [recommendations](#recommendations) below about timeouts.
 
 **with the sqs adapter**:
 
