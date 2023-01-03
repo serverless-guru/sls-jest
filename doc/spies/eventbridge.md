@@ -16,21 +16,21 @@ This helper creates a new spy for a given event bus. Parameters:
 
 Config:
 
-- `matcherDefaultTimeout`: The default timeout for event matchers, in milliseconds. Defaults to `10_000`. This is the maximum time a matcher will wait until it determines whether the assertion succeeds or fails. Also see the [recommendations](#recommendations) below about timeouts.
+- `matcherDefaultTimeout`: The default timeout for event matchers, in milliseconds. Defaults to `10000`. This is the maximum time a matcher will wait until it determines whether the assertion succeeds or fails. Also see the [recommendations](#recommendations) below about timeouts.
 
 **with the sqs adapter**:
 
-- `waitTimeSeconds`: number, optional: The maximum polling time of the sqs poller (uses long polling). Defaults to `20`. Must be between `0` (use short polling) and `20`. The spie will run long polling cycles until the spie is [stopped](#spy.stop)
+- `waitTimeSeconds`: number, optional: The maximum polling time of the sqs poller (uses long polling). Defaults to `20`. Must be between `0` (use short polling) and `20`. The spie will run long polling cycles until the spy is [stopped](#spy.stop)
 - `clientConfig`: [SQSClientConfig](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-sqs/interfaces/sqsclientconfig.html), optional. Custom AWS SDK config.
 
 **with the cloudwatch adapter**:
 
-- `interval`: number, optional: The interval at which the spy will pull logs from the log group. Defaults: `2000`
+- `interval`: number, optional: The interval at which the spy will pull logs from the log group. Defaults to `2000`
 - `clientConfig`: [CloudWatchLogsClientConfig](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-cloudwatch-logs/interfaces/cloudwatchlogsclientconfig.html), optional. Custom AWS SDK config.
 
 ## Usage
 
-The simplest and more efficient way to use EventBridge spies is to create them at the very beginning of your tests. i.e.: in a `beforeAll()` hook at the top of your file or a `describe` block. The first time you create a spy for a given configuration combination (`adapter` and `eventBusName`), a new CloudFormation stack will be deployed automatically with the necessary resources. Further usage of the same spy will re-use the already deployed resources, even across several files.
+The simplest and most efficient way to use EventBridge spies is to create them at the very beginning of your tests. i.e.: in a `beforeAll()` hook at the top of your file or a `describe` block. The first time you create a spy for a given configuration combination (`adapter` and `eventBusName`), a new CloudFormation stack will be deployed automatically with the necessary resources. Further usage of the same spy will re-use the already deployed resources, even across several files.
 
 ```typescript
 let spy: EventBridgeSpy;
@@ -140,7 +140,7 @@ Cons:
 
 Pros:
 
-- By default, events are retained in the log group for 1 day. That allows you to go and check what events where received as you write your tests. This can help finding issues or adjust [timeouts](#recommendations) for example
+- By default, events are retained in the log group for 1 day. That allows you to go and check what events where received as you write your tests. This can help find issues or adjust [timeouts](#recommendations) for example
 
 Cons:
 
@@ -153,7 +153,7 @@ In practice, because of the asynchronous nature of EventBridge, it is hard to co
 **Always use random ids and assert on them**
 
 By using random ids and matching them in your test, you are avoiding false positive and false negative results.
-For example, here is a good example of a bad test:
+For example, here is a bad test:
 
 ```typescript
 it('should see an orderCreated event - use case 1', async () => {
@@ -175,7 +175,7 @@ it('should see an orderCreated event - use case 2', async () => {
 
 Matching only against the `detail-type` is not specific enough. The second test might see the event from the previous one and return successfully, when in fact no event was placed in that scenario.
 
-better:
+A better a test would be:
 
 ```typescript
 it('should see an orderCreated event - use case 1', async () => {
@@ -209,11 +209,11 @@ it('should see an orderCreated event - use case 2', async () => {
 
 **Use adequate timeouts**
 
-When matchers evaluate an assertion, they wait up to a certain amount of time until the assertion can either be resolved, in which case the matcher returns immediately, or it times out and evaluates the assertion with the data it has at that moment. Using too short timeouts can cause false negatives or positives as events that affect the result might arrive shortly after. On the other hand, using too-long timeouts can artificially slow down your test suite in some cases. Playing with different timeouts can reduce this inconvenience. Finding the right timeout may vary depending on your architecture and use case.
+When matchers evaluate an assertion, they wait up to a certain amount of time until the assertion can either be resolved, in which case the matcher returns immediately, or it times out and evaluates the assertion with the data it has at that moment. Using too short timeouts can cause false negatives or false positives as events that affect the result might arrive shortly after. On the other hand, using too-long timeouts can artificially slow down your test suite in some cases. Playing with different timeouts can reduce this inconvenience. Finding the right timeout may vary depending on your architecture and use case.
 
 Cases where a long timeout can slow down your tests:
 
-- `expect(spy).not.toHaveEventMatchingObject(...)`: The macher must wait the full timeout in order to ensure the event is not seen.
+- `expect(spy).not.toHaveEventMatchingObject(...)`: The matcher must wait the full timeout in order to ensure the event is not seen.
 
 - `expect(spy).toHaveEventMatchingObjectTimes(..., 2)`: The matcher must make sure that no more than 2 events are received.
 
