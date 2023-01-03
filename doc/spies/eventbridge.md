@@ -175,7 +175,7 @@ it('should see an orderCreated event - use case 2', async () => {
 
 Matching only against the `detail-type` is not specific enough. The second test might see the event from the previous one and return successfully, when in fact no event was placed in that scenario.
 
-A better a test would be:
+A better test would be:
 
 ```typescript
 it('should see an orderCreated event - use case 1', async () => {
