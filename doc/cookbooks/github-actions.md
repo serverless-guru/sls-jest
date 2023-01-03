@@ -5,7 +5,7 @@ description: >-
 
 # Deploy feauture ephemeral stacks
 
-You can use Github Actions to run your tests against an ephemeral stack each time you open a new Pul Request and push new code to it.
+You can use Github Actions to run your tests against an ephemeral stack each time you open a new Pull Request and push new code to it.
 
 ```yaml
 name: Deploy and run tests
@@ -45,7 +45,7 @@ jobs:
 
       # Deploy to a unique stack for each Pull Request
       - name: Deploy
-        run: sls deploy --stage ci${{ github.event.pull_request.number }} # or cdk deploy --all or whatever
+        run: sls deploy --stage ci${{ github.event.pull_request.number }} # or cdk deploy --all or a deploy command that makes sense for your stack
 
       # run tests
       - name: Integration tests
@@ -96,5 +96,5 @@ jobs:
         run: npx sls-jest destroy --tag ci${{ github.event.pull_request.number }}
 
       - name: Destroy stack
-        run: sls remove --stage ci${{ github.event.pull_request.number }} # or cdk destroy --all --force or whatever
+        run: sls remove --stage ci${{ github.event.pull_request.number }} # or cdk destroy --all --force or a remove/destroy command that makes sense for your stack
 ```

@@ -26,7 +26,7 @@ await expect(
 
 ### `toExistAndMatchObject<E>(expected: DeepPartial<E>)`
 
-Asserts that an item exists in the given table, and matches a subset of the properties of an object. It works similarely to jest's [toMatchObject](https://jestjs.io/docs/expect#tomatchobjectobject).
+Asserts that an item exists in the given table, and matches a subset of the properties of an object. It works similarly to jest's [toMatchObject](https://jestjs.io/docs/expect#tomatchobjectobject).
 
 ```typescript
 await expect(
@@ -43,7 +43,7 @@ await expect(
 
 ### `toExistAndMatchSnapshot(propertiesOrHint?: string, hint?: string)`
 
-Asserts that an item exists in the given table, and that it matches the most recent snapshot. It works similarely to jest's [toMatchSnapshot](https://jestjs.io/docs/expect#tomatchsnapshotpropertymatchers-hint).
+Asserts that an item exists in the given table, and that it matches the most recent snapshot. It works similarly to jest's [toMatchSnapshot](https://jestjs.io/docs/expect#tomatchsnapshotpropertymatchers-hint).
 
 ```typescript
 await expect(
@@ -58,7 +58,7 @@ await expect(
 
 ### `toExistAndMatchInlineSnapshot(propertiesOrHint?: string, hint?: string)`
 
-Asserts that an item exists in the given table, and that it matches the most recent inline snapshot. It works similarely to jest's [toMatchInlineSnapshot](https://jestjs.io/docs/expect#tomatchinlinesnapshotpropertymatchers-inlinesnapshot).
+Asserts that an item exists in the given table, and that it matches the most recent inline snapshot. It works similarly to jest's [toMatchInlineSnapshot](https://jestjs.io/docs/expect#tomatchinlinesnapshotpropertymatchers-inlinesnapshot).
 
 ```typescript
 await expect(
