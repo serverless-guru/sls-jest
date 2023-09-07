@@ -312,8 +312,14 @@ describe('Matchers', () => {
             },
           }),
         ).toExistAndMatchObject({
-          id: '456',
-          title: 'Play Fifa',
+          Username: existingUser,
+          Enabled: true,
+          UserAttributes: expect.arrayContaining([
+            {
+              Name: 'email',
+              Value: existingUser,
+            },
+          ]),
         });
       } catch (e) {
         expect(e).toMatchInlineSnapshot(
