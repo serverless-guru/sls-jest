@@ -90,10 +90,7 @@ export const deployStack = (params: {
     `config=${config}`,
   ];
 
-  const { error, status, stderr } = spawnSync('npx', args, {
-    // Run CDK in the context of the sls-jest
-    cwd: __dirname,
-  });
+  const { error, status, stderr } = spawnSync('npx', args);
 
   if (status !== 0 || error) {
     if (error) {
