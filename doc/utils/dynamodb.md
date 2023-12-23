@@ -31,7 +31,7 @@ Note: Under the hood, items are inserted [in batches](https://docs.aws.amazon.co
 
 Feeds several tables with the given data.
 
-`items` is an object of which the keys represent table names, and the values a `DynamoDBItemCollection`.
+The `items` parameter is an object of which the keys represent table names, and the values a `DynamoDBItemCollection`.
 
 ```typescript
 await feedTables({
@@ -66,7 +66,7 @@ Note: Under the hood, items are inserted [in batches](https://docs.aws.amazon.co
 
 Deletes all the items from a table. It is useful for cleaning up data between tests.
 
-`keys` represents the primary key (Partition Key and, optionally, the Sort Key). If not passed, `sls-jest` will try to infer it from the [table description](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html).
+`keys` represent the primary key (Partition Key and, optionally, the Sort Key). If not passed, `sls-jest` will try to infer it from the [table description](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html).
 
 example:
 
@@ -80,7 +80,7 @@ For TypeScript users, some types are also exported for your convenience.
 
 ### `DynamoDBItem`
 
-Represents a single DynaoDB item, represented as a plain JS object.
+Represents a single DynamoDB item, represented as a plain JS object.
 
 example:
 

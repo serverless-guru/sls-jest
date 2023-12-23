@@ -58,7 +58,7 @@ await expect(
 
 ### `toEvaluateToSnapshot(propertiesOrHint?: string, hint?: string)`
 
-Asserts that the evaluated template matches the most recent snapshot. It works similarely to jest's [toMatchSnapshot](https://jestjs.io/docs/expect#tomatchsnapshotpropertymatchers-hint).
+Asserts that the evaluated template matches the most recent snapshot. It works similarly to jest's [toMatchSnapshot](https://jestjs.io/docs/expect#tomatchsnapshotpropertymatchers-hint).
 
 ```typescript
 await expect(
@@ -75,7 +75,7 @@ await expect(
 
 ### `toEvaluateToInlineSnapshot(propertiesOrHint?: string, hint?: string)`
 
-Asserts that the evaluated template matches the most recent snapshot. It works similarely to jest's [toMatchInlineSnapshot](https://jestjs.io/docs/expect#tomatchinlinesnapshotpropertymatchers-inlinesnapshot).
+Asserts that the evaluated template matches the most recent snapshot. It works similarly to jest's [toMatchInlineSnapshot](https://jestjs.io/docs/expect#tomatchinlinesnapshotpropertymatchers-inlinesnapshot).
 
 ```typescript
 await expect(

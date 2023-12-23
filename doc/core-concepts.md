@@ -12,7 +12,7 @@ Basic validation is also done on the values that are passed in the helper functi
 
 - **Reuseability**
 
-Some matchers can be used with several sersources. e.g. You can do `expect(dynamodbItem(...)).toExist();` or `expect(s3Object(...)).toExist();`.
+Some matchers can be used with several resources. e.g. You can do `expect(dynamodbItem(...)).toExist();` or `expect(s3Object(...)).toExist();`.
 
 `sls-jest` uses those helpers to keep track of **what** you are intending to test and use the appropriate logic internally.
 
