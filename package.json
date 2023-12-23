@@ -23,6 +23,9 @@
   },
   "author": "Serverless Guru LLC",
   "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
     "@types/aws-lambda": "^8.10.101",
