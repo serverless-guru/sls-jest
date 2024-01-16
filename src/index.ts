@@ -34,12 +34,12 @@ declare global {
       toExistAndMatchObject<E extends object>(
         params: O.Partial<E, 'deep'>,
       ): Promise<void>;
-      toExistAndMatchSnapshot(
-        propertiesOrHint?: string,
+      toExistAndMatchSnapshot<E extends object>(
+        propertyMatchers?: O.Partial<E, 'deep'>,
         hint?: string,
       ): Promise<void>;
-      toExistAndMatchInlineSnapshot(
-        propertiesOrHint?: string,
+      toExistAndMatchInlineSnapshot<E extends object>(
+        propertyMatchers?: O.Partial<E, 'deep'>,
         hint?: string,
       ): Promise<void>;
     }
