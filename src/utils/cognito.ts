@@ -9,7 +9,7 @@ import {
 import { getCognitoClient } from './internal';
 
 /**
- * Get credentials for an existing user.
+ * Sign in a user in cognito and return its credentials.
  */
 export const cognitoSignIn = async (params: {
   clientId: string;
@@ -41,7 +41,7 @@ export const cognitoSignIn = async (params: {
 };
 
 /**
- * Create a new user in cognito, auto confirm it and return credentials.
+ * Create a new user in cognito, auto confirm it and return its credentials.
  */
 export const cognitoSignUp = async (params: {
   clientId: string;
