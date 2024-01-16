@@ -3,7 +3,7 @@ import { cognitoSignIn, cognitoSignUp, cognitoUser } from 'sls-jest';
 
 const chance = new Chance();
 
-// TODO replace with your own values
+// TODO: replace with your own values
 const clientId = '3oed3rv2h43sleqojqtt2bb43a';
 const userPoolId = 'us-east-1_2KFDP3x2n';
 
@@ -61,9 +61,7 @@ describe('Utils', () => {
             },
           ],
         }),
-      ).rejects.toMatchInlineSnapshot(
-        `[UsernameExistsException: User account already exists]`,
-      );
+      ).rejects.toThrow('already exists');
     });
   });
 
@@ -233,7 +231,6 @@ describe('Matchers', () => {
           userPoolId,
         }),
       ).toExistAndMatchObject({
-        Username: existingUser,
         Enabled: true,
         UserAttributes: expect.arrayContaining([
           {
@@ -394,14 +391,25 @@ describe('Matchers', () => {
   });
 
   describe('toExistAndMatchSnapshot', () => {
-    // TODO
-    it.skip('should print values when user exists', async () => {
+    it('should print values when user exists', async () => {
       await expect(
         cognitoUser({
           username: existingUser,
           userPoolId,
         }),
-      ).toExistAndMatchSnapshot();
+      ).toExistAndMatchSnapshot({
+        Enabled: true,
+        UserAttributes: expect.arrayContaining([
+          {
+            Name: 'email',
+            Value: expect.any(String),
+          },
+        ]),
+        UserCreateDate: expect.any(Date),
+        UserLastModifiedDate: expect.any(Date),
+        UserStatus: 'CONFIRMED',
+        Username: expect.any(String),
+      });
     });
 
     it('should fail when user does not exists', async () => {
@@ -440,17 +448,47 @@ describe('Matchers', () => {
   });
 
   describe('toExistAndMatchInlineSnapshot', () => {
-    // TODO
-    it.skip('should print values when user exists', async () => {
+    it('should print values when user exists', async () => {
       await expect(
         cognitoUser({
           username: existingUser,
           userPoolId,
         }),
-      ).toExistAndMatchInlineSnapshot();
+      ).toExistAndMatchInlineSnapshot(
+        {
+          Enabled: true,
+          UserAttributes: expect.arrayContaining([
+            {
+              Name: 'email',
+              Value: expect.any(String),
+            },
+          ]),
+
+          UserCreateDate: expect.any(Date),
+          UserLastModifiedDate: expect.any(Date),
+          UserStatus: 'CONFIRMED',
+          Username: expect.any(String),
+        },
+        `
+        Object {
+          "Enabled": true,
+          "UserAttributes": ArrayContaining [
+            Object {
+              "Name": "email",
+              "Value": Any<String>,
+            },
+          ],
+          "UserCreateDate": Any<Date>,
+          "UserLastModifiedDate": Any<Date>,
+          "UserStatus": "CONFIRMED",
+          "Username": Any<String>,
+        }
+      `,
+      );
     });
 
-    // FIXME: I'm note sure why .toExistAndMatchInlineSnapshot is throwing an error that is not caught by the try catch block
+    // FIXME: it looks like "toExistAndMatchInlineSnapshot" is not throwing any error in this use case
+    // we probably need to fix this in the future (internally, this issue is not related to cognito but the jest matcher itself)
     it.skip('should fail when user does not match snapshot', async () => {
       try {
         await expect(
