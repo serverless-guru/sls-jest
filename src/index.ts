@@ -32,6 +32,7 @@ declare global {
        * @param {string} snapshotName Optional snapshot name.
        */
       toEvaluateToSnapshot(snapshotName?: string): Promise<void>;
+
       /**
        * Asserts that the received AppSync resolver evaluation
        * matches the existing snapshot.
@@ -103,10 +104,7 @@ declare global {
       <T>(actual: IfAny<T, T, never>): JestMatchers<T>;
 
       // AppSync matchers overload
-      <T extends MatcherHelper<'appSyncMappingTemplate'>>(
-        actual: T,
-      ): AndNot<EvaluateMatchers>;
-      <T extends MatcherHelper<'appSyncResolver'>>(
+      <T extends MatcherHelper<'appSyncMappingTemplate' | 'appSyncResolver'>>(
         actual: T,
       ): AndNot<EvaluateMatchers>;
 

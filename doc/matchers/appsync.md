@@ -23,7 +23,7 @@ Use the `appSyncMappingTemplate` helper function to test VTL mapping templates.
 
 ### `toEvaluateTo<E>(expected: E)`
 
-Asserts that a mapping template or resolver evaluates to a given JSON object for a given context.
+Asserts that a mapping template or resolver evaluates to a given object for a given context.
 
 ```typescript
 // matching as a string
