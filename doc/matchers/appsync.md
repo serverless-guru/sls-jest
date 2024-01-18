@@ -6,7 +6,9 @@ A collection of matchers to test AWS AppSync mapping templates and JS resolvers.
 
 ### `appSyncResolver(input: AppSyncResolverInput)`
 
-- `code`: A string with the `APPSYNC_JS`` resolver code
+Use the `appSyncResolver` helper function to test JS resolvers.
+
+- `code`: A string with the `APPSYNC_JS` resolver code
 - `function`: The function to test. Must be `request` or `response`.
 - `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference-js.html) to be injected into the template
 

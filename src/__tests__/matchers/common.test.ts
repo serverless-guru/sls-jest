@@ -1,11 +1,6 @@
 import * as dynamodb from '../../matchers/dynamodb.internal';
 import * as s3 from '../../matchers/s3.internal';
-import {
-  appSyncMappingTemplate,
-  appSyncResolver,
-  dynamodbItem,
-  s3Object,
-} from '../../helpers';
+import { appSyncMappingTemplate, dynamodbItem, s3Object } from '../../helpers';
 import {
   toExist,
   toExistAndMatchObject,
