@@ -17,14 +17,51 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
     interface EvaluateMatchers {
-      toEvaluateTo<E extends object | string>(template: E): Promise<void>;
-      toEvaluateToSnapshot(
-        propertiesOrHint?: string,
-        hint?: string,
+      /**
+       * Asserts that the received AppSync resolver evaluation
+       * matches the expected object.
+       *
+       * @param {object} expected The expected object.
+       */
+      toEvaluateTo<E extends object>(expected: E): Promise<void>;
+
+      /**
+       * Asserts that the received AppSync resolver evaluation
+       * matches the existing snapshot.
+       *
+       * @param {string} snapshotName Optional snapshot name.
+       */
+      toEvaluateToSnapshot(snapshotName?: string): Promise<void>;
+
+      /**
+       * Asserts that the received AppSync resolver evaluation
+       * matches the existing snapshot.
+       *
+       * @param {object} propertyMatchers The snapshot properties.
+       * @param {string} snapshotName Optional snapshot name.
+       */
+      toEvaluateToSnapshot<U extends object>(
+        propertyMatchers: Partial<U>,
+        snapshotName?: string,
       ): Promise<void>;
-      toEvaluateToInlineSnapshot(
-        propertiesOrHint?: string,
-        hint?: string,
+
+      /**
+       * Asserts that the received AppSync resolver evaluation
+       * matches the inline snapshot.
+       *
+       * @param snapshot The expected snapshot.
+       */
+      toEvaluateToInlineSnapshot(snapshot?: string): Promise<void>;
+      /**
+       * Asserts that the received AppSync resolver evaluation
+       * matches the inline snapshot.
+       *
+       * @param {object} propertyMatchers The snapshot properties.
+       * @param {string} snapshot The expected snapshot.
+       */
+      toEvaluateToInlineSnapshot<U extends object>(
+        propertyMatchers: Partial<U>,
+        snapshot?: string,
       ): Promise<void>;
     }
 
@@ -67,7 +104,7 @@ declare global {
       <T>(actual: IfAny<T, T, never>): JestMatchers<T>;
 
       // AppSync matchers overload
-      <T extends MatcherHelper<'appSyncMappingTemplate'>>(
+      <T extends MatcherHelper<'appSyncMappingTemplate' | 'appSyncResolver'>>(
         actual: T,
       ): AndNot<EvaluateMatchers>;
 
