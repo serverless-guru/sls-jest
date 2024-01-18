@@ -144,7 +144,7 @@ describe('Matchers', () => {
       ).toExist();
     });
 
-    it('should fails when user does not exist in the user pool', async () => {
+    it('should fail when user does not exist in the user pool', async () => {
       try {
         await expect(
           cognitoUser({
