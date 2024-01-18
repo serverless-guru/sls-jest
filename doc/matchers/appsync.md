@@ -10,13 +10,13 @@ Use the `appSyncResolver` helper function to test JS resolvers.
 
 - `code`: The path to a file containing an `APPSYNC_JS` resolver code. The path can either be absolute, or relative to the working directory (`process.cwd()`).
 - `function`: The function to test. Must be `request` or `response`.
-- `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference-js.html) to be injected into the template
+- `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference-js.html) to be passed to the function
 
 ### `appSyncMappingTemplate(input: AppSyncMappingTemplateInput)`
 
 Use the `appSyncMappingTemplate` helper function to test VTL mapping templates.
 
-- `template`: The path to a file containing containing a mapping template. The path can either be absolute, or relative to the working directory (`process.cwd()`).
+- `template`: The path to a file containing a mapping template. The path can either be absolute, or relative to the working directory (`process.cwd()`).
 - `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference.html#accessing-the-context) to be injected into the template
 
 ## Matchers

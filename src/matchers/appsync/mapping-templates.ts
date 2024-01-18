@@ -41,7 +41,20 @@ const evaluateMappingTemplate = async (
     throw new Error('Received empty response from AppSync');
   }
 
-  return JSON.parse(received);
+  try {
+    const result = JSON.parse(received);
+    if (typeof result !== 'object') {
+      throw new Error(
+        `The AppSync resolver did not return an object: ${received}`,
+      );
+    }
+
+    return result;
+  } catch (e) {
+    throw new Error(
+      `The AppSync mapping template did not return valid JSON: ${received}`,
+    );
+  }
 };
 
 export const toEvaluateTo: MatcherFunction = async function (
