@@ -6,6 +6,7 @@ export * from './helpers';
 export * as matchers from './matchers';
 export * from './spies';
 export * from './utils/dynamodb';
+export * from './utils/cognito';
 
 // Note: we cannot use the internal IMatcherHelperInput type here
 // because it does not work for some reason.
@@ -65,18 +66,50 @@ declare global {
       ): Promise<void>;
     }
 
-    interface ExistanceMatchers {
+    interface ExistenceMatchers {
+      /**
+       * Asserts that the received value exists.
+       */
       toExist(): Promise<void>;
+
+      /**
+       * Asserts that the received value exists and matches the expected object.
+       * @param params //FIXME:
+       */
       toExistAndMatchObject<E extends object>(
         params: O.Partial<E, 'deep'>,
       ): Promise<void>;
-      toExistAndMatchSnapshot(
-        propertiesOrHint?: string,
-        hint?: string,
+
+      /**
+       * Asserts that the received value exists and matches the expected snapshot.
+       * @param {string} snapshotName Optional snapshot name.
+       */
+      toExistAndMatchSnapshot(snapshotName?: string): Promise<void>;
+
+      /**
+       * Asserts that the received value exists and matches the expected snapshot.
+       * @param {object} propertyMatchers The snapshot properties.
+       * @param {string} snapshotName Optional snapshot name.
+       */
+      toExistAndMatchSnapshot<U extends object>(
+        propertyMatchers: Partial<U>,
+        snapshotName?: string,
       ): Promise<void>;
-      toExistAndMatchInlineSnapshot(
-        propertiesOrHint?: string,
-        hint?: string,
+
+      /**
+       * Asserts that the received value exists and matches the expected snapshot.
+       * @param snapshot The expected snapshot.
+       */
+      toExistAndMatchInlineSnapshot(snapshot?: string): Promise<void>;
+
+      /**
+       * Asserts that the received value exists and matches the expected snapshot.
+       * @param {object} propertyMatchers The snapshot properties.
+       * @param {string} snapshotName Optional snapshot name.
+       */
+      toExistAndMatchInlineSnapshot<U extends object>(
+        propertyMatchers: Partial<U>,
+        snapshot?: string,
       ): Promise<void>;
     }
 
@@ -111,12 +144,17 @@ declare global {
       // DynamoDB matchers overload
       <T extends MatcherHelper<'dynamodbItem'>>(
         actual: T,
-      ): AndNot<ExistanceMatchers>;
+      ): AndNot<ExistenceMatchers>;
 
       // S3 Object matchers overload
       <T extends MatcherHelper<'s3Object'>>(
         actual: T,
-      ): AndNot<ExistanceMatchers>;
+      ): AndNot<ExistenceMatchers>;
+
+      // Cognito User matchers overload
+      <T extends MatcherHelper<'cognitoUser'>>(
+        actual: T,
+      ): AndNot<ExistenceMatchers>;
 
       // EventBridgeSpy matchers overload
       <T extends EventBridgeSpy>(spy: T): AndNot<EventBridgeMatchers>;

@@ -16,6 +16,7 @@ export type ItemType =
   | 'dynamodbItem'
   | 'appSyncMappingTemplate'
   | 'appSyncResolver'
+  | 'cognitoUser'
   | 's3Object';
 
 /**
