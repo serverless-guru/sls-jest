@@ -9,16 +9,7 @@ type DynamoDBGetItem = {
   };
 };
 
-const template = `
-#set($id=$ctx.args.id)
-{
-  "version" : "2017-02-28",
-  "operation" : "GetItem",
-  "key" : {
-      "pk" : $util.dynamodb.toDynamoDBJson($id)
-  }
-}
-`;
+const template = __dirname + '/assets/mapping-template.vtl';
 
 describe('Mapping Template', () => {
   it('should evaluate a template', async () => {
@@ -78,20 +69,7 @@ describe('Mapping Template', () => {
 });
 
 describe('JS resolvers', () => {
-  const code = `
-    import { get } from '@aws-appsync/utils/dynamodb';
-
-    export const request = (ctx) => {
-        return get({
-          key: {
-            id: ctx.args.id,
-          },
-        });
-    }
-    
-    export const response = (ctx) => {
-      return ctx.result;
-    }`;
+  const code = __dirname + '/assets/js-resolver.js';
 
   it('should evaluate a js resolver', async () => {
     await expect(

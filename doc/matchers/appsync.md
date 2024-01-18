@@ -8,7 +8,7 @@ A collection of matchers to test AWS AppSync mapping templates and JS resolvers.
 
 Use the `appSyncResolver` helper function to test JS resolvers.
 
-- `code`: A string with the `APPSYNC_JS` resolver code
+- `code`: The path to a file containing an `APPSYNC_JS` resolver code. The path can either be absolute, or relative to the working directory (`process.cwd()`).
 - `function`: The function to test. Must be `request` or `response`.
 - `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference-js.html) to be injected into the template
 
@@ -16,7 +16,7 @@ Use the `appSyncResolver` helper function to test JS resolvers.
 
 Use the `appSyncMappingTemplate` helper function to test VTL mapping templates.
 
-- `template`: A string representing the mapping template
+- `template`: The path to a file containing containing a mapping template. The path can either be absolute, or relative to the working directory (`process.cwd()`).
 - `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference.html#accessing-the-context) to be injected into the template
 
 ## Matchers
@@ -29,7 +29,7 @@ Asserts that a mapping template or resolver evaluates to a given JSON object for
 // matching as a string
 await expect(
   appSyncResolver({
-    code: fs.readFileSync('resolver.js', { encoding: 'utf8' }),
+    code: __dirname + '/resolver.js',
     function: 'request',
     context: {
       arguments: {

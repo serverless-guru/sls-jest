@@ -43,7 +43,8 @@ const appSyncMappingTemplateInputSchema: HelperZodSchema<
  *
  * Use it to evaluate a mapping template and assert on the result.
  *
- * @param {string} template The code of the VTL mapping template.
+ * @param {string} template The path to a file containing containing a mapping template.
+ * The path can either be absolute, or relative to the working directory (`process.cwd()`).
  * @param {object} context The context to pass to the resolver function.
  * @param {object} clientConfig An optional AppSync SDK client configuration.
  */
@@ -88,7 +89,8 @@ const appSyncResolverInputSchema: HelperZodSchema<typeof appSyncResolver> =
  *
  * Use it to evaluate a js resolver and assert on the result.
  *
- * @param {string} code The code of the resolver function.
+ * @param {string} code The path to a file containing an `APPSYNC_JS` resolver code.
+ * The path can either be absolute, or relative to the working directory (`process.cwd()`).
  * @param {string} function The function to evaluate. `request` or `response`.
  * @param {object} context The context to pass to the resolver function.
  * @param {object} clientConfig An optional AppSync SDK client configuration.

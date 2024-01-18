@@ -12,6 +12,9 @@ import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { AppSyncMappingTemplateInput } from '../../helpers/appsync';
 import { MatcherFunction } from '../internal';
 import { getAppSyncClient } from './client';
+import { promises } from 'fs';
+import path from 'path';
+const { readFile } = promises;
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -21,9 +24,15 @@ const evaluateMappingTemplate = async (
 ): Promise<object> => {
   const client = getAppSyncClient(input.clientConfig);
 
+  const filePath = input.template.startsWith('/')
+    ? input.template
+    : path.resolve(`${process.cwd()}/${input.template}`);
+
+  const code = await readFile(filePath, { encoding: 'utf8' });
+
   const { evaluationResult: received } = await client.send(
     new EvaluateMappingTemplateCommand({
-      template: input.template,
+      template: code,
       context: JSON.stringify(input.context),
     }),
   );

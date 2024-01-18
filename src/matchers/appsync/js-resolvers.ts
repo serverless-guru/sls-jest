@@ -12,6 +12,9 @@ import { equals, subsetEquality, iterableEquality } from '@jest/expect-utils';
 import { AppSyncResolverInput } from '../../helpers/appsync';
 import { MatcherFunction } from '../internal';
 import { getAppSyncClient } from './client';
+import { promises } from 'fs';
+import path from 'path';
+const { readFile } = promises;
 
 const EXPECTED_LABEL = 'Expected';
 const RECEIVED_LABEL = 'Received';
@@ -21,9 +24,15 @@ const evaluateResolver = async (
 ): Promise<string> => {
   const client = getAppSyncClient(input.clientConfig);
 
+  const filePath = input.code.startsWith('/')
+    ? input.code
+    : path.resolve(`${process.cwd()}/${input.template}`);
+
+  const code = await readFile(filePath, { encoding: 'utf8' });
+
   const { evaluationResult: received, error } = await client.send(
     new EvaluateCodeCommand({
-      code: input.code,
+      code,
       function: input.function,
       runtime: {
         name: RuntimeName.APPSYNC_JS,
