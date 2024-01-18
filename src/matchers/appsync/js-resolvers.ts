@@ -26,7 +26,7 @@ const evaluateResolver = async (
 
   const filePath = input.code.startsWith('/')
     ? input.code
-    : path.resolve(`${process.cwd()}/${input.template}`);
+    : path.resolve(`${process.cwd()}/${input.code}`);
 
   const code = await readFile(filePath, { encoding: 'utf8' });
 
