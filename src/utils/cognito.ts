@@ -1,5 +1,6 @@
 import {
   AdminCreateUserCommand,
+  AdminDeleteUserCommand,
   AdminInitiateAuthCommand,
   AdminSetUserPasswordCommand,
   AttributeType,
@@ -80,4 +81,23 @@ export const cognitoSignUp = async (params: {
     username,
     config,
   });
+};
+
+/**
+ * Delete a user in cognito.
+ */
+export const cognitoDeleteUser = async (params: {
+  userPoolId: string;
+  username: string;
+  config?: CognitoIdentityProviderClientConfig;
+}): Promise<void> => {
+  const { userPoolId, username, config } = params;
+  const client = getCognitoClient(config);
+
+  await client.send(
+    new AdminDeleteUserCommand({
+      UserPoolId: userPoolId,
+      Username: username,
+    }),
+  );
 };
