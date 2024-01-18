@@ -1,4 +1,5 @@
-import { appSyncMappingTemplate } from 'sls-jest';
+import { DynamoDBGetItemRequest } from '@aws-appsync/utils';
+import { appSyncMappingTemplate, appSyncResolver } from 'sls-jest';
 
 type DynamoDBGetItem = {
   version: string;
@@ -20,32 +21,7 @@ const template = `
 `;
 
 describe('Mapping Template', () => {
-  it('should evaluate a template string', async () => {
-    const expected = `
-{
-  "version" : "2017-02-28",
-  "operation" : "GetItem",
-  "key" : {
-      "pk" : {"S":"123"}
-  }
-}
-`;
-
-    // test that the template evaluates to the expected value as a string
-    await expect(
-      appSyncMappingTemplate({
-        template,
-        context: {
-          arguments: {
-            id: '123',
-          },
-        },
-      }),
-    ).toEvaluateTo(expected);
-  });
-
-  it('should evaluate a template object', async () => {
-    // test that the template evaluates to the expected value as an object
+  it('should evaluate a template', async () => {
     await expect(
       appSyncMappingTemplate({
         template,
@@ -64,9 +40,7 @@ describe('Mapping Template', () => {
     });
   });
 
-  it('should evaluate a template snapshot as object', async () => {
-    // test that the template evaluates to the expected snapshot
-    // if the snapshot evaluates to an object, it is parsed before being saved
+  it('should evaluate a template snapshot', async () => {
     await expect(
       appSyncMappingTemplate({
         template,
@@ -79,9 +53,7 @@ describe('Mapping Template', () => {
     ).toEvaluateToSnapshot();
   });
 
-  it('should evaluate a template inline snapshot as object', async () => {
-    // test that the template evaluates to the expected inline snapshot
-    // if the snapshot evaluates to an object, it is parsed before being saved
+  it('should evaluate a template inline snapshot', async () => {
     await expect(
       appSyncMappingTemplate({
         template,
@@ -103,32 +75,96 @@ describe('Mapping Template', () => {
       }
     `);
   });
+});
 
-  it('should evaluate a template snapshot as string', async () => {
-    // test that the template evaluates to the expected snapshot
+describe('JS resolvers', () => {
+  const code = `
+    import { get } from '@aws-appsync/utils/dynamodb';
+
+    export const request = (ctx) => {
+        return get({
+          key: {
+            id: ctx.args.id,
+          },
+        });
+    }
+    
+    export const response = (ctx) => {
+      return ctx.result;
+    }`;
+
+  it('should evaluate a js resolver', async () => {
     await expect(
-      appSyncMappingTemplate({
-        template: 'hello ${ctx.args.id}',
+      appSyncResolver({
+        code,
+        function: 'request',
         context: {
           arguments: {
-            id: '456',
+            id: '123',
+          },
+        },
+      }),
+    ).toEvaluateTo<DynamoDBGetItemRequest>({
+      operation: 'GetItem',
+      key: {
+        id: { S: '123' },
+      },
+    });
+
+    await expect(
+      appSyncResolver({
+        code,
+        function: 'response',
+        context: {
+          arguments: {
+            id: '123',
+          },
+          result: {
+            id: '123',
+            name: 'test',
+          },
+        },
+      }),
+    ).toEvaluateTo({
+      id: '123',
+      name: 'test',
+    });
+  });
+
+  it('should evaluate a js resolver with snapshot', async () => {
+    await expect(
+      appSyncResolver({
+        code,
+        function: 'request',
+        context: {
+          arguments: {
+            id: '123',
           },
         },
       }),
     ).toEvaluateToSnapshot();
   });
 
-  it('should evaluate a template inline snapshot', async () => {
-    // test that the template evaluates to the expected inline snapshot
+  it('should evaluate a js resolver inline snapshot', async () => {
     await expect(
-      appSyncMappingTemplate({
-        template: 'hello ${ctx.args.id}',
+      appSyncResolver({
+        code,
+        function: 'request',
         context: {
           arguments: {
             id: '789',
           },
         },
       }),
-    ).toEvaluateToInlineSnapshot(`"hello 789"`);
+    ).toEvaluateToInlineSnapshot(`
+      Object {
+        "key": Object {
+          "id": Object {
+            "S": "789",
+          },
+        },
+        "operation": "GetItem",
+      }
+    `);
   });
 });

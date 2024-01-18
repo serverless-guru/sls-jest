@@ -17,7 +17,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
     interface EvaluateMatchers {
-      toEvaluateTo<E extends object | string>(template: E): Promise<void>;
+      toEvaluateTo<E extends object>(template: E): Promise<void>;
       toEvaluateToSnapshot(
         propertiesOrHint?: string,
         hint?: string,
@@ -68,6 +68,9 @@ declare global {
 
       // AppSync matchers overload
       <T extends MatcherHelper<'appSyncMappingTemplate'>>(
+        actual: T,
+      ): AndNot<EvaluateMatchers>;
+      <T extends MatcherHelper<'appSyncResolver'>>(
         actual: T,
       ): AndNot<EvaluateMatchers>;
 
