@@ -4,17 +4,17 @@ A collection of matchers to test AWS AppSync mapping templates and JS resolvers.
 
 ## Helper Functions
 
+### `appSyncResolver(input: AppSyncResolverInput)`
+
+- `code`: A string with the `APPSYNC_JS`` resolver code
+- `function`: The function to test. Must be `request` or `response`.
+- `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference-js.html) to be injected into the template
+
 ### `appSyncMappingTemplate(input: AppSyncMappingTemplateInput)`
 
 Use the `appSyncMappingTemplate` helper function to test VTL mapping templates.
 
 - `template`: A string representing the mapping template
-- `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference.html#accessing-the-context) to be injected into the template
-
-### `appSyncMappingTemplate(input: AppSyncMappingTemplateInput)`
-
-- `code`: A string with the APPSYNC_JS resolver code
-- `function`: The function to test. Must be `request`, or `response`.
 - `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference.html#accessing-the-context) to be injected into the template
 
 ## Matchers
