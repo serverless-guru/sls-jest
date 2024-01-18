@@ -68,7 +68,7 @@ export const toExistAndMatchObject = withRetry(async function (
   const client = getCognitoClient(clientConfig);
 
   try {
-    const { $metadata, ...received } = await client.send(
+    const { $metadata: _, ...received } = await client.send(
       new AdminGetUserCommand({
         UserPoolId: userPoolId,
         Username: username,
@@ -119,7 +119,7 @@ export const toExistAndMatchSnapshot = withRetry(async function (
 
   const client = getCognitoClient(clientConfig);
   try {
-    const { $metadata, ...received } = await client.send(
+    const { $metadata: _, ...received } = await client.send(
       new AdminGetUserCommand({
         UserPoolId: userPoolId,
         Username: username,
@@ -158,7 +158,7 @@ export const toExistAndMatchInlineSnapshot = withRetry(async function (
   const client = getCognitoClient(clientConfig);
 
   try {
-    const { $metadata, ...received } = await client.send(
+    const { $metadata: _, ...received } = await client.send(
       new AdminGetUserCommand({
         UserPoolId: userPoolId,
         Username: username,
