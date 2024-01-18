@@ -29,7 +29,7 @@ declare global {
       ): Promise<void>;
     }
 
-    interface ExistanceMatchers {
+    interface ExistenceMatchers {
       toExist(): Promise<void>;
       toExistAndMatchObject<E extends object>(
         params: O.Partial<E, 'deep'>,
@@ -75,17 +75,17 @@ declare global {
       // DynamoDB matchers overload
       <T extends MatcherHelper<'dynamodbItem'>>(
         actual: T,
-      ): AndNot<ExistanceMatchers>;
+      ): AndNot<ExistenceMatchers>;
 
       // S3 Object matchers overload
       <T extends MatcherHelper<'s3Object'>>(
         actual: T,
-      ): AndNot<ExistanceMatchers>;
+      ): AndNot<ExistenceMatchers>;
 
       // Cognito User matchers overload
       <T extends MatcherHelper<'cognitoUser'>>(
         actual: T,
-      ): AndNot<ExistanceMatchers>;
+      ): AndNot<ExistenceMatchers>;
 
       // EventBridgeSpy matchers overload
       <T extends EventBridgeSpy>(spy: T): AndNot<EventBridgeMatchers>;
