@@ -27,6 +27,7 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
+    "@aws-appsync/utils": "^1.6.0",
     "@tsconfig/node20": "^20.1.2",
     "@types/aws-lambda": "^8.10.101",
     "@types/command-line-args": "^5.2.0",

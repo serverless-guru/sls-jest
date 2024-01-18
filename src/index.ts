@@ -137,7 +137,7 @@ declare global {
       <T>(actual: IfAny<T, T, never>): JestMatchers<T>;
 
       // AppSync matchers overload
-      <T extends MatcherHelper<'appSyncMappingTemplate'>>(
+      <T extends MatcherHelper<'appSyncMappingTemplate' | 'appSyncResolver'>>(
         actual: T,
       ): AndNot<EvaluateMatchers>;
 

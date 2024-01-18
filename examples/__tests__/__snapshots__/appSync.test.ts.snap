@@ -1,6 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Mapping Template should evaluate a template snapshot as object 1`] = `
+exports[`JS resolvers should evaluate a js resolver with snapshot 1`] = `
+Object {
+  "key": Object {
+    "id": Object {
+      "S": "123",
+    },
+  },
+  "operation": "GetItem",
+}
+`;
+
+exports[`Mapping Template should evaluate a template snapshot 1`] = `
 Object {
   "key": Object {
     "pk": Object {
@@ -11,5 +22,3 @@ Object {
   "version": "2017-02-28",
 }
 `;
-
-exports[`Mapping Template should evaluate a template snapshot as string 1`] = `"hello 456"`;
