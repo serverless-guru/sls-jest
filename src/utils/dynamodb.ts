@@ -16,7 +16,7 @@ export type DynamoDBItemCollection =
  * Feed a table with items
  *
  * @param {string} tableName The table name
- * @param {DynamoDBItemCollection} items The items to feed the table with
+ * @param {DynamoDBItemCollection} items The items to feed the table with. {@link DynamoDBItemCollection}
  */
 export const feedTable = async (
   tableName: string,
@@ -46,7 +46,7 @@ export const feedTable = async (
 /**
  * Feed multiple tables with items
  *
- * @param {Record<string, DynamoDBItemCollection>} items A Key-Value pair of table name and items to insert
+ * @param {Record<string, DynamoDBItemCollection>} items A Key-Value pair of table name and items to insert. (@link DynamoDBItemCollection)
  */
 export const feedTables = async (items: {
   [tableName: string]: DynamoDBItemCollection;
