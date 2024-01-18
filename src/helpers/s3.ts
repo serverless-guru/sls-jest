@@ -2,7 +2,7 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { z } from 'zod';
 import {
   HelperZodSchema,
-  RetriableMatcherHelper,
+  RetryableMatcherHelper,
   assertMatcherHelperInputValue,
 } from './internal';
 
@@ -30,7 +30,7 @@ const s3ObjectInputSchema: HelperZodSchema<typeof s3Object> = z.object({
 /**
  * S3 Object helper
  */
-export const s3Object: RetriableMatcherHelper<'s3Object', S3ObjectInput> = (
+export const s3Object: RetryableMatcherHelper<'s3Object', S3ObjectInput> = (
   input,
 ) => {
   assertMatcherHelperInputValue('s3Object', s3ObjectInputSchema, input);
