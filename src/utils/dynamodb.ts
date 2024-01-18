@@ -12,6 +12,12 @@ export type DynamoDBItemCollection =
       [itemName: string]: DynamoDBItem | DynamoDBItem[];
     };
 
+/**
+ * Feed a table with items
+ *
+ * @param {string} tableName The table name
+ * @param {DynamoDBItemCollection} items The items to feed the table with
+ */
 export const feedTable = async (
   tableName: string,
   items: DynamoDBItemCollection,
@@ -37,6 +43,11 @@ export const feedTable = async (
   }
 };
 
+/**
+ * Feed multiple tables with items
+ *
+ * @param {Record<string, DynamoDBItemCollection>} items A Key-Value pair of table name and items to insert
+ */
 export const feedTables = async (items: {
   [tableName: string]: DynamoDBItemCollection;
 }) => {
@@ -115,6 +126,13 @@ const getTableKeys = async (tableName: string) => {
   return tableKeys[tableName];
 };
 
+/**
+ * Truncate a DynamoDB table
+ *
+ * @param {string} tableName The table name
+ * @param {string[]} keys Optional. They attribute names of the table keys (PK and optional SK).
+ * If not provided, the keys will be inferred from the table schema.
+ */
 export const truncateTable = async (tableName: string, keys?: string[]) => {
   const client = getDynamoDBDocumentClient();
   const key = keys ?? (await getTableKeys(tableName));

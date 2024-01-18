@@ -74,10 +74,11 @@ declare global {
 
       /**
        * Asserts that the received value exists and matches the expected object.
-       * @param params //FIXME:
+       *
+       * @param {object} expected The expected object.
        */
       toExistAndMatchObject<E extends object>(
-        params: O.Partial<E, 'deep'>,
+        expected: O.Partial<E, 'deep'>,
       ): Promise<void>;
 
       /**
@@ -114,9 +115,23 @@ declare global {
     }
 
     interface EventBridgeMatchers {
+      /**
+       * Asserts the the EventBridge spy has received an
+       * event matching the expected object.
+       *
+       * @param {object} expected The expected object.
+       */
       toHaveEventMatchingObject<TDetailType extends string, TDetail>(
         expected: O.Partial<EventBridgeEvent<TDetailType, TDetail>, 'deep'>,
       ): Promise<void>;
+
+      /**
+       * Asserts the the EventBridge spy has received an
+       * event matching the expected object a certain number of times.
+       *
+       * @param {object} expected The expected object.
+       * @param {number} times The (exact) number of times the event should have been received.
+       */
       toHaveEventMatchingObjectTimes<TDetailType extends string, TDetail>(
         expected: O.Partial<EventBridgeEvent<TDetailType, TDetail>, 'deep'>,
         times: number,
@@ -136,7 +151,7 @@ declare global {
       // or the "default" `any` matcher from jest.
       <T>(actual: IfAny<T, T, never>): JestMatchers<T>;
 
-      // AppSync matchers overload
+      // AppSync resolver matchers overload
       <T extends MatcherHelper<'appSyncMappingTemplate' | 'appSyncResolver'>>(
         actual: T,
       ): AndNot<EvaluateMatchers>;

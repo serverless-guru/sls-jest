@@ -11,6 +11,12 @@ import { getCognitoClient } from './internal';
 
 /**
  * Sign in a user in cognito and return its credentials.
+ *
+ * @param {string} clientId The cognito user pool client id.
+ * @param {string} userPoolId The cognito user pool id.
+ * @param {string} username The cognito user username.
+ * @param {string} password The cognito user password.
+ * @param {CognitoIdentityProviderClientConfig} config An optional cognito client configuration.
  */
 export const cognitoSignIn = async (params: {
   clientId: string;
@@ -43,6 +49,14 @@ export const cognitoSignIn = async (params: {
 
 /**
  * Create a new user in cognito, auto confirm it and return its credentials.
+ *
+ * @param {string} clientId The cognito user pool client id.
+ * @param {string} userPoolId The cognito user pool id.
+ * @param {string} username The cognito user username.
+ * @param {string} password The cognito user password.
+ * @param {AttributeType[]} attributes The cognito user attributes.
+ * @param {CognitoIdentityProviderClientConfig} config An optional cognito client configuration.
+ *
  */
 export const cognitoSignUp = async (params: {
   clientId: string;
@@ -85,6 +99,10 @@ export const cognitoSignUp = async (params: {
 
 /**
  * Delete a user in cognito.
+ *
+ * @param {string} userPoolId The cognito user pool id.
+ * @param {string} username The cognito user username.
+ * @param {CognitoIdentityProviderClientConfig} config An optional cognito client configuration.
  */
 export const cognitoDeleteUser = async (params: {
   userPoolId: string;

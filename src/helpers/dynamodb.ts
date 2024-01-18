@@ -3,12 +3,16 @@ import { GetCommandInput } from '@aws-sdk/lib-dynamodb';
 import { z } from 'zod';
 import {
   HelperZodSchema,
-  RetryableMatcherHelper,
+  RetriableMatcherHelper,
   assertMatcherHelperInputValue,
 } from './internal';
 
 /**
  * DynamoDB Item helper input
+ *
+ * @param {string} tableName The DynamoDB table name.
+ * @param {object} key The DynamoDB item key.
+ * @param {object} clientConfig An optional DynamoDB SDK client configuration.
  */
 export type DynamodbItemInput = {
   tableName: string;
@@ -27,7 +31,7 @@ const dynamodbItemInputSchema: HelperZodSchema<typeof dynamodbItem> = z.object({
 /**
  * DynamoDB Item helper
  */
-export const dynamodbItem: RetryableMatcherHelper<
+export const dynamodbItem: RetriableMatcherHelper<
   'dynamodbItem',
   DynamodbItemInput
 > = (input) => {

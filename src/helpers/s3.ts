@@ -2,12 +2,16 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { z } from 'zod';
 import {
   HelperZodSchema,
-  RetryableMatcherHelper,
+  RetriableMatcherHelper,
   assertMatcherHelperInputValue,
 } from './internal';
 
 /**
  * S3 Object helper input
+ *
+ * @param {string} bucketName The S3 bucket name.
+ * @param {string} key The S3 object key.
+ * @param {object} clientConfig An optional S3 SDK client configuration.
  */
 export type S3ObjectInput = {
   bucketName: string;
@@ -26,7 +30,7 @@ const s3ObjectInputSchema: HelperZodSchema<typeof s3Object> = z.object({
 /**
  * S3 Object helper
  */
-export const s3Object: RetryableMatcherHelper<'s3Object', S3ObjectInput> = (
+export const s3Object: RetriableMatcherHelper<'s3Object', S3ObjectInput> = (
   input,
 ) => {
   assertMatcherHelperInputValue('s3Object', s3ObjectInputSchema, input);
