@@ -61,7 +61,7 @@ const appSyncMappingTemplateInputSchema: HelperZodSchema<
  * @example
  *
  * expect(appSyncMappingTemplate({
- *   template: 'src/resolvers/request.vtl',
+ *   template: 'src/resolvers/Query.getUser.request.vtl',
  *   context: {
  *     arguments: {
  *       id: '123'
@@ -133,7 +133,7 @@ const appSyncResolverInputSchema: HelperZodSchema<typeof appSyncResolver> =
  * @example
  *
  * expect(appSyncResolver({
- *   code: 'src/resolvers/request.js',
+ *   code: 'src/resolvers/Query.getUser.js',
  *   function: 'request',
  *   context: {
  *     arguments: {

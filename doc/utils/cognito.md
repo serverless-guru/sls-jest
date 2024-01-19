@@ -48,7 +48,7 @@ The returned value is of type [AuthenticationResultType](https://docs.aws.amazon
 
 ### `cognitoDeleteUser`
 
-Deletes a user in cognito.
+Delete a user in cognito.
 
 ```typescript
 await cognitoDeleteUser({

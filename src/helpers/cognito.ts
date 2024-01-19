@@ -42,8 +42,8 @@ const cognitoUserInputSchema: HelperZodSchema<typeof cognitoUser> = z.object({
  * @example
  *
  * expect(cognitoUser({
- *  userPoolId: 'us-east-1_123456789',
- *  username: 'john'
+ *   userPoolId: 'us-east-1_123456789',
+ *   username: 'john'
  * })).toExist();
  */
 export const cognitoUser: RetryableMatcherHelper<
