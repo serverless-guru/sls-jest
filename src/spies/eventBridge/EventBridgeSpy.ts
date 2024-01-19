@@ -35,6 +35,11 @@ export class EventBridgeSpy {
     this.subject.next(this.events);
   }
 
+  /**
+   * Returns a promise that resolves when the passed matcher function returns true.
+   *
+   * This method is used by matchers. You should probably never use this directly.
+   */
   awaitEvents(
     matcher: EventMatcher,
     config?: EventBridgeMatcherOptions,
@@ -55,12 +60,34 @@ export class EventBridgeSpy {
     });
   }
 
+  /**
+   * Resets the spy and removes all the events that have been captured.
+   *
+   * Use this method in an `afterEach` block.
+   *
+   * @example
+   *
+   * afterEach(() => {
+   *   spy.reset();
+   * });
+   */
   reset() {
     this.events = [];
     this.subject.complete();
     this.subject = new BehaviorSubject(this.events);
   }
 
+  /**
+   * Stop spying on the EventBridge bus.
+   *
+   * Use this method in an `afterAll` block.
+   *
+   * @example
+   *
+   * afterAll(async () => {
+   *   await spy.stop();
+   * });
+   */
   async stop() {
     await this.stopPolling();
     this.reset();

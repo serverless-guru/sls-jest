@@ -33,7 +33,7 @@ const s3ObjectInputSchema: HelperZodSchema<typeof s3Object> = z.object({
 });
 
 /**
- * Helper function that represents an S3 Object.
+ * Helper function that describes an S3 Object to test.
  *
  * Use with {@link expect} and any compatible matcher.
  * @see https://serverlessguru.gitbook.io/sls-jest/matchers/s3

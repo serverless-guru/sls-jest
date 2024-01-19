@@ -33,7 +33,7 @@ const cognitoUserInputSchema: HelperZodSchema<typeof cognitoUser> = z.object({
 });
 
 /**
- * Helper function that represents a Cognito User.
+ * Helper function that describes a Cognito User to test.
  *
  * Use with {@link expect} and any compatible matcher.
  *

@@ -34,8 +34,10 @@ export type EventBridgeSpyParams = {
  *
  * @example
  *
- * const spy = await eventBridgeSpy({
- *  eventBusName: 'default',
+ * let spy: EventBridgeSpy;
+ *
+ * beforeAll(async () => {
+ *   spy = await eventBridgeSpy(config);
  * });
  */
 export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {

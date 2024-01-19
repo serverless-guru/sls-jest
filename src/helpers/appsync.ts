@@ -51,7 +51,7 @@ const appSyncMappingTemplateInputSchema: HelperZodSchema<
 });
 
 /**
- * Helper that represents an AppSync mapping template.
+ * Helper function to describe an AppSync mapping template to test.
  *
  * Use with {@link expect} and any compatible matcher.
  * @see https://serverlessguru.gitbook.io/sls-jest/matchers/appsync
@@ -123,7 +123,7 @@ const appSyncResolverInputSchema: HelperZodSchema<typeof appSyncResolver> =
   });
 
 /**
- * Helper that represents an AppSync js resolver.
+ * Helper function that describes an AppSync js resolver to test.
  *
  * Use with {@link expect} and any compatible matcher.
  * @see https://serverlessguru.gitbook.io/sls-jest/matchers/appsync

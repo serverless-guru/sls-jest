@@ -34,7 +34,7 @@ const dynamodbItemInputSchema: HelperZodSchema<typeof dynamodbItem> = z.object({
 });
 
 /**
- * Helper function that represents a DynamoDB Item.
+ * Helper function that describes a DynamoDB Item to test.
  *
  * Use with {@link expect} and any compatible matcher.
  * @see https://serverlessguru.gitbook.io/sls-jest/matchers/dynamodb
