@@ -17,15 +17,21 @@ export type EventBridgeSpyConfig = {
  * A basic class for spying on EventBridge events.
  */
 export class EventBridgeSpy {
-  events: EventBridgeEvent<string, unknown>[] = [];
-  subject: BehaviorSubject<EventBridgeEvent<string, unknown>[]>;
-  matcherTimeout: number;
+  protected events: EventBridgeEvent<string, unknown>[] = [];
+  protected subject: BehaviorSubject<EventBridgeEvent<string, unknown>[]>;
+  protected matcherTimeout: number;
 
   constructor(private config: EventBridgeSpyConfig = {}) {
     this.subject = new BehaviorSubject(this.events);
     this.matcherTimeout = config.matcherDefaultTimeout ?? 10000;
   }
 
+  /**
+   * Start spying on the EventBridge bus.
+   *
+   * This method is called automatically by the `eventBridgeSpy` helper.
+   * You should never call this method directly.
+   */
   async startPolling() {
     throw new Error('Not implemented. Implement this in a child class.');
   }

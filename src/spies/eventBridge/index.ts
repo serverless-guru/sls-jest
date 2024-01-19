@@ -30,6 +30,10 @@ export type EventBridgeSpyParams = {
  * Use it before your tests to spy on EventBridge events,
  * usually in a `beforeAll` block.
  *
+ * The first time it is called, this function will create a CloudFormation stack
+ * with the resources needed to spy on the specified EventBridge bus.
+ * On subsequent calls, it will reuse the existing stack.
+ *
  * Then use the spy with {@link expect} and any compatible matcher.
  * @see https://serverlessguru.gitbook.io/sls-jest/matchers/eventbridge
  *
