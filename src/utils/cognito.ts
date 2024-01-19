@@ -117,7 +117,7 @@ export const cognitoSignUp = async (
   });
 };
 
-export type CognitoUserInput = {
+export type DeleteCognitoUserInput = {
   /**
    * The cognito user pool id.
    */
@@ -135,10 +135,10 @@ export type CognitoUserInput = {
 /**
  * Delete a user in cognito.
  *
- * @param input {@link CognitoUserInput}
+ * @param input {@link DeleteCognitoUserInput}
  */
 export const cognitoDeleteUser = async (
-  input: CognitoUserInput,
+  input: DeleteCognitoUserInput,
 ): Promise<void> => {
   const { userPoolId, username, clientConfig } = input;
   const client = getCognitoClient(clientConfig);

@@ -1,10 +1,5 @@
 import { Chance } from 'chance';
-import {
-  CognitoUserInput,
-  cognitoSignIn,
-  cognitoSignUp,
-  cognitoUser,
-} from 'sls-jest';
+import { cognitoSignIn, cognitoSignUp, cognitoUser } from 'sls-jest';
 
 const chance = new Chance();
 

@@ -30,11 +30,11 @@ Asserts that a user exists in the given user pool, and matches a subset of the p
 await expect(
   cognitoUser({
     userPoolId: 'my-pool',
-    username: 'user-1'
+    username: 'user-1',
   }),
 ).toExistAndMatchObject({
   Enabled: true,
-  Username: 'user-1'
+  Username: 'user-1',
 });
 ```
 
@@ -46,7 +46,7 @@ Asserts that a user exists in the given user pool, and that it matches the most 
 await expect(
   cognitoUser({
     userPoolId: 'my-pool',
-    username: 'user-1'
+    username: 'user-1',
   }),
 ).toExistAndMatchSnapshot();
 ```
@@ -56,11 +56,10 @@ await expect(
 Asserts that a user exists in the given user pool, and that it matches the most recent inline snapshot. It works similarly to jest's [toMatchInlineSnapshot](https://jestjs.io/docs/expect#tomatchinlinesnapshotpropertymatchers-inlinesnapshot).
 
 ```typescript
-
 await expect(
   cognitoUser({
     userPoolId: 'my-pool',
-    username: 'user-1'
+    username: 'user-1',
   }),
 ).toExistAndMatchInlineSnapshot(
   {
