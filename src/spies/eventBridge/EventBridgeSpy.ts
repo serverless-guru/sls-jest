@@ -62,6 +62,7 @@ export class EventBridgeSpy {
 
   /**
    * Resets the spy and removes all the events that have been captured.
+   * This will avoid mixing events from different tests.
    *
    * Use this method in an `afterEach` block.
    *
@@ -80,7 +81,8 @@ export class EventBridgeSpy {
   /**
    * Stop spying on the EventBridge bus.
    *
-   * Use this method in an `afterAll` block.
+   * You should always call this method at the end of your tests,
+   * usually in an `afterAll` block.
    *
    * @example
    *

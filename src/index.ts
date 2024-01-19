@@ -116,7 +116,7 @@ declare global {
 
     interface EventBridgeMatchers {
       /**
-       * Asserts the the EventBridge spy has received an
+       * Asserts the the spied EventBridge has received an
        * event matching the expected object.
        *
        * @param expected The expected object.
@@ -126,7 +126,7 @@ declare global {
       ): Promise<void>;
 
       /**
-       * Asserts the the EventBridge spy has received an
+       * Asserts the the spied EventBridge has received an
        * event matching the expected object a certain number of times.
        *
        * @param expected The expected object.

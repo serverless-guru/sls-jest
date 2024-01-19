@@ -27,7 +27,10 @@ export type EventBridgeSpyParams = {
 /**
  * Creates an EventBridge spy.
  *
- * Use with {@link expect} and any compatible matcher.
+ * Use it before your tests to spy on EventBridge events,
+ * usually in a `beforeAll` block.
+ *
+ * Then use the spy with {@link expect} and any compatible matcher.
  * @see https://serverlessguru.gitbook.io/sls-jest/matchers/eventbridge
  *
  * @param params {@link EventBridgeSpyParams}
@@ -38,6 +41,16 @@ export type EventBridgeSpyParams = {
  *
  * beforeAll(async () => {
  *   spy = await eventBridgeSpy(config);
+ * });
+ *
+ * it('should have event matching object', async () => {
+ *   // do something that triggers an event
+ *   await expect(spy).toHaveEventMatchingObject({
+ *     'detail-type': 'orderCreated',
+ *      detail: {
+ *        id: order.id,
+ *      },
+ *   });
  * });
  */
 export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {

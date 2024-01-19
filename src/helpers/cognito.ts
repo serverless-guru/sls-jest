@@ -19,7 +19,7 @@ export type CognitoUserInput = {
    */
   username: string;
   /**
-   * An optional cognito client configuration.
+   * An optional Cognito SDK client configuration.
    */
   clientConfig?: CognitoIdentityProviderClientConfig;
 };

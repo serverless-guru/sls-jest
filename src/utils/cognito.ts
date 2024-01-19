@@ -11,7 +11,7 @@ import { getCognitoClient } from './internal';
 
 type CognitoInput = {
   /**
-   * An optional cognito client configuration.
+   * An optional Cognito Identity Provider SDK client configuration.
    */
   clientConfig?: CognitoIdentityProviderClientConfig;
 };
