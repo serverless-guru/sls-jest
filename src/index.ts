@@ -22,7 +22,7 @@ declare global {
        * Asserts that the received AppSync resolver evaluation
        * matches the expected object.
        *
-       * @param {object} expected The expected object.
+       * @param expected The expected object.
        */
       toEvaluateTo<E extends object>(expected: E): Promise<void>;
 
@@ -30,7 +30,7 @@ declare global {
        * Asserts that the received AppSync resolver evaluation
        * matches the existing snapshot.
        *
-       * @param {string} snapshotName Optional snapshot name.
+       * @param snapshotName Optional snapshot name.
        */
       toEvaluateToSnapshot(snapshotName?: string): Promise<void>;
 
@@ -38,8 +38,8 @@ declare global {
        * Asserts that the received AppSync resolver evaluation
        * matches the existing snapshot.
        *
-       * @param {object} propertyMatchers The snapshot properties.
-       * @param {string} snapshotName Optional snapshot name.
+       * @param propertyMatchers The snapshot properties.
+       * @param snapshotName Optional snapshot name.
        */
       toEvaluateToSnapshot<U extends object>(
         propertyMatchers: Partial<U>,
@@ -57,8 +57,8 @@ declare global {
        * Asserts that the received AppSync resolver evaluation
        * matches the inline snapshot.
        *
-       * @param {object} propertyMatchers The snapshot properties.
-       * @param {string} snapshot The expected snapshot.
+       * @param propertyMatchers The snapshot properties.
+       * @param snapshot The expected snapshot.
        */
       toEvaluateToInlineSnapshot<U extends object>(
         propertyMatchers: Partial<U>,
@@ -75,7 +75,7 @@ declare global {
       /**
        * Asserts that the received value exists and matches the expected object.
        *
-       * @param {object} expected The expected object.
+       * @param expected The expected object.
        */
       toExistAndMatchObject<E extends object>(
         expected: O.Partial<E, 'deep'>,
@@ -83,14 +83,14 @@ declare global {
 
       /**
        * Asserts that the received value exists and matches the expected snapshot.
-       * @param {string} snapshotName Optional snapshot name.
+       * @param snapshotName Optional snapshot name.
        */
       toExistAndMatchSnapshot(snapshotName?: string): Promise<void>;
 
       /**
        * Asserts that the received value exists and matches the expected snapshot.
-       * @param {object} propertyMatchers The snapshot properties.
-       * @param {string} snapshotName Optional snapshot name.
+       * @param propertyMatchers The snapshot properties.
+       * @param snapshotName Optional snapshot name.
        */
       toExistAndMatchSnapshot<U extends object>(
         propertyMatchers: Partial<U>,
@@ -105,8 +105,8 @@ declare global {
 
       /**
        * Asserts that the received value exists and matches the expected snapshot.
-       * @param {object} propertyMatchers The snapshot properties.
-       * @param {string} snapshotName Optional snapshot name.
+       * @param propertyMatchers The snapshot properties.
+       * @param snapshotName Optional snapshot name.
        */
       toExistAndMatchInlineSnapshot<U extends object>(
         propertyMatchers: Partial<U>,
@@ -119,7 +119,7 @@ declare global {
        * Asserts the the EventBridge spy has received an
        * event matching the expected object.
        *
-       * @param {object} expected The expected object.
+       * @param expected The expected object.
        */
       toHaveEventMatchingObject<TDetailType extends string, TDetail>(
         expected: O.Partial<EventBridgeEvent<TDetailType, TDetail>, 'deep'>,
@@ -129,8 +129,8 @@ declare global {
        * Asserts the the EventBridge spy has received an
        * event matching the expected object a certain number of times.
        *
-       * @param {object} expected The expected object.
-       * @param {number} times The (exact) number of times the event should have been received.
+       * @param expected The expected object.
+       * @param times The (exact) number of times the event should have been received.
        */
       toHaveEventMatchingObjectTimes<TDetailType extends string, TDetail>(
         expected: O.Partial<EventBridgeEvent<TDetailType, TDetail>, 'deep'>,

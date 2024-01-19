@@ -9,24 +9,45 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import { getCognitoClient } from './internal';
 
+type CognitoInput = {
+  /**
+   * An optional cognito client configuration.
+   */
+  clientConfig?: CognitoIdentityProviderClientConfig;
+};
+
+/**
+ * Cognito Sign In input
+ */
+export type CognitoSignInInput = {
+  /**
+   * The cognito user pool id.
+   */
+  userPoolId: string;
+  /**
+   * The cognito user pool client id.
+   */
+  clientId: string;
+  /**
+   * The cognito user username.
+   */
+  username: string;
+  /**
+   * The cognito user password.
+   */
+  password: string;
+} & CognitoInput;
+
 /**
  * Sign in a user in cognito and return its credentials.
  *
- * @param {string} clientId The cognito user pool client id.
- * @param {string} userPoolId The cognito user pool id.
- * @param {string} username The cognito user username.
- * @param {string} password The cognito user password.
- * @param {CognitoIdentityProviderClientConfig} config An optional cognito client configuration.
+ * @param input {@link CognitoSignInInput}
  */
-export const cognitoSignIn = async (params: {
-  clientId: string;
-  userPoolId: string;
-  username: string;
-  password: string;
-  config?: CognitoIdentityProviderClientConfig;
-}): Promise<AuthenticationResultType> => {
-  const { clientId, userPoolId, username, password, config } = params;
-  const client = getCognitoClient(config);
+export const cognitoSignIn = async (
+  input: CognitoSignInInput,
+): Promise<AuthenticationResultType> => {
+  const { clientId, userPoolId, username, password, clientConfig } = input;
+  const client = getCognitoClient(clientConfig);
 
   const { AuthenticationResult } = await client.send(
     new AdminInitiateAuthCommand({
@@ -48,27 +69,26 @@ export const cognitoSignIn = async (params: {
 };
 
 /**
+ * Cognito Sign Up input
+ */
+export type CognitoSignUpInput = CognitoSignInInput & {
+  /**
+   * The cognito user attributes.
+   */
+  attributes?: AttributeType[];
+};
+
+/**
  * Create a new user in cognito, auto confirm it and return its credentials.
  *
- * @param {string} clientId The cognito user pool client id.
- * @param {string} userPoolId The cognito user pool id.
- * @param {string} username The cognito user username.
- * @param {string} password The cognito user password.
- * @param {AttributeType[]} attributes The cognito user attributes.
- * @param {CognitoIdentityProviderClientConfig} config An optional cognito client configuration.
- *
+ * @param input {@link CognitoSignUpInput}
  */
-export const cognitoSignUp = async (params: {
-  clientId: string;
-  userPoolId: string;
-  username: string;
-  password: string;
-  attributes?: AttributeType[];
-  config?: CognitoIdentityProviderClientConfig;
-}): Promise<AuthenticationResultType> => {
-  const { clientId, userPoolId, username, password, attributes, config } =
-    params;
-  const client = getCognitoClient(config);
+export const cognitoSignUp = async (
+  input: CognitoSignUpInput,
+): Promise<AuthenticationResultType> => {
+  const { clientId, userPoolId, username, password, attributes, clientConfig } =
+    input;
+  const client = getCognitoClient(clientConfig);
 
   await client.send(
     new AdminCreateUserCommand({
@@ -93,24 +113,35 @@ export const cognitoSignUp = async (params: {
     userPoolId,
     password,
     username,
-    config,
+    clientConfig,
   });
 };
+
+export type CognitoUserInput = {
+  /**
+   * The cognito user pool id.
+   */
+  userPoolId: string;
+  /**
+   * The cognito user username.
+   */
+  username: string;
+  /**
+   * An optional cognito client configuration.
+   */
+  clientConfig?: CognitoIdentityProviderClientConfig;
+} & CognitoInput;
 
 /**
  * Delete a user in cognito.
  *
- * @param {string} userPoolId The cognito user pool id.
- * @param {string} username The cognito user username.
- * @param {CognitoIdentityProviderClientConfig} config An optional cognito client configuration.
+ * @param input {@link CognitoUserInput}
  */
-export const cognitoDeleteUser = async (params: {
-  userPoolId: string;
-  username: string;
-  config?: CognitoIdentityProviderClientConfig;
-}): Promise<void> => {
-  const { userPoolId, username, config } = params;
-  const client = getCognitoClient(config);
+export const cognitoDeleteUser = async (
+  input: CognitoUserInput,
+): Promise<void> => {
+  const { userPoolId, username, clientConfig } = input;
+  const client = getCognitoClient(clientConfig);
 
   await client.send(
     new AdminDeleteUserCommand({

@@ -7,6 +7,10 @@ import { EventBridgeSpy } from './EventBridgeSpy';
 import { SQSEventBridgeSpy, SqsEventSpyConfig } from './SqsEventBridgeSpy';
 
 export type { EventBridgeSpy } from './EventBridgeSpy';
+
+/**
+ * EventBridge spy parameters
+ */
 export type EventBridgeSpyParams = {
   eventBusName: string;
 } & (
@@ -20,6 +24,20 @@ export type EventBridgeSpyParams = {
     }
 );
 
+/**
+ * Creates an EventBridge spy.
+ *
+ * Use with {@link expect} and any compatible matcher.
+ * @see https://serverlessguru.gitbook.io/sls-jest/matchers/eventbridge
+ *
+ * @param params {@link EventBridgeSpyParams}
+ *
+ * @example
+ *
+ * const spy = await eventBridgeSpy({
+ *  eventBusName: 'default',
+ * });
+ */
 export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {
   const { eventBusName, adapter, config } = params;
 

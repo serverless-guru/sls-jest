@@ -8,14 +8,19 @@ import {
 
 /**
  * S3 Object helper input
- *
- * @param {string} bucketName The S3 bucket name.
- * @param {string} key The S3 object key.
- * @param {object} clientConfig An optional S3 SDK client configuration.
  */
 export type S3ObjectInput = {
+  /**
+   * The S3 bucket name.
+   */
   bucketName: string;
+  /**
+   * The S3 object key.
+   */
   key: string;
+  /**
+   * An optional S3 SDK client configuration.
+   */
   clientConfig?: S3Client;
 };
 
@@ -28,7 +33,19 @@ const s3ObjectInputSchema: HelperZodSchema<typeof s3Object> = z.object({
 });
 
 /**
- * S3 Object helper
+ * Helper function that represents an S3 Object.
+ *
+ * Use with {@link expect} and any compatible matcher.
+ * @see https://serverlessguru.gitbook.io/sls-jest/matchers/s3
+ *
+ * @param input {@link S3ObjectInput}
+ *
+ * @example
+ *
+ * expect(s3Object({
+ *   bucketName: 'my-bucket',
+ *   key: 'invoice123.pdf'
+ * })).toExist();
  */
 export const s3Object: RetryableMatcherHelper<'s3Object', S3ObjectInput> = (
   input,

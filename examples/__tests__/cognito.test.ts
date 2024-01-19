@@ -1,5 +1,10 @@
 import { Chance } from 'chance';
-import { cognitoSignIn, cognitoSignUp, cognitoUser } from 'sls-jest';
+import {
+  CognitoUserInput,
+  cognitoSignIn,
+  cognitoSignUp,
+  cognitoUser,
+} from 'sls-jest';
 
 const chance = new Chance();
 
@@ -84,8 +89,8 @@ describe('Utils', () => {
       });
 
       const credentials = await cognitoSignIn({
-        clientId,
         userPoolId,
+        clientId,
         username: email,
         password,
       });
