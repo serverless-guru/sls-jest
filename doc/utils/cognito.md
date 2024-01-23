@@ -46,12 +46,12 @@ const credentials = await cognitoSignIn({
 
 The returned value is of type [AuthenticationResultType](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AuthenticationResultType.html) from @aws-sdk/client-cognito-identity-provider.
 
-### `cognitoDeleteUser`
+### `deleteCognitoUser`
 
 Delete a user in cognito.
 
 ```typescript
-await cognitoDeleteUser({
+await deleteCognitoUser({
   userPoolId: 'user_pool_id',
   username: 'someone@example.com',
 });
