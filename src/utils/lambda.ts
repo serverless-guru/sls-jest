@@ -38,7 +38,7 @@ export type InvokeLambdaFunctionInput = {
 };
 
 /**
- * Invoke a lambda function.
+ * Invoke a Lambda function.
  *
  * @param input {@link InvokeLambdaFunctionInput}
  * @throws {@link LambdaInvocationError}
