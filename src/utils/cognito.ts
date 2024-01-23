@@ -21,29 +21,29 @@ type CognitoInput = {
  */
 export type CognitoSignInInput = {
   /**
-   * The cognito user pool id.
+   * The Cognito user pool id.
    */
   userPoolId: string;
   /**
-   * The cognito user pool client id.
+   * The Cognito user pool client id.
    */
   clientId: string;
   /**
-   * The cognito user username.
+   * The Cognito user username.
    */
   username: string;
   /**
-   * The cognito user password.
+   * The Cognito user password.
    */
   password: string;
 } & CognitoInput;
 
 /**
- * Sign in a user in cognito and return its credentials.
+ * Sign in a user in Cognito and return its credentials.
  *
  * @param input {@link CognitoSignInInput}
  */
-export const cognitoSignIn = async (
+export const CognitoSignIn = async (
   input: CognitoSignInInput,
 ): Promise<AuthenticationResultType> => {
   const { clientId, userPoolId, username, password, clientConfig } = input;
@@ -73,17 +73,17 @@ export const cognitoSignIn = async (
  */
 export type CognitoSignUpInput = CognitoSignInInput & {
   /**
-   * The cognito user attributes.
+   * The Cognito user attributes.
    */
   attributes?: AttributeType[];
 };
 
 /**
- * Create a new user in cognito, auto confirm it and return its credentials.
+ * Create a new user in Cognito, auto confirm it and return its credentials.
  *
  * @param input {@link CognitoSignUpInput}
  */
-export const cognitoSignUp = async (
+export const CognitoSignUp = async (
   input: CognitoSignUpInput,
 ): Promise<AuthenticationResultType> => {
   const { clientId, userPoolId, username, password, attributes, clientConfig } =
@@ -108,7 +108,7 @@ export const cognitoSignUp = async (
     }),
   );
 
-  return cognitoSignIn({
+  return CognitoSignIn({
     clientId,
     userPoolId,
     password,
@@ -117,27 +117,30 @@ export const cognitoSignUp = async (
   });
 };
 
+/**
+ * Cognito Delete User input
+ */
 export type DeleteCognitoUserInput = {
   /**
-   * The cognito user pool id.
+   * The Cognito user pool id.
    */
   userPoolId: string;
   /**
-   * The cognito user username.
+   * The Cognito user username.
    */
   username: string;
   /**
-   * An optional cognito client configuration.
+   * An optional Cognito client configuration.
    */
   clientConfig?: CognitoIdentityProviderClientConfig;
 } & CognitoInput;
 
 /**
- * Delete a user in cognito.
+ * Delete a user from Cognito.
  *
  * @param input {@link DeleteCognitoUserInput}
  */
-export const cognitoDeleteUser = async (
+export const deleteCognitoUser = async (
   input: DeleteCognitoUserInput,
 ): Promise<void> => {
   const { userPoolId, username, clientConfig } = input;
