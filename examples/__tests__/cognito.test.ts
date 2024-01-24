@@ -1,5 +1,9 @@
 import { Chance } from 'chance';
-import { cognitoSignIn, cognitoSignUp, cognitoUser } from 'sls-jest';
+import {
+  signInWithCognitoUser,
+  signUpCognitoUser,
+  cognitoUser,
+} from 'sls-jest';
 
 const chance = new Chance();
 
@@ -8,11 +12,11 @@ const clientId = '3oed3rv2h43sleqojqtt2bb43a';
 const userPoolId = 'us-east-1_2KFDP3x2n';
 
 describe('Utils', () => {
-  describe('cognitoSignUp', () => {
+  describe('signUpCognitoUser', () => {
     it('should sign up a user and return its credentials, when user does not exist', async () => {
       const email = chance.email();
       const password = chance.string({ length: 8 });
-      const credentials = await cognitoSignUp({
+      const credentials = await signUpCognitoUser({
         clientId,
         userPoolId,
         username: email,
@@ -35,7 +39,7 @@ describe('Utils', () => {
       const email = chance.email();
       const password = chance.string({ length: 8 });
 
-      await cognitoSignUp({
+      await signUpCognitoUser({
         clientId,
         userPoolId,
         username: email,
@@ -49,7 +53,7 @@ describe('Utils', () => {
       });
 
       await expect(
-        cognitoSignUp({
+        signUpCognitoUser({
           clientId,
           userPoolId,
           username: email,
@@ -65,12 +69,12 @@ describe('Utils', () => {
     });
   });
 
-  describe('cognitoSignIn', () => {
+  describe('signInWithCognitoUser', () => {
     it('should sign in a user and return its credentials, when user exists', async () => {
       const email = chance.email();
       const password = chance.string({ length: 8 });
 
-      await cognitoSignUp({
+      await signUpCognitoUser({
         clientId,
         userPoolId,
         username: email,
@@ -83,7 +87,7 @@ describe('Utils', () => {
         ],
       });
 
-      const credentials = await cognitoSignIn({
+      const credentials = await signInWithCognitoUser({
         userPoolId,
         clientId,
         username: email,
@@ -101,7 +105,7 @@ describe('Utils', () => {
       const password = chance.string({ length: 8 });
 
       await expect(
-        cognitoSignIn({
+        signInWithCognitoUser({
           clientId,
           userPoolId,
           username: email,
@@ -120,7 +124,7 @@ describe('Matchers', () => {
   beforeAll(async () => {
     existingUser = chance.email();
 
-    await cognitoSignUp({
+    await signUpCognitoUser({
       clientId,
       userPoolId,
       username: existingUser,

@@ -19,7 +19,7 @@ type CognitoInput = {
 /**
  * Cognito Sign In input
  */
-export type CognitoSignInInput = {
+export type SignInWithCognitoUserInput = {
   /**
    * The Cognito user pool id.
    */
@@ -41,10 +41,10 @@ export type CognitoSignInInput = {
 /**
  * Sign in a user in Cognito and return its credentials.
  *
- * @param input {@link CognitoSignInInput}
+ * @param input {@link SignInWithCognitoUserInput}
  */
-export const CognitoSignIn = async (
-  input: CognitoSignInInput,
+export const signInWithCognitoUser = async (
+  input: SignInWithCognitoUserInput,
 ): Promise<AuthenticationResultType> => {
   const { clientId, userPoolId, username, password, clientConfig } = input;
   const client = getCognitoClient(clientConfig);
@@ -71,7 +71,7 @@ export const CognitoSignIn = async (
 /**
  * Cognito Sign Up input
  */
-export type CognitoSignUpInput = CognitoSignInInput & {
+export type SignUpCognitoUserInput = SignInWithCognitoUserInput & {
   /**
    * The Cognito user attributes.
    */
@@ -81,10 +81,10 @@ export type CognitoSignUpInput = CognitoSignInInput & {
 /**
  * Create a new user in Cognito, auto confirm it and return its credentials.
  *
- * @param input {@link CognitoSignUpInput}
+ * @param input {@link SignUpCognitoUserInput}
  */
-export const CognitoSignUp = async (
-  input: CognitoSignUpInput,
+export const signUpCognitoUser = async (
+  input: SignUpCognitoUserInput,
 ): Promise<AuthenticationResultType> => {
   const { clientId, userPoolId, username, password, attributes, clientConfig } =
     input;
@@ -108,7 +108,7 @@ export const CognitoSignUp = async (
     }),
   );
 
-  return CognitoSignIn({
+  return signInWithCognitoUser({
     clientId,
     userPoolId,
     password,
