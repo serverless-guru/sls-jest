@@ -2,14 +2,14 @@
 
 ## Functions
 
-### `cognitoSignUp`
+### `signUpCognitoUser`
 
 Create a new user in cognito, auto confirm it and return its credentials.
 
 example:
 
 ```typescript
-const credentials = await cognitoSignUp({
+const credentials = await signUpCognitoUser({
   clientId: 'client_id',
   userPoolId: 'user_pool_id',
   username: 'someone@example.com',
@@ -29,12 +29,12 @@ The returned value is of type [AuthenticationResultType](https://docs.aws.amazon
 
 Note: this function is not idempotent, if the user already exists it will fail.
 
-### `cognitoSignIn`
+### `signInWithCognitoUser`
 
 Sign in a user in cognito and return its credentials.
 
 ```typescript
-const credentials = await cognitoSignIn({
+const credentials = await signInWithCognitoUser({
   clientId: 'client_id',
   userPoolId: 'user_pool_id',
   username: 'someone@example.com',
