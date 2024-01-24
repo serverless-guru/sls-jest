@@ -8,6 +8,9 @@ import { Context } from '@aws-appsync/utils';
 import { O } from 'ts-toolbelt';
 import { z } from 'zod';
 
+/**
+ * Partial AWS AppSync context
+ */
 type PartialContext = O.Partial<
   Context<
     Record<string, unknown>,
@@ -23,8 +26,17 @@ type PartialContext = O.Partial<
  * AppSync mapping template helper input
  */
 export type AppSyncMappingTemplateInput = {
+  /**
+   * The path to a file containing containing a mapping template.
+   */
   template: string;
+  /**
+   * The context to pass to the resolver function.
+   */
   context: PartialContext;
+  /**
+   * An optional AppSync SDK client configuration.
+   */
   clientConfig?: AppSyncClientConfig;
 };
 
@@ -39,14 +51,28 @@ const appSyncMappingTemplateInputSchema: HelperZodSchema<
 });
 
 /**
- * AppSync mapping template matcher helper.
+ * Helper function to describe an AppSync mapping template to test.
  *
- * Use it to evaluate a mapping template and assert on the result.
+ * Use with {@link expect} and any compatible matcher.
+ * @see https://serverlessguru.gitbook.io/sls-jest/matchers/appsync
  *
- * @param {string} template The path to a file containing containing a mapping template.
- * The path can either be absolute, or relative to the working directory (`process.cwd()`).
- * @param {object} context The context to pass to the resolver function.
- * @param {object} clientConfig An optional AppSync SDK client configuration.
+ * @param input {@link AppSyncMappingTemplateInput}
+ *
+ * @example
+ *
+ * expect(appSyncMappingTemplate({
+ *   template: 'src/resolvers/Query.getUser.request.vtl',
+ *   context: {
+ *     arguments: {
+ *       id: '123'
+ *     }
+ *   }
+ * })).toEvaluateTo({
+ *   operation: 'GetItem',
+ *   key: {
+ *     id: { S: '123' }
+ *   }
+ * });
  */
 export const appSyncMappingTemplate: MatcherHelper<
   'appSyncMappingTemplate',
@@ -68,9 +94,21 @@ export const appSyncMappingTemplate: MatcherHelper<
  * AppSync js resolver helper input
  */
 export type AppSyncResolverInput = {
+  /**
+   * The path to a file containing an `APPSYNC_JS` resolver code.
+   */
   code: string;
+  /**
+   * The function to evaluate. `request` or `response`.
+   */
   function: 'request' | 'response';
+  /**
+   * The context to pass to the resolver function.
+   */
   context: PartialContext;
+  /**
+   * An optional AppSync SDK client configuration.
+   */
   clientConfig?: AppSyncClientConfig;
 };
 
@@ -85,15 +123,29 @@ const appSyncResolverInputSchema: HelperZodSchema<typeof appSyncResolver> =
   });
 
 /**
- * AppSync Resolver matcher helper.
+ * Helper function that describes an AppSync js resolver to test.
  *
- * Use it to evaluate a js resolver and assert on the result.
+ * Use with {@link expect} and any compatible matcher.
+ * @see https://serverlessguru.gitbook.io/sls-jest/matchers/appsync
  *
- * @param {string} code The path to a file containing an `APPSYNC_JS` resolver code.
- * The path can either be absolute, or relative to the working directory (`process.cwd()`).
- * @param {string} function The function to evaluate. `request` or `response`.
- * @param {object} context The context to pass to the resolver function.
- * @param {object} clientConfig An optional AppSync SDK client configuration.
+ * @param input {@link AppSyncResolverInput}
+ *
+ * @example
+ *
+ * expect(appSyncResolver({
+ *   code: 'src/resolvers/Query.getUser.js',
+ *   function: 'request',
+ *   context: {
+ *     arguments: {
+ *       id: '123'
+ *     }
+ *   }
+ * })).toEvaluateTo({
+ *   operation: 'GetItem',
+ *   key: {
+ *     id: { S: '123' }
+ *   }
+ * });
  */
 export const appSyncResolver: MatcherHelper<
   'appSyncResolver',

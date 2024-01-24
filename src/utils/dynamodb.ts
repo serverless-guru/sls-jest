@@ -4,14 +4,48 @@ import { chunk, flatten, groupBy, map, pick, reduce } from 'lodash';
 import { getDynamoDBDocumentClient } from './internal';
 import { BatchWriteCommandInput } from '@aws-sdk/lib-dynamodb';
 
+/**
+ * A DynamoDB item
+ */
 export type DynamoDBItem = Record<string, NativeAttributeValue>;
 
+/**
+ * A collection of DynamoDB items
+ *
+ * It can be an array of items, or a key-value pair of item names and items.
+ *
+ * @example
+ *
+ * const items: DynamoDBItemCollection = [
+ *  {
+ *    "id": "1",
+ *    "name": "John Doe"
+ *  }
+ * ];
+ *
+ * const items: DynamoDBItemCollection = {
+ *   "user1": {
+ *     "id": "1",
+ *     "name": "John Doe"
+ *   },
+ *   "user2": {
+ *     "id": "2",
+ *     "name": "Jane Doe"
+ *   },
+ * };
+ */
 export type DynamoDBItemCollection =
   | DynamoDBItem[]
   | {
       [itemName: string]: DynamoDBItem | DynamoDBItem[];
     };
 
+/**
+ * Feed a table with items
+ *
+ * @param tableName The table name
+ * @param items The items to feed the table with. {@link DynamoDBItemCollection}
+ */
 export const feedTable = async (
   tableName: string,
   items: DynamoDBItemCollection,
@@ -37,6 +71,11 @@ export const feedTable = async (
   }
 };
 
+/**
+ * Feed multiple tables with items
+ *
+ * @param items A Key-Value pair of table name and items to insert. {@link DynamoDBItemCollection}
+ */
 export const feedTables = async (items: {
   [tableName: string]: DynamoDBItemCollection;
 }) => {
@@ -115,6 +154,13 @@ const getTableKeys = async (tableName: string) => {
   return tableKeys[tableName];
 };
 
+/**
+ * Truncate a DynamoDB table
+ *
+ * @param tableName The table name
+ * @param keys Optional. They attribute names of the table keys (PK and optional SK).
+ * If not provided, the keys will be inferred from the table schema.
+ */
 export const truncateTable = async (tableName: string, keys?: string[]) => {
   const client = getDynamoDBDocumentClient();
   const key = keys ?? (await getTableKeys(tableName));

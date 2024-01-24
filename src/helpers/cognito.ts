@@ -10,8 +10,17 @@ import {
  * Cognito User helper input
  */
 export type CognitoUserInput = {
+  /**
+   * The cognito user pool id.
+   */
   userPoolId: string;
+  /**
+   * The cognito user username.
+   */
   username: string;
+  /**
+   * An optional Cognito SDK client configuration.
+   */
   clientConfig?: CognitoIdentityProviderClientConfig;
 };
 
@@ -24,7 +33,18 @@ const cognitoUserInputSchema: HelperZodSchema<typeof cognitoUser> = z.object({
 });
 
 /**
- * Cognito User helper
+ * Helper function that describes a Cognito User to test.
+ *
+ * Use with {@link expect} and any compatible matcher.
+ *
+ * @param input {@link CognitoUserInput}
+ *
+ * @example
+ *
+ * expect(cognitoUser({
+ *   userPoolId: 'us-east-1_123456789',
+ *   username: 'john'
+ * })).toExist();
  */
 export const cognitoUser: RetryableMatcherHelper<
   'cognitoUser',

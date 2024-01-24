@@ -2,7 +2,7 @@ name: Naming Conventions
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, synchronize]
     branches:
       - develop
 
@@ -11,6 +11,14 @@ jobs:
     name: Naming Conventions
     runs-on: ubuntu-latest
     steps:
-      - uses: deepakputhraya/action-pr-title@master
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          regex: '(feat|fix|ci|docs|test|refactor|build|chore|script)\(.+\): .+'
+          types: |
+            feat
+            fix
+            ci
+            docs
+            chore
+          requireScope: true

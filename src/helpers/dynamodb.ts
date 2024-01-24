@@ -11,8 +11,17 @@ import {
  * DynamoDB Item helper input
  */
 export type DynamodbItemInput = {
+  /**
+   * The DynamoDB table name.
+   */
   tableName: string;
+  /**
+   * The DynamoDB item key.
+   */
   key: GetCommandInput['Key'];
+  /**
+   * An optional DynamoDB SDK client configuration.
+   */
   clientConfig?: DynamoDBClientConfig;
 };
 
@@ -25,7 +34,21 @@ const dynamodbItemInputSchema: HelperZodSchema<typeof dynamodbItem> = z.object({
 });
 
 /**
- * DynamoDB Item helper
+ * Helper function that describes a DynamoDB Item to test.
+ *
+ * Use with {@link expect} and any compatible matcher.
+ * @see https://serverlessguru.gitbook.io/sls-jest/matchers/dynamodb
+ *
+ * @param input {@link DynamodbItemInput}
+ *
+ * @example
+ *
+ * expect(dynamodbItem({
+ *   tableName: 'users',
+ *   key: {
+ *     id: '1'
+ *   }
+ * })).toExist();
  */
 export const dynamodbItem: RetryableMatcherHelper<
   'dynamodbItem',
