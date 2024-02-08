@@ -1,12 +1,13 @@
 import { EventBridgeEvent } from 'aws-lambda';
-import { ItemType } from './helpers/internal';
 import { O } from 'ts-toolbelt';
+import { ItemType } from './helpers/internal';
 import { EventBridgeSpy } from './spies';
 export * from './helpers';
 export * as matchers from './matchers';
 export * from './spies';
-export * from './utils/dynamodb';
 export * from './utils/cognito';
+export * from './utils/dynamodb';
+export * from './utils/lambda';
 
 // Note: we cannot use the internal IMatcherHelperInput type here
 // because it does not work for some reason.
