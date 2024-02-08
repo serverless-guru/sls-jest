@@ -1,3 +1,3 @@
 export * from './eventBridge';
-export * from './appSync';
+export * from './appsync';
 export * from './common';

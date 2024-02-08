@@ -7,6 +7,10 @@ import { EventBridgeSpy } from './EventBridgeSpy';
 import { SQSEventBridgeSpy, SqsEventSpyConfig } from './SqsEventBridgeSpy';
 
 export type { EventBridgeSpy } from './EventBridgeSpy';
+
+/**
+ * EventBridge spy parameters
+ */
 export type EventBridgeSpyParams = {
   eventBusName: string;
 } & (
@@ -20,6 +24,39 @@ export type EventBridgeSpyParams = {
     }
 );
 
+/**
+ * Creates an EventBridge spy.
+ *
+ * Use it before your tests to spy on EventBridge events,
+ * usually in a `beforeAll` block.
+ *
+ * The first time it is called, this function will create a CloudFormation stack
+ * with the resources needed to spy on the specified EventBridge bus.
+ * On subsequent calls, it will reuse the existing stack.
+ *
+ * Then use the spy with {@link expect} and any compatible matcher.
+ * @see https://serverlessguru.gitbook.io/sls-jest/matchers/eventbridge
+ *
+ * @param params {@link EventBridgeSpyParams}
+ *
+ * @example
+ *
+ * let spy: EventBridgeSpy;
+ *
+ * beforeAll(async () => {
+ *   spy = await eventBridgeSpy(config);
+ * });
+ *
+ * it('should have event matching object', async () => {
+ *   // do something that triggers an event
+ *   await expect(spy).toHaveEventMatchingObject({
+ *     'detail-type': 'orderCreated',
+ *      detail: {
+ *        id: order.id,
+ *      },
+ *   });
+ * });
+ */
 export const eventBridgeSpy = async (params: EventBridgeSpyParams) => {
   const { eventBusName, adapter, config } = params;
 

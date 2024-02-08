@@ -1,54 +1,43 @@
 # AppSync
 
-A collection of matchers to test mapping templates.
+A collection of matchers to test AWS AppSync mapping templates and JS resolvers.
 
-Use the `appSyncMappingTemplate` helper function with mapping template matchers.
+## Helper Functions
 
-- `template`: A string representing the mapping template
+### `appSyncResolver(input: AppSyncResolverInput)`
+
+Use the `appSyncResolver` helper function to test JS resolvers.
+
+- `code`: The path to a file containing an `APPSYNC_JS` resolver code. The path can either be absolute, or relative to the working directory (`process.cwd()`).
+- `function`: The function to test. Must be `request` or `response`.
+- `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference-js.html) to be passed to the function
+
+### `appSyncMappingTemplate(input: AppSyncMappingTemplateInput)`
+
+Use the `appSyncMappingTemplate` helper function to test VTL mapping templates.
+
+- `template`: The path to a file containing a mapping template. The path can either be absolute, or relative to the working directory (`process.cwd()`).
 - `context`: The [context object](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference.html#accessing-the-context) to be injected into the template
+
+## Matchers
 
 ### `toEvaluateTo<E>(expected: E)`
 
-Asserts that a mapping template evaluates to a given string or object for a given context.
-
-If you pass an object as `value`, the matcher will try to parse the generated template into a javascript object before comparing the values.
+Asserts that a mapping template or resolver evaluates to a given object for a given context.
 
 ```typescript
 // matching as a string
 await expect(
-  appSyncMappingTemplate({
-    template: fs.readFileSync('tempalte.vtl', { encoding: 'utf8' }),
+  appSyncResolver({
+    code: __dirname + '/resolver.js',
+    function: 'request',
     context: {
       arguments: {
         id: '123',
       },
     },
   }),
-).toEvaluateTo(`
-{
-  "version" : "2017-02-28",
-  "operation" : "GetItem",
-  "key" : {
-      "pk" : {"S":"123"}
-  }
-}
-`);
-```
-
-```typescript
-// matching as an object also works as long as the mapping template evaluates to a valid JSON
-// otherwise, an error will be thrown
-await expect(
-  appSyncMappingTemplate({
-    template: fs.readFileSync('tempalte.vtl', { encoding: 'utf8' }),
-    context: {
-      arguments: {
-        id: '123',
-      },
-    },
-  }),
-).toEvaluateTo<DynamoDBGetItem>({
-  version: '2017-02-28',
+).toEvaluateTo<DynamoDBGetItemRequest>({
   operation: 'GetItem',
   key: {
     pk: { S: '123' },
@@ -88,12 +77,14 @@ await expect(
     },
   }),
 ).toEvaluateToInlineSnapshot(`
-  {
-    "version" : "2017-02-28",
-    "operation" : "GetItem",
-    "key" : {
-        "pk" : {"S":"123"}
-    }
+  Object {
+    "key": Object {
+      "pk": Object {
+        "S": "789",
+      },
+    },
+    "operation": "GetItem",
+    "version": "2017-02-28",
   }
 `);
 ```

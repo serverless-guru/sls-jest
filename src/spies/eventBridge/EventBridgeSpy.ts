@@ -17,15 +17,21 @@ export type EventBridgeSpyConfig = {
  * A basic class for spying on EventBridge events.
  */
 export class EventBridgeSpy {
-  events: EventBridgeEvent<string, unknown>[] = [];
-  subject: BehaviorSubject<EventBridgeEvent<string, unknown>[]>;
-  matcherTimeout: number;
+  protected events: EventBridgeEvent<string, unknown>[] = [];
+  protected subject: BehaviorSubject<EventBridgeEvent<string, unknown>[]>;
+  protected matcherTimeout: number;
 
   constructor(private config: EventBridgeSpyConfig = {}) {
     this.subject = new BehaviorSubject(this.events);
     this.matcherTimeout = config.matcherDefaultTimeout ?? 10000;
   }
 
+  /**
+   * Start spying on the EventBridge bus.
+   *
+   * This method is called automatically by the `eventBridgeSpy` helper.
+   * You should never call this method directly.
+   */
   async startPolling() {
     throw new Error('Not implemented. Implement this in a child class.');
   }
@@ -35,6 +41,11 @@ export class EventBridgeSpy {
     this.subject.next(this.events);
   }
 
+  /**
+   * Returns a promise that resolves when the passed matcher function returns true.
+   *
+   * This method is used by matchers. You should probably never use this directly.
+   */
   awaitEvents(
     matcher: EventMatcher,
     config?: EventBridgeMatcherOptions,
@@ -55,12 +66,36 @@ export class EventBridgeSpy {
     });
   }
 
+  /**
+   * Resets the spy and removes all the events that have been captured.
+   * This will avoid mixing events from different tests.
+   *
+   * Use this method in an `afterEach` block.
+   *
+   * @example
+   *
+   * afterEach(() => {
+   *   spy.reset();
+   * });
+   */
   reset() {
     this.events = [];
     this.subject.complete();
     this.subject = new BehaviorSubject(this.events);
   }
 
+  /**
+   * Stop spying on the EventBridge bus.
+   *
+   * You should always call this method at the end of your tests,
+   * usually in an `afterAll` block.
+   *
+   * @example
+   *
+   * afterAll(async () => {
+   *   await spy.stop();
+   * });
+   */
   async stop() {
     await this.stopPolling();
     this.reset();

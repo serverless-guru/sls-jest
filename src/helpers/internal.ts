@@ -12,7 +12,12 @@ export type HelperZodSchema<T extends (...args: any) => any> = z.ZodType<
 /**
  * Helper input type names
  */
-export type ItemType = 'dynamodbItem' | 'appSyncMappingTemplate' | 's3Object';
+export type ItemType =
+  | 'dynamodbItem'
+  | 'appSyncMappingTemplate'
+  | 'appSyncResolver'
+  | 'cognitoUser'
+  | 's3Object';
 
 /**
  * Matcher helper input
